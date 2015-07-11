@@ -1,0 +1,60 @@
+{
+    "recipes" :[
+                {
+                "name":"Bagel",
+                "ingredients" : [{
+                                 "ingredient name" : "Bread",
+                                 "ingredient quantity" : "1",
+                                 "ingredient units" : "GRAM"
+                                 
+                                 }],
+                "instructions" : "Go to Panera Bread!"
+                },
+                
+                {
+                "name":"Pizza",
+                "ingredients" : [{
+                                 "ingredient name" : "Dough",
+                                 "ingredient quantity" : "2",
+                                 "ingredient units" : "ML"
+                                 
+                                 }],
+                "instructions" : "Go to Dominos!"
+                },
+                
+                {
+                "name":"Burger",
+                "ingredients" : [{
+                                 "ingredient name" : "Patty",
+                                 "ingredient quantity" : "1",
+                                 "ingredient units" : "SPOONS"
+                        
+                                 }],
+                
+                "instructions" : "Go to McDonals"
+                },
+                
+                {
+                "name":"Pasta",
+                "ingredients" : [{
+                                 "ingredient name" : "Spaghetti",
+                                 "ingredient quantity" : "2",
+                                 "ingredient units" : "CUPS"
+                                 
+                                 }],
+                "instructions" : "Go to Olive Garden"
+                },
+                
+                {
+                "name":"Frappucino",
+                "ingredients" : [{
+                                 "ingredient name" : "Milk",
+                                 "ingredient quantity" : "1",
+                                 "ingredient units" : "CUPS"
+                                 
+                                 }],
+                "instructions" : "Go to Starbucks!"
+                }
+    
+            ]
+}
