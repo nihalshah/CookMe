@@ -1,4 +1,4 @@
-package com.example.android.cookme;
+package com.example.android.cookme.data;
 
 import java.util.LinkedList;
 

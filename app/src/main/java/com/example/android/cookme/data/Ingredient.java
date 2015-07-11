@@ -1,15 +1,16 @@
-package com.example.android.cookme;
+package com.example.android.cookme.data;
 
 public class Ingredient{
 
-	public enum Units {ML, CUPS, SPOONS, QUARTS, GRAMS};
+//	public enum Units {ML, CUPS, SPOONS, QUARTS, GRAMS};
 
 	private String name;
 	private double quantity;
-	private Units unit;
+//	private Units unit;
+	private String unit;
 	
 
-	public Ingredient(String name, double quantity, Units unit){
+	public Ingredient(String name, double quantity, String unit){
 		this.name = name;
 		this.quantity = quantity;
 		this.unit = unit;
@@ -23,7 +24,7 @@ public class Ingredient{
 		return quantity;
 	}
 
-	public Units getUnits(){
+	public String getUnits(){
 		return unit;
 	}
 
