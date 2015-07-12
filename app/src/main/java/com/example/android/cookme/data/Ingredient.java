@@ -2,6 +2,7 @@ package com.example.android.cookme.data;
 
 public class Ingredient{
 
+	//enum for having the Units of measure as constants
 //	public enum Units {ML, CUPS, SPOONS, QUARTS, GRAMS};
 
 	private String name;
