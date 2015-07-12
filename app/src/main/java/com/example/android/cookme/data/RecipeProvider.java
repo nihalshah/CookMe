@@ -29,14 +29,14 @@ public class RecipeProvider {
             JSONObject jsonRecipe = new JSONObject(readJsonFromAssets(context));
             JSONArray RecipeArray = jsonRecipe.getJSONArray("recipe");
 
-            for( int i =0; i<RecipeArray.length(); i++){
+            for( int i = 0; i < RecipeArray.length(); i++){
                 JSONObject dish = RecipeArray.getJSONObject(i);
 
                 String name = dish.getString("name");
                 LinkedList<Ingredient>allIngredients = getIngredients(dish);
                 String instructions = dish.getString("instructions");
 
-                collection_of_recipes[i] = new Recipe(name,allIngredients , instructions);
+                collection_of_recipes[i] = new Recipe(name, allIngredients ,instructions);
             }
         } catch (JSONException e) {
             e.printStackTrace();
