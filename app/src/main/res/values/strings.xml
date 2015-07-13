@@ -2,4 +2,9 @@
     <string name="app_name">CookMe</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <!--- Strings for the Search Layout -->
+    <string name="input_ingredient_hint">Type an ingredient</string>
+    <string name="search_button">Search</string>
+
 </resources>

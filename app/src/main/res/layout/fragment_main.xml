@@ -9,7 +9,34 @@
     android:orientation="vertical"
     tools:context=".MainActivityFragment">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal">
+
+        <EditText
+            android:id="@+id/ingredient_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:hint="@string/input_ingredient_hint"
+            android:inputType="text"/>
+
+        <Button
+            android:id="@+id/search_ingredient_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/search_button"/>
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/recipes_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </ListView>
 
 </LinearLayout>
