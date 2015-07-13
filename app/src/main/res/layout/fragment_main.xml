@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="5"
-            android:hint="Type an ingredient"
+            android:hint="@string/input_ingredient_hint"
             android:inputType="text"/>
 
         <Button
@@ -28,13 +28,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Search"/>
+            android:text="@string/search_button"/>
 
     </LinearLayout>
 
-    <TextView
+    <ListView
+        android:id="@+id/recipes_list"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Here goes the list"/>
+        android:layout_height="wrap_content">
+
+    </ListView>
 
 </LinearLayout>
