@@ -2,6 +2,7 @@ package com.example.android.cookme.data;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,7 +17,9 @@ import java.util.LinkedList;
  * Created by Nihal on 7/11/15.
  */
 public class RecipeProvider {
+
     private ArrayList<Recipe> collection_of_recipes;
+    private static final String LOG_TAG = RecipeProvider.class.getSimpleName();
 /*
 
     Constructor :
@@ -38,7 +41,7 @@ public class RecipeProvider {
                 String name = dish.getString("name");
                 LinkedList<Ingredient>allIngredients = getIngredients(dish);
                 String instructions = dish.getString("instructions");
-
+                Log.v(LOG_TAG, "Adding Recipe to collection...");
                 collection_of_recipes.add(new Recipe(name, allIngredients ,instructions));
             }
         } catch (JSONException e) {
