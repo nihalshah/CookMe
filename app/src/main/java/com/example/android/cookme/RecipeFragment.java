@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+
+import com.example.android.cookme.data.RecipeProvider;
 
 
 /**
@@ -12,12 +15,20 @@ import android.view.ViewGroup;
  */
 public class RecipeFragment extends Fragment {
 
+    private RecipeProvider mListRecipes;
+    private ArrayAdapter<String> mRecipeAdapter;
+
     public RecipeFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+        mListRecipes = new RecipeProvider(getActivity());
+        
+
+        return rootView;
     }
 }

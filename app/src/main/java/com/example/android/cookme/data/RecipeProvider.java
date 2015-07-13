@@ -9,13 +9,14 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
  * Created by Nihal on 7/11/15.
  */
 public class RecipeProvider {
-    private Recipe collection_of_recipes[];
+    private ArrayList<Recipe> collection_of_recipes;
 /*
 
     Constructor :
@@ -36,7 +37,7 @@ public class RecipeProvider {
                 LinkedList<Ingredient>allIngredients = getIngredients(dish);
                 String instructions = dish.getString("instructions");
 
-                collection_of_recipes[i] = new Recipe(name, allIngredients ,instructions);
+                collection_of_recipes.add(new Recipe(name, allIngredients ,instructions));
             }
         } catch (JSONException e) {
             e.printStackTrace();
