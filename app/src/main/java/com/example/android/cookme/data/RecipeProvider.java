@@ -64,14 +64,14 @@ public class RecipeProvider {
  */
     private LinkedList<Ingredient> getIngredients(JSONObject dish) {
 
-        JSONObject ingredientInfo = null;
+        JSONArray ingredientInfo = null;
         LinkedList<Ingredient> allIngredients = new LinkedList<Ingredient>();
         try {
-            ingredientInfo = dish.getJSONObject("ingredients");
+            ingredientInfo = dish.getJSONArray("ingredients");
 
-            double quantity = Double.parseDouble(ingredientInfo.getString("ingredient quantity"));
-            String ingredientName = ingredientInfo.getString("ingredient name");
-            String ingredientUnit = ingredientInfo.getString("ingredient units");
+            double quantity = Double.parseDouble(ingredientInfo.getJSONObject(0).getString("ingredient quantity"));
+            String ingredientName = ingredientInfo.getJSONObject(0).getString("ingredient name");
+            String ingredientUnit = ingredientInfo.getJSONObject(0).getString("ingredient units");
             Ingredient ingredients = new Ingredient(ingredientName, quantity, ingredientUnit);
 
 
