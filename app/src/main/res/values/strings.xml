@@ -6,5 +6,6 @@
     <!--- Strings for the Search Layout -->
     <string name="input_ingredient_hint">Type an ingredient</string>
     <string name="search_button">Search</string>
+    <string name="title_activity_detail">DetailActivity</string>
 
 </resources>
