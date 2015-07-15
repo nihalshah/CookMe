@@ -1,6 +1,8 @@
 package com.example.android.cookme.data;
 
-public class Ingredient{
+import java.io.Serializable;
+
+public class Ingredient implements Serializable{
 
 	//enum for having the Units of measure as constants
 //	public enum Units {ML, CUPS, SPOONS, QUARTS, GRAMS};

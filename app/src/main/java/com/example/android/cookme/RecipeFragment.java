@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.android.cookme.data.Recipe;
 import com.example.android.cookme.data.RecipeProvider;
 
 import java.util.ArrayList;
@@ -46,9 +47,11 @@ public class RecipeFragment extends Fragment {
         listRecipes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
                 String recipeName = mRecipeAdapter.getItem(i);
+                Recipe actualRecipe = mListRecipes.getRecipeByName(recipeName);
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
-                detailIntent.putExtra(Intent.EXTRA_TEXT, recipeName);
+                detailIntent.putExtra("Recipe", actualRecipe);
                 startActivity(detailIntent);
             }
         });

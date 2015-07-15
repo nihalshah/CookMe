@@ -1,8 +1,9 @@
 package com.example.android.cookme.data;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
-public class Recipe{
+public class Recipe implements  Serializable{
 
 	private String name;
 	private LinkedList<Ingredient> ingredients;
