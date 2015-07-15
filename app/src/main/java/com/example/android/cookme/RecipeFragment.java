@@ -30,7 +30,7 @@ public class RecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        //mListRecipes = new RecipeProvider(getActivity());
+        mListRecipes = new RecipeProvider(getActivity());
 
         //Fake Data to try the population of the ListView with an ArrayList of Strings
         String [] fakeData = {"Pizza with Brocoli", "Tune Sandwich", "Paella",
