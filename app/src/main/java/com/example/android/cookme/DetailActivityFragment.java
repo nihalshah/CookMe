@@ -8,10 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.android.cookme.data.Recipe;
 import com.example.android.cookme.data.RecipeProvider;
+
+import java.util.ArrayList;
 
 
 /**
@@ -36,6 +39,13 @@ public class DetailActivityFragment extends Fragment {
             //TODO: Add the text received to TextView in layout
             TextView recipeName = (TextView) rootView.findViewById(R.id.recipeName_textview);
             recipeName.setText(recipe.getName());
+            
+            /*ArrayAdapter<String> ingredientsAdapter = new ArrayAdapter<String>(getActivity(),
+                                                                    R.layout.fragment_detail,
+                                                                    R.id.list_item_recipes_textview,
+                                                                    recipe.getStringsOfIngredients());
+            ListView ingredientsList = (ListView)rootView.findViewById(R.id.ingredients_list);
+            ingredientsList.setAdapter(ingredientsAdapter);*/
 
         }
 

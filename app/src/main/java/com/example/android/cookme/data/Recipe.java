@@ -1,6 +1,7 @@
 package com.example.android.cookme.data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Recipe implements  Serializable{
@@ -47,10 +48,10 @@ public class Recipe implements  Serializable{
 		return false;
 	}
 
-	public String getStringOfIngredients(){
-		String sIngredients = "";
+	public ArrayList<String> getStringsOfIngredients(){
+		ArrayList<String> ingredientsStrings = new ArrayList<>();
 		for(Ingredient ing : ingredients)
-			sIngredients += "- " + ing.getName() + " " + ing.getQuantity() + " " + ing.getUnits() + "\n";
-		return sIngredients;
+			ingredientsStrings.add(ing.getName() + " " + ing.getQuantity() + " " + ing.getUnits());
+		return ingredientsStrings;
 	}
 }
