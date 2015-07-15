@@ -50,6 +50,9 @@ public class RecipeProvider {
 
     }
 
+    public ArrayList<Recipe> getCollection_of_recipes(){
+        return this.collection_of_recipes;
+    }
     /* Return an ArrayList of Strings with only the name of each Recipe to populate the ListView */
     public ArrayList<String> getRecipeNames(){
 
