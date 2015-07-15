@@ -7,6 +7,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.example.android.cookme.data.Recipe;
+import com.example.android.cookme.data.RecipeProvider;
+
+import java.util.ArrayList;
 
 
 /**
@@ -15,6 +23,7 @@ import android.view.ViewGroup;
 public class DetailActivityFragment extends Fragment {
 
     private static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
+    private RecipeProvider mRecipeProvider;
 
     public DetailActivityFragment() {
     }
@@ -24,9 +33,20 @@ public class DetailActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         Intent receivedIntent = getActivity().getIntent();
-        if(receivedIntent != null && receivedIntent.hasExtra(Intent.EXTRA_TEXT)){
-            Log.v(LOG_TAG, "Text Recievied: " + receivedIntent.getStringExtra(Intent.EXTRA_TEXT));
+        if(receivedIntent != null && receivedIntent.hasExtra("Recipe")){
+            //Get the recipe from the intent and fill all the elements of the layout with it
+            Recipe recipe = (Recipe) receivedIntent.getExtras().getSerializable("Recipe");
             //TODO: Add the text received to TextView in layout
+            TextView recipeName = (TextView) rootView.findViewById(R.id.recipeName_textview);
+            recipeName.setText(recipe.getName());
+            
+            /*ArrayAdapter<String> ingredientsAdapter = new ArrayAdapter<String>(getActivity(),
+                                                                    R.layout.fragment_detail,
+                                                                    R.id.list_item_recipes_textview,
+                                                                    recipe.getStringsOfIngredients());
+            ListView ingredientsList = (ListView)rootView.findViewById(R.id.ingredients_list);
+            ingredientsList.setAdapter(ingredientsAdapter);*/
+
         }
 
         return rootView;

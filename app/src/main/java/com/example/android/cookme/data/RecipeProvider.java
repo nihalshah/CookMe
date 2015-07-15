@@ -62,6 +62,14 @@ public class RecipeProvider {
         }
         return recipe_names;
     }
+
+    public Recipe getRecipeByName(String name){
+        for(Recipe r : collection_of_recipes){
+            if(r.getName().equals(name))
+                return r;
+        }
+        return null;
+    }
 /*
     Returns a list of ingredients in the appropriate format
  */
