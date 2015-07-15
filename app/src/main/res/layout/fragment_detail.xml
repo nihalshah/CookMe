@@ -10,19 +10,19 @@
     android:id="@+id/recipeLayout">
 
     <TextView
+        android:id="@+id/recipeName_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Recipe Name"
-        android:id="@+id/recipeName"
         android:layout_gravity="center"
         android:textAlignment="center"
         android:textStyle="bold"
         android:textSize="20dp" />
 
     <ListView
+        android:id="@+id/ingredients_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ingredients"
         android:layout_gravity="center"
         android:choiceMode="multipleChoice"
         android:textAlignment="center" />
