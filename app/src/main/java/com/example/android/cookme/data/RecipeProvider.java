@@ -33,7 +33,7 @@ public class RecipeProvider {
 
         try {
             JSONObject jsonRecipe = new JSONObject(readJsonFromAssets(context));
-            JSONArray RecipeArray = jsonRecipe.getJSONArray("recipe");
+            JSONArray RecipeArray = jsonRecipe.getJSONArray("recipes");
 
             for( int i = 0; i < RecipeArray.length(); i++){
                 JSONObject dish = RecipeArray.getJSONObject(i);
