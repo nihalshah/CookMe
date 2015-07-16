@@ -39,7 +39,7 @@ public class DetailActivityFragment extends Fragment {
             //TODO: Add the text received to TextView in layout
             TextView recipeName = (TextView) rootView.findViewById(R.id.recipeName_textview);
             recipeName.setText(recipe.getName());
-            
+
             /*ArrayAdapter<String> ingredientsAdapter = new ArrayAdapter<String>(getActivity(),
                                                                     R.layout.fragment_detail,
                                                                     R.id.list_item_recipes_textview,
