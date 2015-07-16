@@ -36,16 +36,17 @@ public class DetailActivityFragment extends Fragment {
         if(receivedIntent != null && receivedIntent.hasExtra("Recipe")){
             //Get the recipe from the intent and fill all the elements of the layout with it
             Recipe recipe = (Recipe) receivedIntent.getExtras().getSerializable("Recipe");
-            //TODO: Add the text received to TextView in layout
+
             TextView recipeName = (TextView) rootView.findViewById(R.id.recipeName_textview);
             recipeName.setText(recipe.getName());
 
-            /*ArrayAdapter<String> ingredientsAdapter = new ArrayAdapter<String>(getActivity(),
-                                                                    R.layout.fragment_detail,
-                                                                    R.id.list_item_recipes_textview,
-                                                                    recipe.getStringsOfIngredients());
+            ArrayAdapter<String> ingredientsAdapter = new ArrayAdapter<>(
+                                                        getActivity(),
+                                                        R.layout.list_item_ingredients,
+                                                        R.id.list_item_ingredients_textview,
+                                                        recipe.getStringsOfIngredients());
             ListView ingredientsList = (ListView)rootView.findViewById(R.id.ingredients_list);
-            ingredientsList.setAdapter(ingredientsAdapter);*/
+            ingredientsList.setAdapter(ingredientsAdapter);
 
         }
 
