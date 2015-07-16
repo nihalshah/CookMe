@@ -56,6 +56,7 @@ public class RecipeProvider {
     /* Return an ArrayList of Strings with only the name of each Recipe to populate the ListView */
     public ArrayList<String> getRecipeNames(){
 
+         
         ArrayList<String> recipe_names = new ArrayList<>();
         for(Recipe recipe : collection_of_recipes){
             recipe_names.add(recipe.getName());
