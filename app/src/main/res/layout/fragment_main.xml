@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="5"
             android:hint="@string/input_ingredient_hint"
-            android:inputType="text"/>
+            android:inputType="text" />
 
         <Button
             android:id="@+id/search_ingredient_button"
