@@ -23,7 +23,6 @@ import java.util.ArrayList;
 public class DetailActivityFragment extends Fragment {
 
     private static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
-    private RecipeProvider mRecipeProvider;
 
     public DetailActivityFragment() {
     }
@@ -34,19 +33,23 @@ public class DetailActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         Intent receivedIntent = getActivity().getIntent();
         if(receivedIntent != null && receivedIntent.hasExtra("Recipe")){
-            //Get the recipe from the intent and fill all the elements of the layout with it
-            Recipe recipe = (Recipe) receivedIntent.getExtras().getSerializable("Recipe");
 
-            TextView recipeName = (TextView) rootView.findViewById(R.id.recipeName_textview);
-            recipeName.setText(recipe.getName());
+            //Get the recipe from the intent and fill all the elements of the layout with it
+            Recipe actualRecipe = (Recipe) receivedIntent.getExtras().getSerializable("Recipe");
+
+            TextView recipeName = (TextView) rootView.findViewById(R.id.recipeName_textView);
+            recipeName.setText(actualRecipe.getName());
 
             ArrayAdapter<String> ingredientsAdapter = new ArrayAdapter<>(
                                                         getActivity(),
                                                         R.layout.list_item_ingredients,
-                                                        R.id.list_item_ingredients_textview,
-                                                        recipe.getStringsOfIngredients());
+                                                        R.id.list_item_ingredients_textView,
+                                                        actualRecipe.getStringsOfIngredients());
             ListView ingredientsList = (ListView)rootView.findViewById(R.id.ingredients_list);
             ingredientsList.setAdapter(ingredientsAdapter);
+
+            TextView instructions = (TextView) rootView.findViewById(R.id.instructions_textView);
+            instructions.setText(actualRecipe.getInstructions());
 
         }
 
