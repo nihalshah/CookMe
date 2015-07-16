@@ -13,12 +13,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.example.android.cookme.data.Ingredient;
 import com.example.android.cookme.data.Recipe;
 import com.example.android.cookme.data.RecipeProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 
 /**
@@ -29,6 +31,9 @@ public class RecipeFragment extends Fragment {
     private RecipeProvider mListRecipes;
     private ArrayAdapter<String> mRecipeAdapter;
     private ArrayList<String> mRecipeNames;
+    //List of Recipes which with the filter had been removed
+    // (This will be improved with DB)
+    private ArrayList<String> mDeletedRecipesNames;
 
     public RecipeFragment() {
     }
@@ -39,6 +44,8 @@ public class RecipeFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         mListRecipes = new RecipeProvider(getActivity());
+
+        mDeletedRecipesNames = new ArrayList<>();
 
         mRecipeNames = mListRecipes.getRecipeNames();
 
@@ -73,7 +80,7 @@ public class RecipeFragment extends Fragment {
                 EditText ingredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
                 String ingredientQuery = ingredientInput.getText().toString();
                 Log.v(null, "Ingredient:" + ingredientQuery);
-
+                filterRecipesByIngredient(ingredientQuery);
 
             }
         });
@@ -82,13 +89,16 @@ public class RecipeFragment extends Fragment {
     }
 
     public void filterRecipesByIngredient(String ingredientTyped){
-        mRecipeNames.clear();
-        mRecipeNames = mListRecipes.getRecipeNames();
+
+        mRecipeNames.addAll(mDeletedRecipesNames);
+        mDeletedRecipesNames.clear();
         if(ingredientTyped != ""){
             Iterator it = mRecipeNames.iterator();
             while(it.hasNext()){
                 String actualRep = (String) it.next();
+
                 if(!mListRecipes.getRecipeByName(actualRep).hasIngredient(ingredientTyped)){
+                    mDeletedRecipesNames.add(actualRep);
                     it.remove();
                 }
             }
