@@ -79,7 +79,6 @@ public class RecipeFragment extends Fragment {
 
                 EditText ingredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
                 String ingredientQuery = ingredientInput.getText().toString();
-                Log.v(null, "Ingredient:" + ingredientQuery);
                 filterRecipesByIngredient(ingredientQuery);
 
             }
@@ -92,7 +91,7 @@ public class RecipeFragment extends Fragment {
 
         mRecipeNames.addAll(mDeletedRecipesNames);
         mDeletedRecipesNames.clear();
-        if(ingredientTyped != ""){
+        if(ingredientTyped.length() != 0){
             Iterator it = mRecipeNames.iterator();
             while(it.hasNext()){
                 String actualRep = (String) it.next();
