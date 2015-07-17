@@ -35,6 +35,9 @@ public class RecipeContract {
     //This class doesn't implements BaseColumns cause it doesn't need an autoincrement key
     public static final class RecipeIngredientRelationship{
 
+        //Name of table
+        public static final String TABLE_NAME = "recipe_ingredient_relationship";
+
         //Foreign key from RecipeTable
         public static final String COL_RECIPE_KEY = "recipe_id";
 
