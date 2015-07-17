@@ -84,7 +84,7 @@ public class TestDb extends AndroidTestCase {
                 recipeColumnHashSet.isEmpty());
 
         //*********************** TRYING INGREDIENT TABLE ******************************
-        
+
         c = db.rawQuery("PRAGMA table_info(" + RecipeContract.IngredientEntry.TABLE_NAME + ")",
                 null);
 
@@ -100,13 +100,41 @@ public class TestDb extends AndroidTestCase {
         columnNameIndex = c.getColumnIndex("name");
         do {
             String columnName = c.getString(columnNameIndex);
-            recipeColumnHashSet.remove(columnName);
+            ingredientColumnHashSet.remove(columnName);
         } while (c.moveToNext());
 
         // if this fails, it means that your database doesn't contain all of the required location
         // entry columns
         assertTrue("Error: The database doesn't contain all of the required Ingredient entry columns",
-                recipeColumnHashSet.isEmpty());
+                ingredientColumnHashSet.isEmpty());
+
+        //*********************** TRYING RELATIONSHIP TABLE ******************************
+
+        c = db.rawQuery("PRAGMA table_info(" + RecipeContract.RecipeIngredientRelationship.TABLE_NAME + ")",
+                null);
+
+        assertTrue("Error: This means that we were unable to query the database for table information.",
+                c.moveToFirst());
+
+        // Build a HashSet of all of the column names we want to look for
+        final HashSet<String> relationColumnHashSet = new HashSet<String>();
+        relationColumnHashSet.add(RecipeContract.RecipeIngredientRelationship.COL_RECIPE_KEY);
+        relationColumnHashSet.add(RecipeContract.RecipeIngredientRelationship.COL_INGREDIENT_KEY);
+        relationColumnHashSet.add(RecipeContract.RecipeIngredientRelationship.COL_UNITS);
+        relationColumnHashSet.add(RecipeContract.RecipeIngredientRelationship.COL_QUANTITY);
+
+
+        columnNameIndex = c.getColumnIndex("name");
+        do {
+            String columnName = c.getString(columnNameIndex);
+            relationColumnHashSet.remove(columnName);
+        } while (c.moveToNext());
+
+        // if this fails, it means that your database doesn't contain all of the required location
+        // entry columns
+        assertTrue("Error: The database doesn't contain all of the required Relationship entry columns",
+                relationColumnHashSet.isEmpty());
+
         db.close();
     }
 }
