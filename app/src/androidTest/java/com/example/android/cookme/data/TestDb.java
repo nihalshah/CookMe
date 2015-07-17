@@ -56,7 +56,9 @@ public class TestDb extends AndroidTestCase {
         assertTrue("Error: Your database was created without three entry tables",
                 tableNameHashSet.isEmpty());
 
-        // now, do our tables contain the correct columns?
+        //******************** TRYING RECIPE TABLE *******************************
+
+        // now, does the Recipe table contains the correct columns?
         c = db.rawQuery("PRAGMA table_info(" + RecipeContract.RecipeEntry.TABLE_NAME + ")",
                 null);
 
@@ -78,7 +80,32 @@ public class TestDb extends AndroidTestCase {
 
         // if this fails, it means that your database doesn't contain all of the required location
         // entry columns
-        assertTrue("Error: The database doesn't contain all of the required location entry columns",
+        assertTrue("Error: The database doesn't contain all of the required Recipe entry columns",
+                recipeColumnHashSet.isEmpty());
+
+        //*********************** TRYING INGREDIENT TABLE ******************************
+        
+        c = db.rawQuery("PRAGMA table_info(" + RecipeContract.IngredientEntry.TABLE_NAME + ")",
+                null);
+
+        assertTrue("Error: This means that we were unable to query the database for table information.",
+                c.moveToFirst());
+
+        // Build a HashSet of all of the column names we want to look for
+        final HashSet<String> ingredientColumnHashSet = new HashSet<String>();
+        ingredientColumnHashSet.add(RecipeContract.IngredientEntry._ID);
+        ingredientColumnHashSet.add(RecipeContract.IngredientEntry.COL_NAME);
+
+
+        columnNameIndex = c.getColumnIndex("name");
+        do {
+            String columnName = c.getString(columnNameIndex);
+            recipeColumnHashSet.remove(columnName);
+        } while (c.moveToNext());
+
+        // if this fails, it means that your database doesn't contain all of the required location
+        // entry columns
+        assertTrue("Error: The database doesn't contain all of the required Ingredient entry columns",
                 recipeColumnHashSet.isEmpty());
         db.close();
     }
