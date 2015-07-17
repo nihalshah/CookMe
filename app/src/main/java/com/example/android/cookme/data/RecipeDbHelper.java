@@ -37,8 +37,32 @@ public class RecipeDbHelper extends SQLiteOpenHelper {
                 IngredientEntry.COL_NAME + " TEXT NOT NULL " +
                 ");";
 
-        
+        final String SQL_CREATE_RELATIONSHIP_TABLE = "CREATE TABLE " + RecipeIngredientRelationship.TABLE_NAME + " (" +
+                RecipeIngredientRelationship.COL_RECIPE_KEY + " INTEGER NOT NULL, " +
+                RecipeIngredientRelationship.COL_INGREDIENT_KEY + " INTEGER NOT NULL, " +
+                RecipeIngredientRelationship.COL_UNITS + " TEXT NOT NULL, " +
+                RecipeIngredientRelationship.COL_QUANTITY + " INTEGER NOT NULL, " +
 
+                //Setup Recipe_Key column as foreign key
+                "FOREIGN KEY (" + RecipeIngredientRelationship.COL_RECIPE_KEY + ") REFERENCES " +
+                RecipeEntry.TABLE_NAME + " (" + RecipeEntry._ID + "), " +
+
+                //Setup Ingredient_Key as foreign key
+                "FOREIGN KEY (" + RecipeIngredientRelationship.COL_INGREDIENT_KEY + ") REFERENCES " +
+                IngredientEntry.TABLE_NAME + " (" + IngredientEntry._ID + ") " +
+
+                //Setup of composed Primary Key
+                "PRIMARY KEY (" + RecipeIngredientRelationship.COL_RECIPE_KEY + ", " +
+                                RecipeIngredientRelationship.COL_INGREDIENT_KEY + ") " +
+
+                // To assure the application have just one unique combination Rep - Ing
+                // it's created a UNIQUE constraint with REPLACE strategy
+                " UNIQUE (" + RecipeIngredientRelationship.COL_RECIPE_KEY + ", " +
+                RecipeIngredientRelationship.COL_INGREDIENT_KEY + ") ON CONFLICT REPLACE);";
+
+        sqLiteDatabase.execSQL(SQL_CREATE_RECIPE_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_INGREDIENT_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_RELATIONSHIP_TABLE);
 
     }
 
