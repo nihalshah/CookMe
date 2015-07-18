@@ -1,48 +1,141 @@
 {
     "recipes" :[
                 {
-                "name":"Bagel",
-                "ingredients" : [{
-                                 "ingredient name" : "Bread",
-                                 "ingredient quantity" : "1",
-                                 "ingredient units" : "GRAM"
-                                 
-                                 }],
-                "instructions" : "Go to Panera Bread!"
+                "name":"Mexican Rice",
+                "ingredients" : [
+                  {
+                    "ingredient name" : "Vegetable Oil",
+                    "ingredient quantity" : "3",
+                    "ingredient units" : "TABLESPOON"
+                  },
+                  {
+                    "ingredient name" : "Long-grain Rice",
+                    "ingredient quantity" : "1",
+                    "ingredient units" : "CUP"
+                  },
+                  {
+                    "ingredient name" : "Garlic Salt",
+                    "ingredient quantity" : "1",
+                    "ingredient units" : "TEASPOON"
+                  },
+                  {
+                    "ingredient name" : "Chopped Onion",
+                    "ingredient quantity" : ".25",
+                    "ingredient units" : "CUP"
+                  },
+                  {
+                    "ingredient name" : "Tomato Sauce",
+                    "ingredient quantity" : ".50",
+                    "ingredient units" : "CUP"
+                  },
+                  {
+                    "ingredient name" : "Chicken Broth",
+                    "ingredient quantity" : "2",
+                    "ingredient units" : "CUP"
+                  }
+                ],
+                "instructions" : "1.- Heat oil in a large saucepan over medium heat and add rice. Cook, stirring constantly, until puffed and golden. While rice is cooking, sprinkle with salt and cumin. 2.- Stir in onions and cook until tender. Stir in tomato sauce and chicken broth; bring to a boil. Reduce heat to low, cover and simmer for 20 to 25 minutes. Fluff with fork."
                 },
                 
                 {
-                "name":"Pizza",
-                "ingredients" : [{
-                                 "ingredient name" : "Dough",
-                                 "ingredient quantity" : "2",
-                                 "ingredient units" : "ML"
-                                 
-                                 }],
-                "instructions" : "Go to Dominos!"
+                "name":"Honey Mustard Grilled Chicken",
+                "ingredients" : [
+                  {
+                  "ingredient name" : "Dijon Mustard",
+                  "ingredient quantity" : ".33",
+                  "ingredient units" : "CUP"
+                  },
+                  {
+                    "ingredient name" : "Honey",
+                    "ingredient quantity" : ".25",
+                    "ingredient units" : "CUP"
+                  },{
+                    "ingredient name" : "Steak Sauce",
+                    "ingredient quantity" : "1",
+                    "ingredient units" : "TEASPOON"
+                  },{
+                    "ingredient name" : "Boneless Chicken",
+                    "ingredient quantity" : "4",
+                    "ingredient units" : "PIECES"
+                  }],
+                "instructions" : "1. Preheat the grill for medium heat. 2.- In a shallow bowl, mix the mustard, honey, mayonnaise, and steak sauce. Set aside a small amount of the honey mustard sauce for basting, and dip the chicken into the remaining sauce to coat. 3.-Lightly oil the grill grate. Grill chicken over indirect heat for 18 to 20 minutes, turning occasionally, or until juices run clear. Baste occasionally with the reserved sauce during the last 10 minutes. Watch carefully to prevent burning!"
                 },
                 
                 {
-                "name":"Burger",
+                "name":"Grilled Corn",
                 "ingredients" : [{
-                                 "ingredient name" : "Patty",
-                                 "ingredient quantity" : "1",
-                                 "ingredient units" : "SPOONS"
-                        
-                                 }],
+                  "ingredient name" : "Water",
+                  "ingredient quantity" : "1",
+                  "ingredient units" : "GALLON"
+                  },
+                  {
+                    "ingredient name" : "White Sugar",
+                    "ingredient quantity" : ".50",
+                    "ingredient units" : "CUP"
+                  },
+                  {
+                    "ingredient name" : "Salt",
+                    "ingredient quantity" : ".50",
+                    "ingredient units" : "CUP"
+                  },
+                  {
+                    "ingredient name" : "Corn, husks and silk removed",
+                    "ingredient quantity" : "8",
+                    "ingredient units" : "PIECES"
+                  },
+                  {
+                    "ingredient name" : "Butter",
+                    "ingredient quantity" : ".50",
+                    "ingredient units" : "CUP"
+                  }],
+
                 
-                "instructions" : "Go to McDonals"
+                "instructions" : "1.- Pour the water into a large pot, and stir the sugar and 1/2 cup salt together until dissolved. Place the ears of corn into the pot, and allow to soak at least 30 minutes but no longer than 8 hours. 2.- Preheat an outdoor grill for high heat, and lightly oil the grate. 3 Remove the corn from the soak and grill the ears, turning every 2 to 3 minutes to cook the kernels on all sides. 3.- Brush the grilled corn with butter, and season to taste with salt and pepper.. "
                 },
                 
                 {
-                "name":"Pasta",
+                "name":"Pancakes",
                 "ingredients" : [{
-                                 "ingredient name" : "Spaghetti",
-                                 "ingredient quantity" : "2",
-                                 "ingredient units" : "CUPS"
-                                 
-                                 }],
-                "instructions" : "Go to Olive Garden"
+                  "ingredient name" : "Milk",
+                  "ingredient quantity" : ".75",
+                  "ingredient units" : "CUP"
+                },
+                  {
+                    "ingredient name" : "White Vinegar",
+                    "ingredient quantity" : "2",
+                    "ingredient units" : "TABLESPOON"
+                  },
+                  {
+                    "ingredient name" : "Flour",
+                    "ingredient quantity" : "1",
+                    "ingredient units" : "CUP"
+                  },
+                  {
+                    "ingredient name" : "White Sugar",
+                    "ingredient quantity" : "2",
+                    "ingredient units" : "TABLESPOON"
+                  },
+                  {
+                    "ingredient name" : "Baking Powder",
+                    "ingredient quantity" : "1",
+                    "ingredient units" : "TEASPOON"
+                  },
+                  {
+                    "ingredient name" : "Baking Soda",
+                    "ingredient quantity" : ".50",
+                    "ingredient units" : "TEASPOON"
+                  },
+                  {
+                    "ingredient name" : "Egg",
+                    "ingredient quantity" : "1",
+                    "ingredient units" : "Piece"
+                  },
+                  {
+                    "ingredient name" : "Butter",
+                    "ingredient quantity" : "2",
+                    "ingredient units" : "TABLESPOON"
+                  }],
+                "instructions" : "1.-Combine milk with vinegar in a medium bowl and set aside for 5 minutes to sour. 2.-Combine flour, sugar, baking powder, baking soda, and salt in a large mixing bowl. Whisk egg and butter into soured milk. Pour the flour mixture into the wet ingredients and whisk until lumps are gone. 3.-eat a large skillet over medium heat, and coat with cooking spray. Pour 1/4 cupfuls of batter onto the skillet, and cook until bubbles appear on the surface. Flip with a spatula, and cook until browned on the other side. "
                 },
                 
                 {
