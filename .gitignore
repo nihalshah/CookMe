@@ -54,6 +54,7 @@ project.properties
 .idea/modules.xml
 .idea/scopes/scope_settings.xml
 .idea/vcs.xml
+.idea/gradle.xml
 
 ##Gradle-based build
 .gradle

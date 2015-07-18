@@ -80,16 +80,14 @@ public class RecipeProvider {
         LinkedList<Ingredient> allIngredients = new LinkedList<Ingredient>();
         try {
             ingredientInfo = dish.getJSONArray("ingredients");
-
-            double quantity = Double.parseDouble(ingredientInfo.getJSONObject(0).getString("ingredient quantity"));
-            String ingredientName = ingredientInfo.getJSONObject(0).getString("ingredient name");
-            String ingredientUnit = ingredientInfo.getJSONObject(0).getString("ingredient units");
-            Ingredient ingredients = new Ingredient(ingredientName, quantity, ingredientUnit);
-
-
-            allIngredients.add(ingredients);
-
-         }
+            for(int i = 0; i< ingredientInfo.length(); i++){
+                double quantity = Double.parseDouble(ingredientInfo.getJSONObject(i).getString("ingredient quantity"));
+                String ingredientName = ingredientInfo.getJSONObject(i).getString("ingredient name");
+                String ingredientUnit = ingredientInfo.getJSONObject(i).getString("ingredient units");
+                Ingredient ingredients = new Ingredient(ingredientName, quantity, ingredientUnit);
+                allIngredients.add(ingredients);
+            }
+        }
         catch (JSONException e) {
             e.printStackTrace();
             return null;
