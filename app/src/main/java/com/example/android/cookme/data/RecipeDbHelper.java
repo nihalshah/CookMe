@@ -69,6 +69,7 @@ public class RecipeDbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
+        /*We must use ALTER TABLE if we update the Db, so we dont lose user info*/
         onCreate(sqLiteDatabase);
 
     }
