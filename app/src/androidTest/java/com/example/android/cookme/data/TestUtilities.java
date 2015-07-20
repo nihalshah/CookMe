@@ -32,4 +32,10 @@ public class TestUtilities extends AndroidTestCase{
                     expectedValue + "'. " + error, expectedValue, valueCursor.getString(idx));
         }
     }
+
+    static ContentValues createIngredientTomatoValues(){
+        ContentValues testValues = new ContentValues();
+        testValues.put(RecipeContract.IngredientEntry.COL_NAME, "Tomato");
+        return testValues;
+    }
 }

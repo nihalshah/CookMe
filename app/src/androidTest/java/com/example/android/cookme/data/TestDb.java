@@ -172,4 +172,36 @@ public class TestDb extends AndroidTestCase {
         dB.close();
 
     }
+
+    public void testIngredientTable(){
+        RecipeDbHelper dbHelper = new RecipeDbHelper(mContext);
+        SQLiteDatabase dB = dbHelper.getWritableDatabase();
+
+        ContentValues testValues = TestUtilities.createIngredientTomatoValues();
+
+        long ingredientRowId;
+        ingredientRowId = dB.insert(RecipeContract.IngredientEntry.TABLE_NAME, null, testValues);
+
+        assertTrue(ingredientRowId != -1);
+
+        Cursor cursor = dB.query(RecipeContract.IngredientEntry.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        assertTrue( "Error: No Records returned from ingredient query", cursor.moveToFirst());
+
+        TestUtilities.validateCurrentRecord("Error:Ingredient Query Validation Failed",
+                cursor, testValues);
+
+        // Move the cursor to demonstrate that there is only one record in the database
+        assertFalse("Error: More than one record returned from ingredient query",
+                cursor.moveToNext() );
+
+        cursor.close();
+        dB.close();
+    }
 }
