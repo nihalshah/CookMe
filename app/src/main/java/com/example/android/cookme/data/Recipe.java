@@ -42,7 +42,7 @@ public class Recipe implements  Serializable{
 
 	public boolean hasIngredient(String name_ingredient){
 		for(Ingredient ing : ingredients){
-			if(ing.getName().equals(name_ingredient))
+			if(ing.getName().toLowerCase().equals(name_ingredient.toLowerCase()))
 				return true;
 		}
 		return false;
