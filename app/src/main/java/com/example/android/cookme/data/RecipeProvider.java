@@ -1,122 +1,65 @@
 package com.example.android.cookme.data;
 
-import android.content.Context;
-import android.content.res.AssetManager;
-import android.util.Log;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.LinkedList;
+import android.content.ContentProvider;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteQueryBuilder;
+import android.net.Uri;
 
 /**
- * Created by Nihal on 7/11/15.
+ * Created by eduardovaca on 20/07/15.
  */
-public class RecipeProvider {
+public class RecipeProvider extends ContentProvider {
 
-    private ArrayList<Recipe> collection_of_recipes;
-    private static final String LOG_TAG = RecipeProvider.class.getSimpleName();
-/*
 
-    Constructor :
-        Uses both readJsonFromAssets as well as getIngredients function
-        Creates an array of Recipes.
+    private static final SQLiteQueryBuilder sRecipeIngredientQueryBuilder;
 
- */
-    public RecipeProvider(Context context){
+    static{
+        sRecipeIngredientQueryBuilder = new SQLiteQueryBuilder();
 
-        collection_of_recipes = new ArrayList<>();
-
-        try {
-            JSONObject jsonRecipe = new JSONObject(readJsonFromAssets(context));
-            JSONArray RecipeArray = jsonRecipe.getJSONArray("recipes");
-
-            for( int i = 0; i < RecipeArray.length(); i++){
-                JSONObject dish = RecipeArray.getJSONObject(i);
-
-                String name = dish.getString("name");
-                LinkedList<Ingredient>allIngredients = getIngredients(dish);
-                String instructions = dish.getString("instructions");
-                //Log.v(LOG_TAG, "Adding Recipe to collection...");
-                collection_of_recipes.add(new Recipe(name, allIngredients ,instructions));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+        //Inner join of all tables
+        sRecipeIngredientQueryBuilder.setTables(
+                RecipeContract.RecipeIngredientRelationship.TABLE_NAME + " INNER JOIN " +
+                        RecipeContract.RecipeEntry.TABLE_NAME + " ON " +
+                        RecipeContract.RecipeIngredientRelationship.TABLE_NAME + "." +
+                        RecipeContract.RecipeIngredientRelationship.COL_RECIPE_KEY + " = " +
+                        RecipeContract.RecipeEntry.TABLE_NAME + "." +
+                        RecipeContract.RecipeEntry._ID +
+                        " INNER JOIN " + RecipeContract.IngredientEntry.TABLE_NAME + " ON " +
+                        RecipeContract.RecipeIngredientRelationship.TABLE_NAME + "." +
+                        RecipeContract.RecipeIngredientRelationship.COL_INGREDIENT_KEY + " = " +
+                        RecipeContract.IngredientEntry.TABLE_NAME + "." +
+                        RecipeContract.IngredientEntry._ID);
     }
 
-    public ArrayList<Recipe> getCollection_of_recipes(){
-        return this.collection_of_recipes;
-    }
-    /* Return an ArrayList of Strings with only the name of each Recipe to populate the ListView */
-    public ArrayList<String> getRecipeNames(){
 
-         
-        ArrayList<String> recipe_names = new ArrayList<>();
-        for(Recipe recipe : collection_of_recipes){
-            recipe_names.add(recipe.getName());
-        }
-        return recipe_names;
+    @Override
+    public boolean onCreate() {
+        return false;
     }
 
-    public Recipe getRecipeByName(String name){
-        for(Recipe r : collection_of_recipes){
-            if(r.getName().equals(name))
-                return r;
-        }
+    @Override
+    public Cursor query(Uri uri, String[] strings, String s, String[] strings1, String s1) {
         return null;
     }
-/*
-    Returns a list of ingredients in the appropriate format
- */
-    private LinkedList<Ingredient> getIngredients(JSONObject dish) {
 
-        JSONArray ingredientInfo = null;
-        LinkedList<Ingredient> allIngredients = new LinkedList<Ingredient>();
-        try {
-            ingredientInfo = dish.getJSONArray("ingredients");
-            for(int i = 0; i< ingredientInfo.length(); i++){
-                double quantity = Double.parseDouble(ingredientInfo.getJSONObject(i).getString("ingredient quantity"));
-                String ingredientName = ingredientInfo.getJSONObject(i).getString("ingredient name");
-                String ingredientUnit = ingredientInfo.getJSONObject(i).getString("ingredient units");
-                Ingredient ingredients = new Ingredient(ingredientName, quantity, ingredientUnit);
-                allIngredients.add(ingredients);
-            }
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return allIngredients;
+    @Override
+    public String getType(Uri uri) {
+        return null;
     }
 
+    @Override
+    public Uri insert(Uri uri, ContentValues contentValues) {
+        return null;
+    }
 
-/*
-    Reads the testdata JSON file in the assets folder
-    Return a String
- */
-    public String readJsonFromAssets(Context context){
-        String json = null;
-        AssetManager assetManager = context.getResources().getAssets();
-        try {
-            InputStream jsonReader = assetManager.open("testdata.json");
-            int size = jsonReader.available();
-            byte[] buffer = new byte[size];
-            jsonReader.read(buffer);
-            jsonReader.close();
-            json = new String(buffer, "UTF-8");
+    @Override
+    public int delete(Uri uri, String s, String[] strings) {
+        return 0;
+    }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        return json;
-
+    @Override
+    public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
+        return 0;
     }
 }

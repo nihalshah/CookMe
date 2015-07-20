@@ -3,7 +3,6 @@ package com.example.android.cookme;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.example.android.cookme.data.Ingredient;
 import com.example.android.cookme.data.Recipe;
-import com.example.android.cookme.data.RecipeProvider;
+import com.example.android.cookme.data.RecipeProviderByJSON;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 
 /**
@@ -28,7 +24,7 @@ import java.util.LinkedList;
  */
 public class RecipeFragment extends Fragment {
 
-    private RecipeProvider mListRecipes;
+    private RecipeProviderByJSON mListRecipes;
     private ArrayAdapter<String> mRecipeAdapter;
     private ArrayList<String> mRecipeNames;
     //List of Recipes which with the filter had been removed
@@ -43,7 +39,7 @@ public class RecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        mListRecipes = new RecipeProvider(getActivity());
+        mListRecipes = new RecipeProviderByJSON(getActivity());
 
         mDeletedRecipesNames = new ArrayList<>();
 
