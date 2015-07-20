@@ -43,11 +43,11 @@ public class RecipeContract {
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_RECIPE;
 
-        public Uri buildRecipeUri(long id){
+        public static Uri buildRecipeUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public Uri buildRecipeByName(String name){
+        public static Uri buildRecipeByName(String name){
             return CONTENT_URI.buildUpon().appendPath(name).build();
         }
 
@@ -70,7 +70,7 @@ public class RecipeContract {
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_INGREDIENT;
 
-        public Uri buildIngredientUri(long id){
+        public static Uri buildIngredientUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
     }
@@ -101,8 +101,16 @@ public class RecipeContract {
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_RELATIONSHIP;
 
-        public Uri buildRelationshipUri(long id){
+        public static Uri buildRelationshipUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static Uri builRecipeIngredientbyRecipe(String recipeName){
+            return CONTENT_URI.buildUpon().appendPath(recipeName).build();
+        }
+
+        public static Uri buildRecipeIngredientbyIngredient(String ingredientName){
+            return CONTENT_URI.buildUpon().appendPath(ingredientName).build();
         }
     }
 }
