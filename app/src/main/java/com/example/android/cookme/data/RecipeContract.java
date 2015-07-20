@@ -46,6 +46,12 @@ public class RecipeContract {
         public Uri buildRecipeUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
+
+        public Uri buildRecipeByName(String name){
+            return CONTENT_URI.buildUpon().appendPath(name).build();
+        }
+
+
     }
 
     public static final class IngredientEntry implements BaseColumns{
