@@ -1,5 +1,6 @@
 package com.example.android.cookme.data;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
@@ -136,5 +137,118 @@ public class TestDb extends AndroidTestCase {
                 relationColumnHashSet.isEmpty());
 
         db.close();
+    }
+
+    public void testRecipeTable(){
+        insertRecipe();
+    }
+
+    public void testIngredientTable(){
+        insertIngredient();
+    }
+
+    public void testRelationshipTable(){
+
+        long recipeRowId = insertRecipe();
+        long ingredientRowId = insertIngredient();
+
+        //Make sure both were inserted
+        assertFalse("Error: Recipe Not Inserted Correctly", recipeRowId == -1L);
+        assertFalse("Error: Ingredient Not Inserted Correctly", ingredientRowId == -1L);
+
+        RecipeDbHelper dbHelper = new RecipeDbHelper(mContext);
+        SQLiteDatabase dB = dbHelper.getWritableDatabase();
+
+        ContentValues testValues = TestUtilities.createRelationshipValues(recipeRowId, ingredientRowId);
+
+        long relationRowId = dB.insert(RecipeContract.RecipeIngredientRelationship.TABLE_NAME, null, testValues);
+        assertTrue(relationRowId != -1);
+
+        Cursor cursor = dB.query(RecipeContract.RecipeIngredientRelationship.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+        assertTrue( "Error: No Records returned from relationship query", cursor.moveToFirst());
+
+        TestUtilities.validateCurrentRecord("Error:Relationship Query Validation Failed",
+                cursor, testValues);
+
+        // Move the cursor to demonstrate that there is only one record in the database
+        assertFalse("Error: More than one record returned from relationship query",
+                cursor.moveToNext() );
+
+        cursor.close();
+        dB.close();
+    }
+
+
+    public long insertRecipe(){
+
+        RecipeDbHelper dbHelper = new RecipeDbHelper(mContext);
+        SQLiteDatabase dB = dbHelper.getWritableDatabase();
+
+        ContentValues testValues = TestUtilities.createRecipeGuacamoleValues();
+
+        long recipeRowId;
+        recipeRowId = dB.insert(RecipeContract.RecipeEntry.TABLE_NAME, null, testValues);
+
+        assertTrue(recipeRowId != -1);
+
+        Cursor cursor = dB.query(RecipeContract.RecipeEntry.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        assertTrue( "Error: No Records returned from recipe query", cursor.moveToFirst());
+
+        TestUtilities.validateCurrentRecord("Error: Recipe Query Validation Failed",
+                cursor, testValues);
+
+        // Move the cursor to demonstrate that there is only one record in the database
+        assertFalse("Error: More than one record returned from recipe query",
+                cursor.moveToNext() );
+
+        cursor.close();
+        dB.close();
+        return recipeRowId;
+    }
+
+    public long insertIngredient(){
+        RecipeDbHelper dbHelper = new RecipeDbHelper(mContext);
+        SQLiteDatabase dB = dbHelper.getWritableDatabase();
+
+        ContentValues testValues = TestUtilities.createIngredientTomatoValues();
+
+        long ingredientRowId;
+        ingredientRowId = dB.insert(RecipeContract.IngredientEntry.TABLE_NAME, null, testValues);
+
+        assertTrue(ingredientRowId != -1);
+
+        Cursor cursor = dB.query(RecipeContract.IngredientEntry.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        assertTrue("Error: No Records returned from ingredient query", cursor.moveToFirst());
+
+        TestUtilities.validateCurrentRecord("Error:Ingredient Query Validation Failed",
+                cursor, testValues);
+
+        // Move the cursor to demonstrate that there is only one record in the database
+        assertFalse("Error: More than one record returned from ingredient query",
+                cursor.moveToNext());
+
+        cursor.close();
+        dB.close();
+        return ingredientRowId;
     }
 }
