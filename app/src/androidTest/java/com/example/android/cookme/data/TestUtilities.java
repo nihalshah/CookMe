@@ -38,4 +38,13 @@ public class TestUtilities extends AndroidTestCase{
         testValues.put(RecipeContract.IngredientEntry.COL_NAME, "Tomato");
         return testValues;
     }
+
+    static ContentValues createRelationshipValues(long recipeId, long ingredientId){
+        ContentValues testValues = new ContentValues();
+        testValues.put(RecipeContract.RecipeIngredientRelationship.COL_RECIPE_KEY, recipeId);
+        testValues.put(RecipeContract.RecipeIngredientRelationship.COL_INGREDIENT_KEY, ingredientId);
+        testValues.put(RecipeContract.RecipeIngredientRelationship.COL_UNITS, "CUP");
+        testValues.put(RecipeContract.RecipeIngredientRelationship.COL_QUANTITY, 1);
+        return testValues;
+    }
 }
