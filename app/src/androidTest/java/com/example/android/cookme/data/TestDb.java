@@ -1,5 +1,6 @@
 package com.example.android.cookme.data;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
@@ -136,5 +137,39 @@ public class TestDb extends AndroidTestCase {
                 relationColumnHashSet.isEmpty());
 
         db.close();
+    }
+
+    public void testRecipeTable(){
+
+        RecipeDbHelper dbHelper = new RecipeDbHelper(mContext);
+        SQLiteDatabase dB = dbHelper.getWritableDatabase();
+
+        ContentValues testValues = TestUtilities.createRecipeGuacamoleValues();
+
+        long recipeRowId;
+        recipeRowId = dB.insert(RecipeContract.RecipeEntry.TABLE_NAME, null, testValues);
+
+        assertTrue(recipeRowId != -1);
+
+        Cursor cursor = dB.query(RecipeContract.RecipeEntry.TABLE_NAME,
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    null);
+
+        assertTrue( "Error: No Records returned from recipe query", cursor.moveToFirst());
+
+        TestUtilities.validateCurrentRecord("Error: Recipe Query Validation Failed",
+                cursor, testValues);
+
+        // Move the cursor to demonstrate that there is only one record in the database
+        assertFalse("Error: More than one record returned from recipe query",
+                cursor.moveToNext() );
+
+        cursor.close();
+        dB.close();
+
     }
 }
