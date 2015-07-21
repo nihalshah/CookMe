@@ -1,9 +1,14 @@
 package com.example.android.cookme.data;
 
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
+import android.util.Log;
+
 import com.example.android.cookme.data.RecipeContract.RecipeEntry;
 import com.example.android.cookme.data.RecipeContract.IngredientEntry;
 import com.example.android.cookme.data.RecipeContract.RecipeIngredientRelationship;
@@ -81,5 +86,54 @@ public class TestProvider extends AndroidTestCase {
         // vnd.android.cursor.dir/com.example.android.sunshine.app/location
         assertEquals("Error: the LocationEntry CONTENT_URI should return LocationEntry.CONTENT_TYPE",
                 LocationEntry.CONTENT_TYPE, type);*/
+    }
+
+
+    public void testGetRecipesByIngredient() {
+        // insert our test records into the database
+        RecipeDbHelper dbHelper = new RecipeDbHelper(mContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues recipeValues = TestUtilities.createRecipeGuacamoleValues();
+        long recipeRowId = db.insert(RecipeEntry.TABLE_NAME, null, recipeValues);
+        assertTrue("Unable to Insert RecipeEntry into the Database", recipeRowId != -1);
+
+        // Fantastic.  Now that we have a recipe, add ingredient!
+        ContentValues ingredientValues = TestUtilities.createIngredientTomatoValues();
+
+        long ingredientRowId = db.insert(IngredientEntry.TABLE_NAME, null, ingredientValues);
+        assertTrue("Unable to Insert IngredientEntry into the Database", ingredientRowId != -1);
+
+        //Now insert in relation
+        ContentValues relationValues = TestUtilities.createRelationshipValues(recipeRowId, ingredientRowId);
+        long relationId = db.insert(RecipeIngredientRelationship.TABLE_NAME, null, relationValues);
+        assertTrue("Unable to Insert RelationEntry into the Database", relationId != -1);
+
+        db.close();
+//
+        // Test the content provider query
+        Cursor listRecipesCursor = mContext.getContentResolver().query(
+                IngredientEntry.buildRecipesDirUri("Tomato"),
+                null,
+                null,
+                null,
+                null
+        );
+
+        assertTrue("Error, CUrsos is null", listRecipesCursor.moveToFirst());
+        String [] names = listRecipesCursor.getColumnNames();
+        StringBuilder builder = new StringBuilder();
+        for(String s : names) {
+            builder.append(s);
+        }
+        // recipe_idingredient_idunitsquantity_idnameinstructions_idname
+        String row = "";
+        row += "Rec_id: " + Integer.toString(listRecipesCursor.getInt(0));
+        row += " Ing_id: " + Integer.toString(listRecipesCursor.getInt(1));
+        row += " Rec: " + listRecipesCursor.getString(5);
+        row += " Ing: " + listRecipesCursor.getString(8);
+        assertNull(row, listRecipesCursor); //I USE THIS TO PRINT IN CONSOLE
+//        // Make sure we get the correct cursor out of the database
+//        TestUtilities.validateCursor("testBasicWeatherQuery", weatherCursor, weatherValues);
     }
 }
