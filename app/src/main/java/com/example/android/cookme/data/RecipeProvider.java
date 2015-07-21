@@ -72,7 +72,23 @@ public class RecipeProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
-        return null;
+        // Use the Uri Matcher to determine what kind of URI this is.
+        final int match = sUriMatcher.match(uri);
+
+        switch (match){
+            case INGREDIENT_ID_RECIPE_ID:
+                return RecipeContract.RecipeIngredientRelationship.CONTENT_ITEM_TYPE;
+            case INGREDIENT_ID_RECIPES:
+                return RecipeContract.IngredientEntry.CONTENT_TYPE;
+            case RECIPE_ID_INGREDIENTS:
+                return RecipeContract.RecipeEntry.CONTENT_TYPE;
+            case RECIPE:
+                return RecipeContract.RecipeEntry.CONTENT_TYPE;
+            case INGREDIENT:
+                return RecipeContract.IngredientEntry.CONTENT_TYPE;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
     }
 
     @Override
