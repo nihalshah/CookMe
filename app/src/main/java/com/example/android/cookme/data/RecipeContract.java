@@ -47,9 +47,10 @@ public class RecipeContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static Uri buildRecipeByName(String name){
-            return CONTENT_URI.buildUpon().appendPath(name).build();
-        }
+        //Obtained from Google I/O
+       public static Uri buildIngredientsDirUri(String recipeId){
+           return CONTENT_URI.buildUpon().appendPath(recipeId).appendPath(PATH_INGREDIENT).build();
+       }
 
 
     }
@@ -72,6 +73,11 @@ public class RecipeContract {
 
         public static Uri buildIngredientUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        //Obtained from Google I/O
+        public static Uri buildRecipesDirUri(String ingredientId){
+            return CONTENT_URI.buildUpon().appendPath(ingredientId).appendPath(PATH_RECIPE).build();
         }
     }
 
@@ -101,7 +107,7 @@ public class RecipeContract {
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_RELATIONSHIP;
 
-        public static Uri buildRelationshipUri(long id){
+        /*public static Uri buildRelationshipUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
         
@@ -113,6 +119,6 @@ public class RecipeContract {
         public static Uri buildRecipeIngredientbyIngredientAndRecipeId(String ing, long recId){
             return CONTENT_URI.buildUpon().appendPath(ing).
                     appendQueryParameter(COL_RECIPE_KEY, Long.toString(recId)).build();
-        }
+        }*/
     }
 }

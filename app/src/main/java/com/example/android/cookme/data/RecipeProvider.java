@@ -17,8 +17,9 @@ public class RecipeProvider extends ContentProvider {
     private static final SQLiteQueryBuilder sRecipeIngredientQueryBuilder;
 
     static final int RECIPE = 100;
-    static final int RECIPE_WITH_INGREDIENT = 101;
-    static final int INGREDIENT = 102;
+    static final int RECIPE_ID_INGREDIENTS = 101;
+    static final int INGREDIENT_ID_RECIPES = 102;
+    static final int INGREDIENT = 103;
 
     static{
         sRecipeIngredientQueryBuilder = new SQLiteQueryBuilder();
@@ -46,7 +47,10 @@ public class RecipeProvider extends ContentProvider {
 
         // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, RecipeContract.PATH_RECIPE, RECIPE);
-        matcher.addURI(authority, RecipeContract.PATH_RELATIONSHIP + "/*/*", RECIPE_WITH_INGREDIENT);
+        matcher.addURI(authority, RecipeContract.PATH_RECIPE + "/*/" + RecipeContract.PATH_INGREDIENT,
+                RECIPE_ID_INGREDIENTS);
+        matcher.addURI(authority, RecipeContract.PATH_INGREDIENT + "/*/" + RecipeContract.PATH_RECIPE,
+                INGREDIENT_ID_RECIPES);
         matcher.addURI(authority, RecipeContract.PATH_INGREDIENT, INGREDIENT);
 
         return matcher;
