@@ -2,6 +2,7 @@ package com.example.android.cookme.data;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
@@ -11,8 +12,14 @@ import android.net.Uri;
  */
 public class RecipeProvider extends ContentProvider {
 
+    private static final UriMatcher sUriMatcher = buildUriMatcher();
 
     private static final SQLiteQueryBuilder sRecipeIngredientQueryBuilder;
+
+    static final int RECIPE = 100;
+    static final int RECIPE_ID_INGREDIENTS = 101;
+    static final int INGREDIENT_ID_RECIPES = 102;
+    static final int INGREDIENT = 103;
 
     static{
         sRecipeIngredientQueryBuilder = new SQLiteQueryBuilder();
@@ -32,6 +39,22 @@ public class RecipeProvider extends ContentProvider {
                         RecipeContract.IngredientEntry._ID);
     }
 
+
+    static UriMatcher buildUriMatcher(){
+
+        final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
+        final String authority = RecipeContract.CONTENT_AUTHORITY;
+
+        // For each type of URI you want to add, create a corresponding code.
+        matcher.addURI(authority, RecipeContract.PATH_RECIPE, RECIPE);
+        matcher.addURI(authority, RecipeContract.PATH_RECIPE + "/*/" + RecipeContract.PATH_INGREDIENT,
+                RECIPE_ID_INGREDIENTS);
+        matcher.addURI(authority, RecipeContract.PATH_INGREDIENT + "/*/" + RecipeContract.PATH_RECIPE,
+                INGREDIENT_ID_RECIPES);
+        matcher.addURI(authority, RecipeContract.PATH_INGREDIENT, INGREDIENT);
+
+        return matcher;
+    }
 
     @Override
     public boolean onCreate() {

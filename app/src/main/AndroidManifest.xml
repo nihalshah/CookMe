@@ -25,6 +25,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.cookme.MainActivity" />
         </activity>
+
+        <!--Declaring the content provider -->
+        <provider
+            android:authorities="com.example.android.cookme"
+            android:name=".data.RecipeProvider" />
     </application>
 
 </manifest>
