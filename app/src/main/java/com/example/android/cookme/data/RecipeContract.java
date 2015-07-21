@@ -76,8 +76,12 @@ public class RecipeContract {
         }
 
         //Obtained from Google I/O
-        public static Uri buildRecipesDirUri(String ingredientId){
-            return CONTENT_URI.buildUpon().appendPath(ingredientId).appendPath(PATH_RECIPE).build();
+        public static Uri buildRecipesDirUri(String ingredientName){
+            return CONTENT_URI.buildUpon().appendPath(ingredientName).appendPath(PATH_RECIPE).build();
+        }
+
+        public static String getIngredientFromUri(Uri uri){
+            return (uri.getPathSegments().get(1));
         }
     }
 

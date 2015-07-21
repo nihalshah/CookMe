@@ -66,7 +66,7 @@ public class TestProvider extends AndroidTestCase {
         assertEquals("Error: the RelationEntry ITEM should return RELATION.CONTENT_ITEM_TYPE",
                 RecipeIngredientRelationship.CONTENT_ITEM_TYPE, type);
 
-        
+
 
         /*long testDate = 1419120000L; // December 21st, 2014
         // content://com.example.android.sunshine.app/weather/94074/20140612

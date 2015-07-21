@@ -41,6 +41,25 @@ public class RecipeProvider extends ContentProvider {
                         RecipeContract.IngredientEntry._ID);
     }
 
+    private static final String sIngridientSelection =
+            RecipeContract.IngredientEntry.TABLE_NAME + "." +
+                    RecipeContract.IngredientEntry.COL_NAME + " = ? ";
+
+    private Cursor getRecipesByIngredient(Uri uri, String[] projection, String sortOrder){
+        String ingredientName = RecipeContract.IngredientEntry.getIngredientFromUri(uri);
+
+        String [] selectionArgs = new String[]{ingredientName};
+        String selection = sIngridientSelection;
+
+        return sRecipeIngredientQueryBuilder.query(mDbHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder);
+    }
+
 
     static UriMatcher buildUriMatcher(){
 
@@ -66,8 +85,21 @@ public class RecipeProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] strings, String s, String[] strings1, String s1) {
-        return null;
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
+                        String sortOrder) {
+
+        Cursor returnCursor;
+
+        switch (sUriMatcher.match(uri)){
+            case INGREDIENT_ID_RECIPES:{
+                returnCursor = getRecipesByIngredient(uri, projection, sortOrder);
+                break;
+            }
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        returnCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return returnCursor;
     }
 
     @Override
