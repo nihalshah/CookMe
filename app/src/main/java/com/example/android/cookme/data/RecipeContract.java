@@ -107,6 +107,10 @@ public class RecipeContract {
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_RELATIONSHIP;
 
+        public static Uri buildRecipeItemUri(String ingredientId, String recipeId){
+            return CONTENT_URI.buildUpon().appendPath(ingredientId).appendPath(PATH_RECIPE).
+                    appendQueryParameter(COL_RECIPE_KEY, recipeId).build();
+        }
         /*public static Uri buildRelationshipUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
