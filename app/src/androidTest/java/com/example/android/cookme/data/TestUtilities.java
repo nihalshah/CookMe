@@ -20,7 +20,7 @@ public class TestUtilities extends AndroidTestCase{
 
     static ContentValues createRecipeGuacamoleValues(){
         ContentValues testValues = new ContentValues();
-        String inst = "1.- Peel and mash avocados in a medium serving bowl. Stir in onion, garlic, tomato, lime juice, salt and pepper. Season with remaining lime juice and salt and pepper to taste. Chill for half an hour to blend flavors.";
+        String inst = "1.- Peel and mash avocados.";
         testValues.put(RecipeContract.RecipeEntry.COL_NAME, "Guacamole");
         testValues.put(RecipeContract.RecipeEntry.COL_INSTRUCTIONS, inst);
         return testValues;

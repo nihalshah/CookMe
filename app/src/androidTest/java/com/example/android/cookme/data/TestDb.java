@@ -138,7 +138,7 @@ public class TestDb extends AndroidTestCase {
 
         db.close();
     }
-
+/*
     public void testRecipeTable(){
         insertRecipe();
     }
@@ -250,5 +250,5 @@ public class TestDb extends AndroidTestCase {
         cursor.close();
         dB.close();
         return ingredientRowId;
-    }
+    }*/
 }

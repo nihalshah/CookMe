@@ -112,6 +112,18 @@ public class RecipeProvider extends ContentProvider {
                 );
                 break;
             }
+            case RECIPE:{
+                returnCursor = mDbHelper.getReadableDatabase().query(
+                        RecipeContract.RecipeEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
 
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
