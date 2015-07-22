@@ -4,6 +4,8 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
@@ -141,7 +143,40 @@ public class RecipeProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
-        return null;
+        final SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        Uri returnUri;
+
+        switch (match){
+            case RECIPE:{
+                long _id = db.insert(RecipeContract.RecipeEntry.TABLE_NAME, null, contentValues);
+                if(_id > 0)
+                    returnUri = RecipeContract.RecipeEntry.buildRecipeUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
+            case INGREDIENT:{
+                long _id = db.insert(RecipeContract.IngredientEntry.TABLE_NAME, null, contentValues);
+                if(_id > 0)
+                    returnUri = RecipeContract.IngredientEntry.buildIngredientUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
+            case RELATIONSHIP:{
+                long _id = db.insert(RecipeContract.RecipeIngredientRelationship.TABLE_NAME, null, contentValues);
+                if(_id > 0)
+                    returnUri = RecipeContract.RecipeIngredientRelationship.buildRelationshipUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return returnUri;
     }
 
     @Override
