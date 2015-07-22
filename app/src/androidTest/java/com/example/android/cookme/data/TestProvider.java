@@ -1,11 +1,13 @@
 package com.example.android.cookme.data;
 
 import android.content.ComponentName;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Build;
 import android.test.AndroidTestCase;
 import android.util.Log;
@@ -18,6 +20,34 @@ import com.example.android.cookme.data.RecipeContract.RecipeIngredientRelationsh
  * Created by eduardovaca on 21/07/15.
  */
 public class TestProvider extends AndroidTestCase {
+
+
+
+    public void deleteAllRecordsFromDB() {
+        RecipeDbHelper dbHelper = new RecipeDbHelper(mContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.delete(RecipeEntry.TABLE_NAME, null, null);
+        db.delete(IngredientEntry.TABLE_NAME, null, null);
+        db.delete(RecipeIngredientRelationship.TABLE_NAME, null, null);
+        db.close();
+    }
+
+    /*
+        Student: Refactor this function to use the deleteAllRecordsFromProvider functionality once
+        you have implemented delete functionality there.
+     */
+    public void deleteAllRecords() {
+        deleteAllRecordsFromDB();
+    }
+
+    // Since we want each test to start with a clean slate, run deleteAllRecords
+    // in setUp (called by the test runner before each test).
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        deleteAllRecords();
+    }
 
     public void testProviderRegistry() {
         PackageManager pm = mContext.getPackageManager();
@@ -150,5 +180,109 @@ public class TestProvider extends AndroidTestCase {
        // assertNull(row, listRecipesCursor); //I USE THIS TO PRINT IN CONSOLE
 //        // Make sure we get the correct cursor out of the database
 //        TestUtilities.validateCursor("testBasicWeatherQuery", weatherCursor, weatherValues);
+    }
+
+    public void testInsertReadProvider() {
+        ContentValues recipeValues = TestUtilities.createRecipeGuacamoleValues();
+
+        // Register a content observer for our insert.  This time, directly with the content resolver
+        TestUtilities.TestContentObserver tco = TestUtilities.getTestContentObserver();
+        mContext.getContentResolver().registerContentObserver(RecipeEntry.CONTENT_URI, true, tco);
+        Uri recipeUri = mContext.getContentResolver().insert(RecipeEntry.CONTENT_URI, recipeValues);
+
+        // Did our content observer get called?  Students:  If this fails, your insert location
+        // isn't calling getContext().getContentResolver().notifyChange(uri, null);
+        tco.waitForNotificationOrFail();
+        mContext.getContentResolver().unregisterContentObserver(tco);
+
+        long recipeRowId = ContentUris.parseId(recipeUri);
+
+        // Verify we got a row back.
+        assertTrue(recipeRowId != -1);
+
+        // Data's inserted.  IN THEORY.  Now pull some out to stare at it and verify it made
+        // the round trip.
+
+        // A cursor is your primary interface to the query results.
+        Cursor cursor = mContext.getContentResolver().query(
+                RecipeEntry.CONTENT_URI,
+                null, // leaving "columns" null just returns all the columns.
+                null, // cols for "where" clause
+                null, // values for "where" clause
+                null  // sort order
+        );
+
+        TestUtilities.validateCursor("testInsertReadProvider. Error validating RecipeEntry.",
+                cursor, recipeValues);
+
+        // Fantastic.  Now that we have a recipe, add ingredient!
+        ContentValues ingredientValues = TestUtilities.createIngredientTomatoValues();
+        // The TestContentObserver is a one-shot class
+        tco = TestUtilities.getTestContentObserver();
+
+        mContext.getContentResolver().registerContentObserver(IngredientEntry.CONTENT_URI, true, tco);
+
+        Uri ingredientInsertUri = mContext.getContentResolver()
+                .insert(IngredientEntry.CONTENT_URI, ingredientValues);
+        assertTrue(ingredientInsertUri != null);
+
+        // Did our content observer get called?  Students:  If this fails, your insert weather
+        // in your ContentProvider isn't calling
+        // getContext().getContentResolver().notifyChange(uri, null);
+        tco.waitForNotificationOrFail();
+        mContext.getContentResolver().unregisterContentObserver(tco);
+
+        long ingredientRowId = ContentUris.parseId(ingredientInsertUri);
+
+        // A cursor is your primary interface to the query results.
+        Cursor ingredientCursor = mContext.getContentResolver().query(
+                IngredientEntry.CONTENT_URI,  // Table to Query
+                null, // leaving "columns" null just returns all the columns.
+                null, // cols for "where" clause
+                null, // values for "where" clause
+                null // columns to group by
+        );
+
+        TestUtilities.validateCursor("testInsertReadProvider. Error validating IngredientEntry insert.",
+                ingredientCursor, ingredientValues);
+
+        //NOW ADD THE RELATION
+        ContentValues relationValues = TestUtilities.createRelationshipValues(recipeRowId, ingredientRowId);
+
+        tco = TestUtilities.getTestContentObserver();
+
+        mContext.getContentResolver().registerContentObserver(RecipeIngredientRelationship.CONTENT_URI, true, tco);
+
+        Uri relationInsertUri = mContext.getContentResolver().
+                insert(RecipeIngredientRelationship.CONTENT_URI, relationValues);
+
+        assertTrue(relationInsertUri != null);
+
+        // Did our content observer get called?  Students:  If this fails, your insert weather
+        // in your ContentProvider isn't calling
+        // getContext().getContentResolver().notifyChange(uri, null);
+        tco.waitForNotificationOrFail();
+        mContext.getContentResolver().unregisterContentObserver(tco);
+
+
+
+        // make sure that the join worked and we actually get all the values back
+        relationValues.putAll(recipeValues);
+        relationValues.putAll(ingredientValues);
+
+
+        // Get the joined Recipe and Ingrdient data
+        Cursor relationCursor = mContext.getContentResolver().query(
+                IngredientEntry.buildRecipesDirUri("Tomato"),
+                null, // leaving "columns" null just returns all the columns.
+                null, // cols for "where" clause
+                null, // values for "where" clause
+                null  // sort order
+        );
+
+
+        TestUtilities.validateCursor("testInsertReadProvider.  Error validating joined Recipe and Ingredient Data.",
+               relationCursor, relationValues);
+
     }
 }

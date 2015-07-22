@@ -115,11 +115,11 @@ public class RecipeContract {
             return CONTENT_URI.buildUpon().appendPath(ingredientId).appendPath(PATH_RECIPE).
                     appendQueryParameter(COL_RECIPE_KEY, recipeId).build();
         }
-        /*public static Uri buildRelationshipUri(long id){
+        public static Uri buildRelationshipUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
         
-
+        /*
         public static Uri buildRecipeIngredientbyIngredient(String ingredientName){
             return CONTENT_URI.buildUpon().appendPath(ingredientName).build();
         }
