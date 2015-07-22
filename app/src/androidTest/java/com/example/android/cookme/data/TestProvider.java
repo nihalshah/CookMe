@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
@@ -71,21 +72,35 @@ public class TestProvider extends AndroidTestCase {
         assertEquals("Error: the RelationEntry ITEM should return RELATION.CONTENT_ITEM_TYPE",
                 RecipeIngredientRelationship.CONTENT_ITEM_TYPE, type);
 
+    }
 
+    public void testBasicIngredientQueries() {
+        // insert our test records into the database
+        RecipeDbHelper dbHelper = new RecipeDbHelper(mContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        /*long testDate = 1419120000L; // December 21st, 2014
-        // content://com.example.android.sunshine.app/weather/94074/20140612
-        type = mContext.getContentResolver().getType(
-                WeatherEntry.buildWeatherLocationWithDate(testLocation, testDate));
-        // vnd.android.cursor.item/com.example.android.sunshine.app/weather/1419120000
-        assertEquals("Error: the WeatherEntry CONTENT_URI with location and date should return WeatherEntry.CONTENT_ITEM_TYPE",
-                WeatherEntry.CONTENT_ITEM_TYPE, type);
+        ContentValues testValues = TestUtilities.createIngredientTomatoValues();
+        long ingredientRowId = db.insert(IngredientEntry.TABLE_NAME, null, testValues);
+        assertTrue("Unable to Insert IngredientEntry into the Database", ingredientRowId != -1);
 
-        // content://com.example.android.sunshine.app/location/
-        type = mContext.getContentResolver().getType(LocationEntry.CONTENT_URI);
-        // vnd.android.cursor.dir/com.example.android.sunshine.app/location
-        assertEquals("Error: the LocationEntry CONTENT_URI should return LocationEntry.CONTENT_TYPE",
-                LocationEntry.CONTENT_TYPE, type);*/
+        // Test the basic content provider query
+        Cursor ingredientCursor = mContext.getContentResolver().query(
+                IngredientEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+
+        // Make sure we get the correct cursor out of the database
+        TestUtilities.validateCursor("testBasicIngredientQueries, ingredient query", ingredientCursor, testValues);
+
+        // Has the NotificationUri been set correctly? --- we can only test this easily against API
+        // level 19 or greater because getNotificationUri was added in API level 19.
+        if ( Build.VERSION.SDK_INT >= 19 ) {
+            assertEquals("Error: Ingredient Query did not properly set NotificationUri",
+                    ingredientCursor.getNotificationUri(), IngredientEntry.CONTENT_URI);
+        }
     }
 
 
@@ -132,7 +147,7 @@ public class TestProvider extends AndroidTestCase {
         row += " Ing_id: " + Integer.toString(listRecipesCursor.getInt(1));
         row += " Rec: " + listRecipesCursor.getString(5);
         row += " Ing: " + listRecipesCursor.getString(8);
-        assertNull(row, listRecipesCursor); //I USE THIS TO PRINT IN CONSOLE
+       // assertNull(row, listRecipesCursor); //I USE THIS TO PRINT IN CONSOLE
 //        // Make sure we get the correct cursor out of the database
 //        TestUtilities.validateCursor("testBasicWeatherQuery", weatherCursor, weatherValues);
     }

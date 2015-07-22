@@ -91,10 +91,24 @@ public class RecipeProvider extends ContentProvider {
         Cursor returnCursor;
 
         switch (sUriMatcher.match(uri)){
+
             case INGREDIENT_ID_RECIPES:{
                 returnCursor = getRecipesByIngredient(uri, projection, sortOrder);
                 break;
             }
+            case INGREDIENT:{
+                returnCursor = mDbHelper.getReadableDatabase().query(
+                        RecipeContract.IngredientEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
