@@ -22,6 +22,7 @@ public class RecipeProvider extends ContentProvider {
     static final int INGREDIENT_ID_RECIPES = 102;
     static final int INGREDIENT_ID_RECIPE_ID = 103;
     static final int INGREDIENT = 104;
+    static final int RELATIONSHIP = 105;
 
     static{
         sRecipeIngredientQueryBuilder = new SQLiteQueryBuilder();
@@ -74,6 +75,7 @@ public class RecipeProvider extends ContentProvider {
                 INGREDIENT_ID_RECIPES);
         matcher.addURI(authority, RecipeContract.PATH_RELATIONSHIP + "/*/*", INGREDIENT_ID_RECIPE_ID);
         matcher.addURI(authority, RecipeContract.PATH_INGREDIENT, INGREDIENT);
+        matcher.addURI(authority, RecipeContract.PATH_RELATIONSHIP, RELATIONSHIP);
 
         return matcher;
     }
