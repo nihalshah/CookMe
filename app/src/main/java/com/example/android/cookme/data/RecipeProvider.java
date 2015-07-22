@@ -192,8 +192,36 @@ public class RecipeProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(Uri uri, String s, String[] strings) {
-        return 0;
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+        final SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        int rowsDeleted;
+
+        // this makes delete all rows return the number of rows deleted
+        if ( null == selection ) selection = "1";
+
+        switch (match){
+            case RECIPE:{
+                rowsDeleted = db.delete(RecipeContract.RecipeEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            }
+            case INGREDIENT:{
+                rowsDeleted = db.delete(RecipeContract.IngredientEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            }
+            case RELATIONSHIP:{
+                rowsDeleted = db.delete(RecipeContract.RecipeIngredientRelationship.TABLE_NAME, selection, selectionArgs);
+                break;
+            }
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        // Because a null deletes all rows
+        if (rowsDeleted != 0)
+            getContext().getContentResolver().notifyChange(uri, null);
+        
+        return rowsDeleted;
     }
 
     @Override
