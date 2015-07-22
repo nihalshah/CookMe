@@ -21,6 +21,34 @@ import com.example.android.cookme.data.RecipeContract.RecipeIngredientRelationsh
  */
 public class TestProvider extends AndroidTestCase {
 
+
+
+    public void deleteAllRecordsFromDB() {
+        RecipeDbHelper dbHelper = new RecipeDbHelper(mContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.delete(RecipeEntry.TABLE_NAME, null, null);
+        db.delete(IngredientEntry.TABLE_NAME, null, null);
+        db.delete(RecipeIngredientRelationship.TABLE_NAME, null, null);
+        db.close();
+    }
+
+    /*
+        Student: Refactor this function to use the deleteAllRecordsFromProvider functionality once
+        you have implemented delete functionality there.
+     */
+    public void deleteAllRecords() {
+        deleteAllRecordsFromDB();
+    }
+
+    // Since we want each test to start with a clean slate, run deleteAllRecords
+    // in setUp (called by the test runner before each test).
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        deleteAllRecords();
+    }
+
     public void testProviderRegistry() {
         PackageManager pm = mContext.getPackageManager();
 
