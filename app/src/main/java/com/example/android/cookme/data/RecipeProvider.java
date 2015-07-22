@@ -124,6 +124,18 @@ public class RecipeProvider extends ContentProvider {
                 );
                 break;
             }
+            case RELATIONSHIP:{
+                returnCursor = mDbHelper.getReadableDatabase().query(
+                        RecipeContract.RecipeIngredientRelationship.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
 
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -220,7 +232,7 @@ public class RecipeProvider extends ContentProvider {
         // Because a null deletes all rows
         if (rowsDeleted != 0)
             getContext().getContentResolver().notifyChange(uri, null);
-        
+
         return rowsDeleted;
     }
 
