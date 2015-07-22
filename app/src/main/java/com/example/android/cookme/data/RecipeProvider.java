@@ -240,4 +240,7 @@ public class RecipeProvider extends ContentProvider {
     public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
         return 0;
     }
+
+
+    //TODO: add a bulkInsert method if we use the API of recipes
 }
