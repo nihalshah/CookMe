@@ -13,13 +13,15 @@ import android.net.Uri;
 public class RecipeProvider extends ContentProvider {
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
+    private RecipeDbHelper mDbHelper;
 
     private static final SQLiteQueryBuilder sRecipeIngredientQueryBuilder;
 
     static final int RECIPE = 100;
     static final int RECIPE_ID_INGREDIENTS = 101;
     static final int INGREDIENT_ID_RECIPES = 102;
-    static final int INGREDIENT = 103;
+    static final int INGREDIENT_ID_RECIPE_ID = 103;
+    static final int INGREDIENT = 104;
 
     static{
         sRecipeIngredientQueryBuilder = new SQLiteQueryBuilder();
@@ -39,6 +41,25 @@ public class RecipeProvider extends ContentProvider {
                         RecipeContract.IngredientEntry._ID);
     }
 
+    private static final String sIngridientSelection =
+            RecipeContract.IngredientEntry.TABLE_NAME + "." +
+                    RecipeContract.IngredientEntry.COL_NAME + " = ? ";
+
+    private Cursor getRecipesByIngredient(Uri uri, String[] projection, String sortOrder){
+        String ingredientName = RecipeContract.IngredientEntry.getIngredientFromUri(uri);
+
+        String [] selectionArgs = new String[]{ingredientName};
+        String selection = sIngridientSelection;
+
+        return sRecipeIngredientQueryBuilder.query(mDbHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder);
+    }
+
 
     static UriMatcher buildUriMatcher(){
 
@@ -51,6 +72,7 @@ public class RecipeProvider extends ContentProvider {
                 RECIPE_ID_INGREDIENTS);
         matcher.addURI(authority, RecipeContract.PATH_INGREDIENT + "/*/" + RecipeContract.PATH_RECIPE,
                 INGREDIENT_ID_RECIPES);
+        matcher.addURI(authority, RecipeContract.PATH_RELATIONSHIP + "/*/*", INGREDIENT_ID_RECIPE_ID);
         matcher.addURI(authority, RecipeContract.PATH_INGREDIENT, INGREDIENT);
 
         return matcher;
@@ -58,17 +80,61 @@ public class RecipeProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        return false;
+        mDbHelper = new RecipeDbHelper(getContext());
+        return true;
     }
 
     @Override
-    public Cursor query(Uri uri, String[] strings, String s, String[] strings1, String s1) {
-        return null;
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
+                        String sortOrder) {
+
+        Cursor returnCursor;
+
+        switch (sUriMatcher.match(uri)){
+
+            case INGREDIENT_ID_RECIPES:{
+                returnCursor = getRecipesByIngredient(uri, projection, sortOrder);
+                break;
+            }
+            case INGREDIENT:{
+                returnCursor = mDbHelper.getReadableDatabase().query(
+                        RecipeContract.IngredientEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
+
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        returnCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return returnCursor;
     }
 
     @Override
     public String getType(Uri uri) {
-        return null;
+        // Use the Uri Matcher to determine what kind of URI this is.
+        final int match = sUriMatcher.match(uri);
+
+        switch (match){
+            case INGREDIENT_ID_RECIPE_ID:
+                return RecipeContract.RecipeIngredientRelationship.CONTENT_ITEM_TYPE;
+            case INGREDIENT_ID_RECIPES:
+                return RecipeContract.IngredientEntry.CONTENT_TYPE;
+            case RECIPE_ID_INGREDIENTS:
+                return RecipeContract.RecipeEntry.CONTENT_TYPE;
+            case RECIPE:
+                return RecipeContract.RecipeEntry.CONTENT_TYPE;
+            case INGREDIENT:
+                return RecipeContract.IngredientEntry.CONTENT_TYPE;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
     }
 
     @Override
