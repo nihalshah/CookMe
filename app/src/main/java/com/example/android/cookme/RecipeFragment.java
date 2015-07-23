@@ -114,7 +114,7 @@ public class RecipeFragment extends Fragment {
         mRecipeAdapter.notifyDataSetChanged();
     }
 
-    public void testInsertionOfRecipe(){
+   /* public void testInsertionOfRecipe(){
 
         ContentValues recipeValues = Utility.createRecipeValues("Sandwich", "Go to Subway");
         ContentValues ingredientValues = Utility.createIngredientValues("Bread");
@@ -169,4 +169,5 @@ public class RecipeFragment extends Fragment {
 
         cursor.close();
     }
+    */
 }
