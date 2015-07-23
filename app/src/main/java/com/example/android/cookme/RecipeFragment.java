@@ -47,7 +47,7 @@ public class RecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        testInsertionOfRecipe();
+        //testInsertionOfRecipe();
 
 
         mListRecipes = new RecipeProviderByJSON(getActivity());
@@ -84,11 +84,11 @@ public class RecipeFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                /*EditText ingredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
+                EditText ingredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
                 String ingredientQuery = ingredientInput.getText().toString();
-                filterRecipesByIngredient(ingredientQuery);*/
+                filterRecipesByIngredient(ingredientQuery);
 
-                testReadWholeRecipes();
+                //testReadWholeRecipes();
 
             }
         });
@@ -141,7 +141,7 @@ public class RecipeFragment extends Fragment {
     public void testReadWholeRecipes(){
 
         Cursor cursor = getActivity().getContentResolver().query(
-                RecipeContract.IngredientEntry.buildRecipesDirUri("Bread"),
+                RecipeContract.RecipeIngredientRelationship.CONTENT_URI,
                 null,
                 null,
                 null,
