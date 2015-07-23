@@ -3,6 +3,7 @@ package com.example.android.cookme;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -48,6 +49,7 @@ public class RecipeFragment extends Fragment {
 
         //testInsertionOfRecipe();
 
+
         mListRecipes = new RecipeProviderByJSON(getActivity());
 
         mDeletedRecipesNames = new ArrayList<>();
@@ -82,9 +84,11 @@ public class RecipeFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                EditText ingredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
+                /*EditText ingredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
                 String ingredientQuery = ingredientInput.getText().toString();
-                filterRecipesByIngredient(ingredientQuery);
+                filterRecipesByIngredient(ingredientQuery);*/
+
+                testReadWholeRecipes();
 
             }
         });
@@ -132,5 +136,37 @@ public class RecipeFragment extends Fragment {
                 insert(RecipeContract.RecipeIngredientRelationship.CONTENT_URI, relationValues);
 
         Log.v(LOG_TAG, "Insertion of entire recipe completed!");
+    }
+
+    public void testReadWholeRecipes(){
+
+        Cursor cursor = getActivity().getContentResolver().query(
+                RecipeContract.IngredientEntry.buildRecipesDirUri("Meat"),
+                null,
+                null,
+                null,
+                null
+        );
+
+        while(cursor.moveToNext()){
+            String rec = "";
+            int index = cursor.getColumnIndex(RecipeContract.RecipeEntry.COL_NAME);
+            rec += cursor.getString(index) + ", ";
+            index = cursor.getColumnIndex(RecipeContract.RecipeEntry.COL_INSTRUCTIONS);
+            rec += cursor.getString(index) + ", ";
+            index = cursor.getColumnIndex(RecipeContract.IngredientEntry.COL_NAME);
+            rec += cursor.getString(index) + ", ";
+            index = cursor.getColumnIndex(RecipeContract.RecipeIngredientRelationship.COL_QUANTITY);
+            rec += cursor.getInt(index) + ", ";
+            index = cursor.getColumnIndex(RecipeContract.RecipeIngredientRelationship.COL_UNITS);
+            rec += cursor.getString(index) + ", ";
+
+            Log.v(LOG_TAG, "MY RECIPE: " + rec);
+
+
+        }
+
+
+        cursor.close();
     }
 }

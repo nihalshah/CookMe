@@ -50,7 +50,7 @@ public class RecipeProvider extends ContentProvider {
                         RecipeContract.IngredientEntry._ID);
     }
 
-    private static final String sIngridientSelection =
+    private static final String sIngredientSelection =
             RecipeContract.IngredientEntry.TABLE_NAME + "." +
                     RecipeContract.IngredientEntry.COL_NAME + " = ? ";
 
@@ -58,7 +58,7 @@ public class RecipeProvider extends ContentProvider {
         String ingredientName = RecipeContract.IngredientEntry.getIngredientFromUri(uri);
 
         String [] selectionArgs = new String[]{ingredientName};
-        String selection = sIngridientSelection;
+        String selection = sIngredientSelection;
 
         return sRecipeIngredientQueryBuilder.query(mDbHelper.getReadableDatabase(),
                 projection,
@@ -68,6 +68,8 @@ public class RecipeProvider extends ContentProvider {
                 null,
                 sortOrder);
     }
+
+
 
 
     static UriMatcher buildUriMatcher(){
