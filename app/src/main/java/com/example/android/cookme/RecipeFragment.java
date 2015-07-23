@@ -47,7 +47,7 @@ public class RecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        //testInsertionOfRecipe();
+        testInsertionOfRecipe();
 
 
         mListRecipes = new RecipeProviderByJSON(getActivity());
@@ -116,8 +116,8 @@ public class RecipeFragment extends Fragment {
 
     public void testInsertionOfRecipe(){
 
-        ContentValues recipeValues = Utility.createRecipeValues("Tacos", "Go to tacos el pata!");
-        ContentValues ingredientValues = Utility.createIngredientValues("Meat");
+        ContentValues recipeValues = Utility.createRecipeValues("Sandwich", "Go to Subway");
+        ContentValues ingredientValues = Utility.createIngredientValues("Bread");
 
 
         //Insert in tables Recipe and Ingredient
@@ -131,7 +131,7 @@ public class RecipeFragment extends Fragment {
         long ingredient_id = ContentUris.parseId(ingredientInserted);
 
         //Insert in the table of relationship
-        ContentValues relationValues = Utility.createRelationshipValues(recipe_id, ingredient_id, "Grams", 50);
+        ContentValues relationValues = Utility.createRelationshipValues(recipe_id, ingredient_id, "L", 1);
         getActivity().getContentResolver().
                 insert(RecipeContract.RecipeIngredientRelationship.CONTENT_URI, relationValues);
 
@@ -141,7 +141,7 @@ public class RecipeFragment extends Fragment {
     public void testReadWholeRecipes(){
 
         Cursor cursor = getActivity().getContentResolver().query(
-                RecipeContract.IngredientEntry.buildRecipesDirUri("Meat"),
+                RecipeContract.IngredientEntry.buildRecipesDirUri("Bread"),
                 null,
                 null,
                 null,

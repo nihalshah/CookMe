@@ -27,7 +27,7 @@ public class RecipeContract {
         public static final String TABLE_NAME = "recipe";
 
         //Name of the recipe
-        public static final String COL_NAME = "name";
+        public static final String COL_NAME = "name_recipe";
 
         //Instructions of the recipe
         public static final String COL_INSTRUCTIONS = "instructions";
@@ -61,7 +61,7 @@ public class RecipeContract {
         public static final String TABLE_NAME = "ingredient";
 
         //Name of the ingredient
-        public static final String COL_NAME = "name";
+        public static final String COL_NAME = "name_ingredient";
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_INGREDIENT).build();
