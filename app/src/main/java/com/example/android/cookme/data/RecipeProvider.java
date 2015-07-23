@@ -1,6 +1,7 @@
 package com.example.android.cookme.data;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -8,11 +9,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.util.Log;
+
+import com.example.android.cookme.Utility;
 
 /**
  * Created by eduardovaca on 20/07/15.
  */
 public class RecipeProvider extends ContentProvider {
+
+    private static final String LOG_TAG = RecipeProvider.class.getSimpleName();
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private RecipeDbHelper mDbHelper;
@@ -44,7 +50,7 @@ public class RecipeProvider extends ContentProvider {
                         RecipeContract.IngredientEntry._ID);
     }
 
-    private static final String sIngridientSelection =
+    private static final String sIngredientSelection =
             RecipeContract.IngredientEntry.TABLE_NAME + "." +
                     RecipeContract.IngredientEntry.COL_NAME + " = ? ";
 
@@ -52,7 +58,7 @@ public class RecipeProvider extends ContentProvider {
         String ingredientName = RecipeContract.IngredientEntry.getIngredientFromUri(uri);
 
         String [] selectionArgs = new String[]{ingredientName};
-        String selection = sIngridientSelection;
+        String selection = sIngredientSelection;
 
         return sRecipeIngredientQueryBuilder.query(mDbHelper.getReadableDatabase(),
                 projection,
@@ -62,6 +68,18 @@ public class RecipeProvider extends ContentProvider {
                 null,
                 sortOrder);
     }
+
+    private Cursor getAllRelationships(Uri uri, String[] projection, String sortOrder){
+
+        return  sRecipeIngredientQueryBuilder.query(mDbHelper.getReadableDatabase(),
+                projection,
+                null,
+                null,
+                null,
+                null,
+                sortOrder);
+    }
+
 
 
     static UriMatcher buildUriMatcher(){
@@ -125,7 +143,8 @@ public class RecipeProvider extends ContentProvider {
                 break;
             }
             case RELATIONSHIP:{
-                returnCursor = mDbHelper.getReadableDatabase().query(
+                returnCursor = getAllRelationships(uri, projection, sortOrder);
+                /*returnCursor = mDbHelper.getReadableDatabase().query(
                         RecipeContract.RecipeIngredientRelationship.TABLE_NAME,
                         projection,
                         selection,
@@ -133,7 +152,7 @@ public class RecipeProvider extends ContentProvider {
                         null,
                         null,
                         sortOrder
-                );
+                );*/
                 break;
             }
 
@@ -239,6 +258,26 @@ public class RecipeProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
         return 0;
+    }
+
+    public void insertWholeRecipe(ContentValues recipeValues,
+                                  ContentValues ingredientValues,
+                                  String units, int quantity){
+
+        //Insert in tables Recipe and Ingredient
+        Uri recipeInserted = insert(RecipeContract.RecipeEntry.CONTENT_URI, recipeValues);
+        Uri ingredientInserted = insert(RecipeContract.IngredientEntry.CONTENT_URI, ingredientValues);
+
+        //Get the id of the rows inserted
+        long recipe_id = ContentUris.parseId(recipeInserted);
+        long ingredient_id = ContentUris.parseId(ingredientInserted);
+
+        //Insert in the table of relationship
+        ContentValues relationValues = Utility.createRelationshipValues(recipe_id, ingredient_id, units, quantity);
+        insert(RecipeContract.RecipeIngredientRelationship.CONTENT_URI, relationValues);
+
+        Log.v(LOG_TAG, "Insertion of entire recipe completed!");
+
     }
 
 

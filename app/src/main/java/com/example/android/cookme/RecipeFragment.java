@@ -1,8 +1,13 @@
 package com.example.android.cookme;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.android.cookme.data.Recipe;
+import com.example.android.cookme.data.RecipeContract;
 import com.example.android.cookme.data.RecipeProviderByJSON;
 
 import java.util.ArrayList;
@@ -23,6 +29,8 @@ import java.util.Iterator;
  * A placeholder fragment containing a simple view.
  */
 public class RecipeFragment extends Fragment {
+
+    private static final String LOG_TAG = RecipeFragment.class.getSimpleName();
 
     private RecipeProviderByJSON mListRecipes;
     private ArrayAdapter<String> mRecipeAdapter;
@@ -38,6 +46,9 @@ public class RecipeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+        //testInsertionOfRecipe();
+
 
         mListRecipes = new RecipeProviderByJSON(getActivity());
 
@@ -77,6 +88,8 @@ public class RecipeFragment extends Fragment {
                 String ingredientQuery = ingredientInput.getText().toString();
                 filterRecipesByIngredient(ingredientQuery);
 
+                //testReadWholeRecipes();
+
             }
         });
 
@@ -100,4 +113,61 @@ public class RecipeFragment extends Fragment {
         }
         mRecipeAdapter.notifyDataSetChanged();
     }
+
+   /* public void testInsertionOfRecipe(){
+
+        ContentValues recipeValues = Utility.createRecipeValues("Sandwich", "Go to Subway");
+        ContentValues ingredientValues = Utility.createIngredientValues("Bread");
+
+
+        //Insert in tables Recipe and Ingredient
+        Uri recipeInserted = getActivity().getContentResolver().
+                insert(RecipeContract.RecipeEntry.CONTENT_URI, recipeValues);
+        Uri ingredientInserted = getActivity().getContentResolver().
+                insert(RecipeContract.IngredientEntry.CONTENT_URI, ingredientValues);
+
+        //Get the id of the rows inserted
+        long recipe_id = ContentUris.parseId(recipeInserted);
+        long ingredient_id = ContentUris.parseId(ingredientInserted);
+
+        //Insert in the table of relationship
+        ContentValues relationValues = Utility.createRelationshipValues(recipe_id, ingredient_id, "L", 1);
+        getActivity().getContentResolver().
+                insert(RecipeContract.RecipeIngredientRelationship.CONTENT_URI, relationValues);
+
+        Log.v(LOG_TAG, "Insertion of entire recipe completed!");
+    }
+
+    public void testReadWholeRecipes(){
+
+        Cursor cursor = getActivity().getContentResolver().query(
+                RecipeContract.RecipeIngredientRelationship.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+
+        while(cursor.moveToNext()){
+            String rec = "";
+            int index = cursor.getColumnIndex(RecipeContract.RecipeEntry.COL_NAME);
+            rec += cursor.getString(index) + ", ";
+            index = cursor.getColumnIndex(RecipeContract.RecipeEntry.COL_INSTRUCTIONS);
+            rec += cursor.getString(index) + ", ";
+            index = cursor.getColumnIndex(RecipeContract.IngredientEntry.COL_NAME);
+            rec += cursor.getString(index) + ", ";
+            index = cursor.getColumnIndex(RecipeContract.RecipeIngredientRelationship.COL_QUANTITY);
+            rec += cursor.getInt(index) + ", ";
+            index = cursor.getColumnIndex(RecipeContract.RecipeIngredientRelationship.COL_UNITS);
+            rec += cursor.getString(index) + ", ";
+
+            Log.v(LOG_TAG, "MY RECIPE: " + rec);
+
+
+        }
+
+
+        cursor.close();
+    }
+    */
 }
