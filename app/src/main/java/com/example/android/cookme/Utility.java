@@ -18,4 +18,17 @@ public class Utility {
         relationValues.put(RecipeContract.RecipeIngredientRelationship.COL_QUANTITY, quantity);
         return relationValues;
     }
+
+    public static ContentValues createRecipeValues(String name, String instructions){
+        ContentValues recipeValues = new ContentValues();
+        recipeValues.put(RecipeContract.RecipeEntry.COL_NAME, name);
+        recipeValues.put(RecipeContract.RecipeEntry.COL_INSTRUCTIONS, instructions);
+        return recipeValues;
+    }
+
+    public static ContentValues createIngredientValues(String name){
+        ContentValues ingredientValues = new ContentValues();
+        ingredientValues.put(RecipeContract.IngredientEntry.COL_NAME, name);
+        return ingredientValues;
+    }
 }
