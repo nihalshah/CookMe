@@ -1,6 +1,8 @@
 package com.example.android.cookme;
 
 import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
 
 import com.example.android.cookme.data.RecipeContract;
 
@@ -30,5 +32,16 @@ public class Utility {
         ContentValues ingredientValues = new ContentValues();
         ingredientValues.put(RecipeContract.IngredientEntry.COL_NAME, name);
         return ingredientValues;
+    }
+
+    public static boolean dataBaseIsEmpty(Context context){
+        Cursor cursor = context.getContentResolver().query(
+                RecipeContract.RecipeIngredientRelationship.CONTENT_URI,
+                null,
+                null,
+                null,
+                null);
+
+        return cursor.moveToFirst();
     }
 }
