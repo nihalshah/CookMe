@@ -1,5 +1,6 @@
 package com.example.android.cookme;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -41,7 +42,7 @@ public class RecipeFragment extends Fragment {
 
         mListRecipes = new RecipeProviderByJSON(getActivity());
 
-        /*Just insert JSNON in DB if DB is empty*/
+        /*Just insert JSON in DB if DB is empty*/
         if(Utility.dataBaseIsEmpty(getActivity())){
             Utility.insertJSONRecipesToDb(getActivity(), mListRecipes.getCollection_of_recipes());
         }
@@ -63,13 +64,12 @@ public class RecipeFragment extends Fragment {
         //Item clicked event
         listRecipes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-                /*String recipeName = mRecipeAdapter.getItem(i);
-                Recipe actualRecipe = mListRecipes.getRecipeByName(recipeName);
+                String recipeName = mRecipeAdapter.getItem(position);
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
-                detailIntent.putExtra("Recipe", actualRecipe);
-                startActivity(detailIntent);*/
+                detailIntent.putExtra(Intent.EXTRA_TEXT, recipeName);
+                startActivity(detailIntent);
             }
         });
 
@@ -114,7 +114,7 @@ public class RecipeFragment extends Fragment {
     public Cursor queryWithNoParameters(){
 
         /*What we will need*/
-        String [] projection = new String[]{RecipeContract.RecipeEntry.COL_NAME, RecipeContract.RecipeEntry._ID};
+        String [] projection = new String[]{RecipeContract.RecipeEntry.COL_NAME};
         String colName = RecipeContract.RecipeEntry.COL_NAME;
 
         Cursor cursor = getActivity().getContentResolver().query(
@@ -130,7 +130,7 @@ public class RecipeFragment extends Fragment {
     public Cursor queryWithParameters(String ingredientName){
 
         /*What we will need*/
-        String [] projection = new String[]{RecipeContract.RecipeEntry.COL_NAME, RecipeContract.RecipeEntry._ID};
+        String [] projection = new String[]{RecipeContract.RecipeEntry.COL_NAME};
         String colName = RecipeContract.RecipeEntry.COL_NAME;
 
         Cursor cursor = getActivity().getContentResolver().query(

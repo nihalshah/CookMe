@@ -28,24 +28,14 @@ public class DetailActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         Intent receivedIntent = getActivity().getIntent();
-        if(receivedIntent != null && receivedIntent.hasExtra("Recipe")){
+        if(receivedIntent != null && receivedIntent.hasExtra(Intent.EXTRA_TEXT)){
 
             //Get the recipe from the intent and fill all the elements of the layout with it
-            Recipe actualRecipe = (Recipe) receivedIntent.getExtras().getSerializable("Recipe");
+            String recipe = receivedIntent.getStringExtra(Intent.EXTRA_TEXT);
 
             TextView recipeName = (TextView) rootView.findViewById(R.id.recipeName_textView);
-            recipeName.setText(actualRecipe.getName());
+            recipeName.setText("Here we will show info of " + recipe + " querying DB");
 
-            ArrayAdapter<String> ingredientsAdapter = new ArrayAdapter<>(
-                                                        getActivity(),
-                                                        R.layout.list_item_ingredients,
-                                                        R.id.list_item_ingredients_textView,
-                                                        actualRecipe.getStringsOfIngredients());
-            ListView ingredientsList = (ListView)rootView.findViewById(R.id.ingredients_list);
-            ingredientsList.setAdapter(ingredientsAdapter);
-
-            TextView instructions = (TextView) rootView.findViewById(R.id.instructions_textView);
-            instructions.setText(actualRecipe.getInstructions());
 
         }
 
