@@ -52,7 +52,7 @@ public class RecipeProvider extends ContentProvider {
 
     private static final String sIngredientSelection =
             RecipeContract.IngredientEntry.TABLE_NAME + "." +
-                    RecipeContract.IngredientEntry.COL_NAME + " = ? ";
+                    RecipeContract.IngredientEntry.COL_NAME + " = ? COLLATE NOCASE ";
 
     private Cursor getRecipesByIngredient(Uri uri, String[] projection, String sortOrder){
         String ingredientName = RecipeContract.IngredientEntry.getIngredientFromUri(uri);
