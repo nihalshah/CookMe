@@ -45,4 +45,26 @@ public class Utility {
             return false;
         return true;
     }
+
+
+
+
+    /* Careful with this method, it deletes all records in local DB */
+    public static void deleteAllRecordsFromDb(Context context){
+            context.getContentResolver().delete(
+                    RecipeContract.RecipeEntry.CONTENT_URI,
+                    null,
+                    null
+            );
+            context.getContentResolver().delete(
+                    RecipeContract.IngredientEntry.CONTENT_URI,
+                    null,
+                    null
+            );
+            context.getContentResolver().delete(
+                    RecipeContract.RecipeIngredientRelationship.CONTENT_URI,
+                    null,
+                    null
+            );
+    }
 }
