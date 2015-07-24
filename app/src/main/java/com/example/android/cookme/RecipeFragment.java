@@ -1,10 +1,7 @@
 package com.example.android.cookme;
 
-import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -17,12 +14,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.example.android.cookme.data.Recipe;
 import com.example.android.cookme.data.RecipeContract;
 import com.example.android.cookme.data.RecipeProviderByJSON;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 
 /**
@@ -34,10 +29,6 @@ public class RecipeFragment extends Fragment {
 
     private RecipeProviderByJSON mListRecipes;
     private ArrayAdapter<String> mRecipeAdapter;
-    private ArrayList<String> mRecipeNames;
-    //List of Recipes which with the filter had been removed
-    // (This will be improved with DB)
-    private ArrayList<String> mDeletedRecipesNames;
 
     public RecipeFragment() {
     }
@@ -47,33 +38,37 @@ public class RecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        //testInsertionOfRecipe();
 
 
         mListRecipes = new RecipeProviderByJSON(getActivity());
 
-        mDeletedRecipesNames = new ArrayList<>();
+        /*Just insert JSON in DB if DB is empty*/
+        if(Utility.dataBaseIsEmpty(getActivity())){
+            Utility.insertJSONRecipesToDb(getActivity(), mListRecipes.getCollection_of_recipes());
+        }
 
-        mRecipeNames = mListRecipes.getRecipeNames();
 
         mRecipeAdapter = new ArrayAdapter<>(
                                     getActivity(),
                                     R.layout.list_item_recipes,
                                     R.id.list_item_recipes_textview,
-                                    mRecipeNames);
+                                    new ArrayList<String>());
 
         ListView listRecipes = (ListView) rootView.findViewById(R.id.recipes_list);
         listRecipes.setAdapter(mRecipeAdapter);
 
+        final EditText ingredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
+
+        filterRecipesByIngredient(ingredientInput.getText().toString());
+
         //Item clicked event
         listRecipes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-                String recipeName = mRecipeAdapter.getItem(i);
-                Recipe actualRecipe = mListRecipes.getRecipeByName(recipeName);
+                String recipeName = mRecipeAdapter.getItem(position);
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
-                detailIntent.putExtra("Recipe", actualRecipe);
+                detailIntent.putExtra(Intent.EXTRA_TEXT, recipeName);
                 startActivity(detailIntent);
             }
         });
@@ -84,11 +79,13 @@ public class RecipeFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                EditText ingredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
                 String ingredientQuery = ingredientInput.getText().toString();
                 filterRecipesByIngredient(ingredientQuery);
 
                 //testReadWholeRecipes();
+
+                //Log.v(LOG_TAG, "DB empty: " + Utility.dataBaseIsEmpty(getActivity()));
+
 
             }
         });
@@ -98,76 +95,53 @@ public class RecipeFragment extends Fragment {
 
     public void filterRecipesByIngredient(String ingredientTyped){
 
-        mRecipeNames.addAll(mDeletedRecipesNames);
-        mDeletedRecipesNames.clear();
-        if(ingredientTyped.length() != 0){
-            Iterator it = mRecipeNames.iterator();
-            while(it.hasNext()){
-                String actualRep = (String) it.next();
+        Cursor cursor;
 
-                if(!mListRecipes.getRecipeByName(actualRep).hasIngredient(ingredientTyped)){
-                    mDeletedRecipesNames.add(actualRep);
-                    it.remove();
-                }
-            }
+        if(ingredientTyped.length() == 0){
+            cursor = queryWithNoParameters();
+        }else{
+            cursor = queryWithParameters(ingredientTyped);
+        }
+
+        mRecipeAdapter.clear();
+        while(cursor.moveToNext()){
+            mRecipeAdapter.add(cursor.getString(cursor.getColumnIndex(RecipeContract.RecipeEntry.COL_NAME)));
         }
         mRecipeAdapter.notifyDataSetChanged();
+
     }
 
-   /* public void testInsertionOfRecipe(){
+    public Cursor queryWithNoParameters(){
 
-        ContentValues recipeValues = Utility.createRecipeValues("Sandwich", "Go to Subway");
-        ContentValues ingredientValues = Utility.createIngredientValues("Bread");
-
-
-        //Insert in tables Recipe and Ingredient
-        Uri recipeInserted = getActivity().getContentResolver().
-                insert(RecipeContract.RecipeEntry.CONTENT_URI, recipeValues);
-        Uri ingredientInserted = getActivity().getContentResolver().
-                insert(RecipeContract.IngredientEntry.CONTENT_URI, ingredientValues);
-
-        //Get the id of the rows inserted
-        long recipe_id = ContentUris.parseId(recipeInserted);
-        long ingredient_id = ContentUris.parseId(ingredientInserted);
-
-        //Insert in the table of relationship
-        ContentValues relationValues = Utility.createRelationshipValues(recipe_id, ingredient_id, "L", 1);
-        getActivity().getContentResolver().
-                insert(RecipeContract.RecipeIngredientRelationship.CONTENT_URI, relationValues);
-
-        Log.v(LOG_TAG, "Insertion of entire recipe completed!");
-    }
-
-    public void testReadWholeRecipes(){
+        /*What we will need*/
+        String [] projection = new String[]{RecipeContract.RecipeEntry.COL_NAME};
+        String colName = RecipeContract.RecipeEntry.COL_NAME;
 
         Cursor cursor = getActivity().getContentResolver().query(
-                RecipeContract.RecipeIngredientRelationship.CONTENT_URI,
+                RecipeContract.RecipeEntry.CONTENT_URI,
+                projection,
                 null,
                 null,
-                null,
-                null
-        );
+                colName + " ASC");
 
-        while(cursor.moveToNext()){
-            String rec = "";
-            int index = cursor.getColumnIndex(RecipeContract.RecipeEntry.COL_NAME);
-            rec += cursor.getString(index) + ", ";
-            index = cursor.getColumnIndex(RecipeContract.RecipeEntry.COL_INSTRUCTIONS);
-            rec += cursor.getString(index) + ", ";
-            index = cursor.getColumnIndex(RecipeContract.IngredientEntry.COL_NAME);
-            rec += cursor.getString(index) + ", ";
-            index = cursor.getColumnIndex(RecipeContract.RecipeIngredientRelationship.COL_QUANTITY);
-            rec += cursor.getInt(index) + ", ";
-            index = cursor.getColumnIndex(RecipeContract.RecipeIngredientRelationship.COL_UNITS);
-            rec += cursor.getString(index) + ", ";
-
-            Log.v(LOG_TAG, "MY RECIPE: " + rec);
-
-
-        }
-
-
-        cursor.close();
+        return cursor;
     }
-    */
+
+    public Cursor queryWithParameters(String ingredientName){
+
+        /*What we will need*/
+        String [] projection = new String[]{RecipeContract.RecipeEntry.COL_NAME};
+        String colName = RecipeContract.RecipeEntry.COL_NAME;
+
+        Cursor cursor = getActivity().getContentResolver().query(
+                RecipeContract.IngredientEntry.buildRecipesDirUri(ingredientName),
+                projection,
+                null,
+                null,
+                colName + " ASC");
+
+        return cursor;
+
+    }
+
 }
