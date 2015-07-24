@@ -12,7 +12,7 @@ import com.example.android.cookme.data.RecipeContract.RecipeIngredientRelationsh
  */
 public class RecipeDbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     static final String DATABASE_NAME = "recipe.db";
 
@@ -41,7 +41,7 @@ public class RecipeDbHelper extends SQLiteOpenHelper {
                 RecipeIngredientRelationship.COL_RECIPE_KEY + " INTEGER NOT NULL, " +
                 RecipeIngredientRelationship.COL_INGREDIENT_KEY + " INTEGER NOT NULL, " +
                 RecipeIngredientRelationship.COL_UNITS + " TEXT NOT NULL, " +
-                RecipeIngredientRelationship.COL_QUANTITY + " INTEGER NOT NULL, " +
+                RecipeIngredientRelationship.COL_QUANTITY + " REAL NOT NULL, " +
 
                 //Setup Recipe_Key column as foreign key
                 "FOREIGN KEY (" + RecipeIngredientRelationship.COL_RECIPE_KEY + ") REFERENCES " +

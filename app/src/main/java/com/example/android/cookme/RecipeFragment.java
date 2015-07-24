@@ -47,10 +47,15 @@ public class RecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        //testInsertionOfRecipe();
 
 
         mListRecipes = new RecipeProviderByJSON(getActivity());
+
+        /*Just insert JSNON in DB if DB is empty*/
+        if(Utility.dataBaseIsEmpty(getActivity())){
+            Utility.insertJSONRecipesToDb(getActivity(), mListRecipes.getCollection_of_recipes());
+        }
+
 
         mDeletedRecipesNames = new ArrayList<>();
 
@@ -91,6 +96,7 @@ public class RecipeFragment extends Fragment {
                 //testReadWholeRecipes();
 
                 //Log.v(LOG_TAG, "DB empty: " + Utility.dataBaseIsEmpty(getActivity()));
+
 
             }
         });
