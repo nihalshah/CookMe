@@ -41,7 +41,8 @@ public class Utility {
                 null,
                 null,
                 null);
-
-        return cursor.moveToFirst();
+        if(cursor.moveToFirst())
+            return false;
+        return true;
     }
 }

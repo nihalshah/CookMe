@@ -89,6 +89,7 @@ public class RecipeFragment extends Fragment {
                 filterRecipesByIngredient(ingredientQuery);
 
                 //testReadWholeRecipes();
+                Log.v(LOG_TAG, "DB empty: " + Utility.dataBaseIsEmpty(getActivity()));
 
             }
         });
