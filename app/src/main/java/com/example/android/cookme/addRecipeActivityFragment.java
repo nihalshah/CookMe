@@ -27,6 +27,7 @@ public class AddRecipeActivityFragment extends Fragment {
 
 
         /*Button event*/
+
         Button addButton = (Button) rootView.findViewById(R.id.add_new_recipe_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
