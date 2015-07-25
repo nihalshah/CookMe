@@ -91,6 +91,8 @@ public class Utility {
                     RecipeContract.IngredientEntry.CONTENT_URI,
                     ingredientValues);
             ingredient_id = ContentUris.parseId(ingredient_inserted);
+        }else{
+            Log.v(null, "USING EXISTING ID!!! " + ingredient_id);
         }
 
         ContentValues relationValues = createRelationshipValues(recipe_id, ingredient_id, units, quantity);
@@ -116,7 +118,7 @@ public class Utility {
             for(Ingredient ingredient : recipe.getIngredients()){
                 //Insert the ingredients of recipe
                 long ingredient_id = getIngredientId(context, ingredient.getName());
-                if(ingredient_id == -1L){
+                if(ingredient_id == -1){
                     //Ingredient doesn't exists, so we add it
                     ContentValues ingredientValues = createIngredientValues(ingredient.getName());
                     Uri ingredient_inserted = context.getContentResolver().insert(

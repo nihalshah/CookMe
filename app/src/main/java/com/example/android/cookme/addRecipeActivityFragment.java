@@ -1,5 +1,6 @@
 package com.example.android.cookme;
 
+import android.app.AlertDialog;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -48,6 +49,13 @@ public class AddRecipeActivityFragment extends Fragment {
 
                 Utility.insertWholeRecipeInDb(getActivity(), recipe_name, instructions,
                                                 ingredient_name, units, quantity);
+
+                //Message that shows the user that his recipe was added
+                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity()).
+                        setMessage(recipe_name + " recipe added!");
+
+                AlertDialog alert = alertBuilder.create();
+                alert.show();
             }
         });
         return rootView;
