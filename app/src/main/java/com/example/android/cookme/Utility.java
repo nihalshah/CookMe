@@ -72,8 +72,40 @@ public class Utility {
         return -1L;
     }
 
-    /*Method that insert a whole arrayList of Recipes to the Db */
-    /*I would do this on Async Task but is just one time, and its for testing*/
+    /*Method that insert the whole recipe to the DB*/
+    //TODO: this methos will change when we add more than one ingredient by recipe
+    public static void insertWholeRecipeInDb(Context context, String recipeName, String instructions,
+                                             String ingredientName, String units, double quantity){
+
+        ContentValues recipeValues = createRecipeValues(recipeName, instructions);
+        Uri recipeInserted = context.getContentResolver().insert(
+                RecipeContract.RecipeEntry.CONTENT_URI, recipeValues);
+        long recipe_id = ContentUris.parseId(recipeInserted);
+
+        //check if ingredient exists
+        long ingredient_id = getIngredientId(context, ingredientName);
+        if(ingredient_id == -1L){
+            //Ingredient doesn't exists, so we add it
+            ContentValues ingredientValues = createIngredientValues(ingredientName);
+            Uri ingredient_inserted = context.getContentResolver().insert(
+                    RecipeContract.IngredientEntry.CONTENT_URI,
+                    ingredientValues);
+            ingredient_id = ContentUris.parseId(ingredient_inserted);
+        }else{
+            Log.v(null, "USING EXISTING ID!!! " + ingredient_id);
+        }
+
+        ContentValues relationValues = createRelationshipValues(recipe_id, ingredient_id, units, quantity);
+
+        context.getContentResolver().insert(RecipeContract.RecipeIngredientRelationship.CONTENT_URI,
+                                            relationValues);
+
+        Log.v(null, "RECIPE INSERTED!!!!");
+
+    }
+
+    /*Method that insert a whole arrayList of Recipes to the Db
+    I would do this on Async Task but is just one time, and its for testing*/
     public static void insertJSONRecipesToDb(Context context, ArrayList<Recipe> list_recipes){
 
         for(Recipe recipe : list_recipes){
@@ -86,7 +118,7 @@ public class Utility {
             for(Ingredient ingredient : recipe.getIngredients()){
                 //Insert the ingredients of recipe
                 long ingredient_id = getIngredientId(context, ingredient.getName());
-                if(ingredient_id == -1L){
+                if(ingredient_id == -1){
                     //Ingredient doesn't exists, so we add it
                     ContentValues ingredientValues = createIngredientValues(ingredient.getName());
                     Uri ingredient_inserted = context.getContentResolver().insert(

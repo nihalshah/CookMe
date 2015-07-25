@@ -47,7 +47,6 @@ public class RecipeFragment extends Fragment {
             Utility.insertJSONRecipesToDb(getActivity(), mListRecipes.getCollection_of_recipes());
         }
 
-
         mRecipeAdapter = new ArrayAdapter<>(
                                     getActivity(),
                                     R.layout.list_item_recipes,
@@ -81,12 +80,6 @@ public class RecipeFragment extends Fragment {
 
                 String ingredientQuery = ingredientInput.getText().toString();
                 filterRecipesByIngredient(ingredientQuery);
-
-                //testReadWholeRecipes();
-
-                //Log.v(LOG_TAG, "DB empty: " + Utility.dataBaseIsEmpty(getActivity()));
-
-
             }
         });
 
@@ -143,5 +136,6 @@ public class RecipeFragment extends Fragment {
         return cursor;
 
     }
+
 
 }
