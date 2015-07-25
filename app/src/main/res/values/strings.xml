@@ -6,6 +6,13 @@
     <!--- Strings for the Search Layout -->
     <string name="input_ingredient_hint">Type an ingredient</string>
     <string name="search_button">Search</string>
+    <string name="add_recipe">Add</string>
     <string name="title_activity_detail">Details</string>
+    <string name="title_activity_add_recipe">addRecipeActivity</string>
+    <string name="add_recipe_name">Recipe Name</string>
+    <string name="add_ingridient_name">Ingredient Name</string>
+    <string name="add_ingridient_quantity">Ingredient Quantity</string>
+    <string name="add_ingridient_units">Ingredient Units</string>
+    <string name="add_instructions">Instructions</string>
 
 </resources>
