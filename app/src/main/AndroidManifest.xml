@@ -32,7 +32,7 @@
             android:authorities="com.example.android.cookme" />
 
         <activity
-            android:name=".addRecipeActivity"
+            android:name=".AddRecipeActivity"
             android:label="@string/title_activity_add_recipe"
             android:parentActivityName=".MainActivity" >
             <meta-data

@@ -7,7 +7,7 @@ import android.view.MenuItem;
 
 import com.example.android.cookme.R;
 
-public class addRecipeActivity extends ActionBarActivity {
+public class AddRecipeActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

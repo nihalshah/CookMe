@@ -11,9 +11,9 @@ import com.example.android.cookme.R;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class addRecipeActivityFragment extends Fragment {
+public class AddRecipeActivityFragment extends Fragment {
 
-    public addRecipeActivityFragment() {
+    public AddRecipeActivityFragment() {
     }
 
     @Override
