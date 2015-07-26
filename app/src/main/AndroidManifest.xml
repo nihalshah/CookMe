@@ -39,6 +39,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.cookme.MainActivity" />
         </activity>
+        <!-- Declaring the Camara Intent -->
+        <uses-feature android:name="android.hardware.camera"
+            android:required="false" />
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     </application>
 
 </manifest>
