@@ -32,6 +32,15 @@ public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCal
     private RecipeAdapter mRecipeAdapter;
     private String mIngredientTyped;
 
+    //Projection for querying
+    private static final String[] RECIPE_COLUMNS = {
+                RecipeContract.RecipeEntry.TABLE_NAME + "." + RecipeContract.RecipeEntry._ID,
+                RecipeContract.RecipeEntry.COL_NAME
+    };
+
+    static final int COL_RECIPE_ID = 0;
+    static final int COL_RECIPE_NAME = 1;
+
     public RecipeFragment() {
     }
 
@@ -77,7 +86,7 @@ public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCal
         getLoaderManager().initLoader(RECIPE_LOADER, null,  this);
         super.onActivityCreated(savedInstanceState);
     }
-    
+
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -87,14 +96,14 @@ public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCal
         if(mIngredientTyped.length() == 0){
             return  new CursorLoader(getActivity(),
                     RecipeContract.RecipeEntry.CONTENT_URI,
-                    null,
+                    RECIPE_COLUMNS,
                     null,
                     null,
                     sortOrder);
         }else{
             return new CursorLoader(getActivity(),
                     RecipeContract.IngredientEntry.buildRecipesDirUri(mIngredientTyped),
-                    null,
+                    RECIPE_COLUMNS,
                     null,
                     null,
                     sortOrder);
