@@ -56,7 +56,7 @@ public class RecipeFragment extends Fragment {
         mRecipeAdapter = new RecipeAdapter(getActivity(), cursor, 0);
 
 
-        ListView listRecipes = (ListView) rootView.findViewById(R.id.recipes_list);
+        final ListView listRecipes = (ListView) rootView.findViewById(R.id.recipes_list);
         listRecipes.setAdapter(mRecipeAdapter);
 
 
@@ -68,8 +68,8 @@ public class RecipeFragment extends Fragment {
 
                 EditText ingredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
                 String ingredient = ingredientInput.getText().toString();
-                /*String ingredientQuery = ingredientInput.getText().toString();
-                filterRecipesByIngredient(ingredientQuery);*/
+                mRecipeAdapter = new RecipeAdapter(getActivity(), queryByFilter(ingredient), 0);
+                listRecipes.setAdapter(mRecipeAdapter);
             }
         });
 
@@ -89,35 +89,30 @@ public class RecipeFragment extends Fragment {
 
     public Cursor queryWithNoParameters(){
 
-        /*What we will need*/
-        String [] projection = new String[]{RecipeContract.RecipeEntry.COL_NAME};
-        String colName = RecipeContract.RecipeEntry.COL_NAME;
+        String sortOrder = RecipeContract.RecipeEntry.COL_NAME + " ASC";
 
         Cursor cursor = getActivity().getContentResolver().query(
                 RecipeContract.RecipeEntry.CONTENT_URI,
-                projection,
                 null,
                 null,
-                colName + " ASC");
+                null,
+                sortOrder);
 
         return cursor;
     }
 
     public Cursor queryWithParameters(String ingredientName){
 
-        /*What we will need*/
-        String [] projection = new String[]{RecipeContract.RecipeEntry.COL_NAME};
-        String colName = RecipeContract.RecipeEntry.COL_NAME;
+        String sortOrder = RecipeContract.RecipeEntry.COL_NAME + " ASC";
 
         Cursor cursor = getActivity().getContentResolver().query(
                 RecipeContract.IngredientEntry.buildRecipesDirUri(ingredientName),
-                projection,
                 null,
                 null,
-                colName + " ASC");
+                null,
+                sortOrder);
 
         return cursor;
-
     }
 
 
