@@ -102,6 +102,8 @@ public class RecipeFragment extends Fragment {
         }
         mRecipeAdapter.notifyDataSetChanged();
 
+        cursor.close();
+
     }
 
     public Cursor queryWithNoParameters(){

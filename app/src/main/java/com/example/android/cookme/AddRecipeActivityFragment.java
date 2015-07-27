@@ -95,7 +95,7 @@ public class AddRecipeActivityFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.e("LOG", "" + requestCode);
+        Log.v("LOG", "" + requestCode);
         if (requestCode == 1888 && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             mImageView.setImageBitmap(photo);

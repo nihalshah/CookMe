@@ -56,7 +56,7 @@ public class Utility {
     /*Method that checks if ingredient is already in DB, it return the id*/
     public static long getIngredientId(Context context, String ingredientName){
 
-        String selection = RecipeContract.IngredientEntry.COL_NAME + " = ? ";
+        String selection = RecipeContract.IngredientEntry.COL_NAME + " = ? COLLATE NOCASE ";
         String selectionArgs [] = new String[]{ingredientName};
 
         Cursor cursor = context.getContentResolver().query(
