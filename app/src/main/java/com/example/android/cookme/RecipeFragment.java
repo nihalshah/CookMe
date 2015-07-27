@@ -68,8 +68,7 @@ public class RecipeFragment extends Fragment {
 
                 EditText ingredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
                 String ingredient = ingredientInput.getText().toString();
-                mRecipeAdapter = new RecipeAdapter(getActivity(), queryByFilter(ingredient), 0);
-                listRecipes.setAdapter(mRecipeAdapter);
+                mRecipeAdapter.swapCursor(queryByFilter(ingredient));
             }
         });
 
