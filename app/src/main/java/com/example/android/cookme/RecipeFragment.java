@@ -9,26 +9,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.android.cookme.data.RecipeContract;
 import com.example.android.cookme.data.RecipeProviderByJSON;
-
-import java.util.ArrayList;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.support.v4.content.CursorLoader;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class RecipeFragment extends Fragment {
+public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCallbacks<Cursor>{
 
-    private static final String LOG_TAG = RecipeFragment.class.getSimpleName();
 
+    private static final int RECIPE_LOADER = 0;
     private RecipeProviderByJSON mListRecipes;
     private RecipeAdapter mRecipeAdapter;
+    private String mIngredientTyped;
 
     public RecipeFragment() {
     }
@@ -43,22 +45,13 @@ public class RecipeFragment extends Fragment {
             mListRecipes = new RecipeProviderByJSON(getActivity());
             Utility.insertJSONRecipesToDb(getActivity(), mListRecipes.getCollection_of_recipes());
         }
+        mIngredientTyped = "";
 
-        String sortOrder = RecipeContract.RecipeEntry.COL_NAME + " ASC";
+        // The CursorAdapter will take data from our cursor and populate the ListView.
+        mRecipeAdapter = new RecipeAdapter(getActivity(), null, 0);
 
-        Cursor cursor = getActivity().getContentResolver().query(
-                RecipeContract.RecipeEntry.CONTENT_URI,
-                null,
-                null,
-                null,
-                sortOrder);
-
-        mRecipeAdapter = new RecipeAdapter(getActivity(), cursor, 0);
-
-
-        final ListView listRecipes = (ListView) rootView.findViewById(R.id.recipes_list);
+        ListView listRecipes = (ListView) rootView.findViewById(R.id.recipes_list);
         listRecipes.setAdapter(mRecipeAdapter);
-
 
         //Button Pressed event
         Button searchBtn = (Button) rootView.findViewById(R.id.search_ingredient_button);
@@ -67,52 +60,54 @@ public class RecipeFragment extends Fragment {
             public void onClick(View view) {
 
                 EditText ingredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
-                String ingredient = ingredientInput.getText().toString();
-                mRecipeAdapter.swapCursor(queryByFilter(ingredient));
+                mIngredientTyped = ingredientInput.getText().toString();
+                restartLoader();
             }
         });
 
         return rootView;
     }
 
+    public void restartLoader(){
+        getLoaderManager().restartLoader(RECIPE_LOADER, null, this);
+    }
 
-    public Cursor queryByFilter(String ingredientTyped){
-        Cursor cursor;
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getLoaderManager().initLoader(RECIPE_LOADER, null,  this);
+        super.onActivityCreated(savedInstanceState);
+    }
+    
 
-        if(ingredientTyped.length() == 0){
-            return cursor = queryWithNoParameters();
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        String sortOrder = RecipeContract.RecipeEntry.COL_NAME + " ASC";
+
+        if(mIngredientTyped.length() == 0){
+            return  new CursorLoader(getActivity(),
+                    RecipeContract.RecipeEntry.CONTENT_URI,
+                    null,
+                    null,
+                    null,
+                    sortOrder);
         }else{
-            return cursor = queryWithParameters(ingredientTyped);
+            return new CursorLoader(getActivity(),
+                    RecipeContract.IngredientEntry.buildRecipesDirUri(mIngredientTyped),
+                    null,
+                    null,
+                    null,
+                    sortOrder);
         }
     }
 
-    public Cursor queryWithNoParameters(){
-
-        String sortOrder = RecipeContract.RecipeEntry.COL_NAME + " ASC";
-
-        Cursor cursor = getActivity().getContentResolver().query(
-                RecipeContract.RecipeEntry.CONTENT_URI,
-                null,
-                null,
-                null,
-                sortOrder);
-
-        return cursor;
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        mRecipeAdapter.swapCursor(cursor);
     }
 
-    public Cursor queryWithParameters(String ingredientName){
-
-        String sortOrder = RecipeContract.RecipeEntry.COL_NAME + " ASC";
-
-        Cursor cursor = getActivity().getContentResolver().query(
-                RecipeContract.IngredientEntry.buildRecipesDirUri(ingredientName),
-                null,
-                null,
-                null,
-                sortOrder);
-
-        return cursor;
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mRecipeAdapter.swapCursor(null);
     }
-
-
 }
