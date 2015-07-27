@@ -69,7 +69,7 @@ public class RecipeProvider extends ContentProvider {
                 sortOrder);
     }
 
-    private Cursor getAllRelationships(Uri uri, String[] projection, String sortOrder){
+    private Cursor getAllRelationships(Uri uri, String[] projection, String[] selectionArgs,  String sortOrder){
 
         return  sRecipeIngredientQueryBuilder.query(mDbHelper.getReadableDatabase(),
                 projection,
@@ -143,16 +143,7 @@ public class RecipeProvider extends ContentProvider {
                 break;
             }
             case RELATIONSHIP:{
-                returnCursor = getAllRelationships(uri, projection, sortOrder);
-                /*returnCursor = mDbHelper.getReadableDatabase().query(
-                        RecipeContract.RecipeIngredientRelationship.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder
-                );*/
+                returnCursor = getAllRelationships(uri, projection, selectionArgs, sortOrder);
                 break;
             }
 

@@ -9,26 +9,39 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.android.cookme.data.RecipeContract;
 import com.example.android.cookme.data.RecipeProviderByJSON;
-
-import java.util.ArrayList;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.support.v4.content.CursorLoader;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class RecipeFragment extends Fragment {
+public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCallbacks<Cursor>{
 
-    private static final String LOG_TAG = RecipeFragment.class.getSimpleName();
 
+    private static final int RECIPE_LOADER = 0;
     private RecipeProviderByJSON mListRecipes;
-    private ArrayAdapter<String> mRecipeAdapter;
+    private RecipeAdapter mRecipeAdapter;
+    private String mIngredientTyped;
+
+    //Projection for querying
+    private static final String[] RECIPE_COLUMNS = {
+                RecipeContract.RecipeEntry.TABLE_NAME + "." + RecipeContract.RecipeEntry._ID,
+                RecipeContract.RecipeEntry.COL_NAME,
+                RecipeContract.RecipeEntry.COL_INSTRUCTIONS
+    };
+
+    static final int COL_RECIPE_ID = 0;
+    static final int COL_RECIPE_NAME = 1;
+    static final int COL_INSTRUCTIONS = 2;
 
     public RecipeFragment() {
     }
@@ -38,39 +51,18 @@ public class RecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-
-
-        mListRecipes = new RecipeProviderByJSON(getActivity());
-
         /*Just insert JSON in DB if DB is empty*/
         if(Utility.dataBaseIsEmpty(getActivity())){
+            mListRecipes = new RecipeProviderByJSON(getActivity());
             Utility.insertJSONRecipesToDb(getActivity(), mListRecipes.getCollection_of_recipes());
         }
+        mIngredientTyped = "";
 
-        mRecipeAdapter = new ArrayAdapter<>(
-                                    getActivity(),
-                                    R.layout.list_item_recipes,
-                                    R.id.list_item_recipes_textview,
-                                    new ArrayList<String>());
+        // The CursorAdapter will take data from our cursor and populate the ListView.
+        mRecipeAdapter = new RecipeAdapter(getActivity(), null, 0);
 
         ListView listRecipes = (ListView) rootView.findViewById(R.id.recipes_list);
         listRecipes.setAdapter(mRecipeAdapter);
-
-        final EditText ingredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
-
-        filterRecipesByIngredient(ingredientInput.getText().toString());
-
-        //Item clicked event
-        listRecipes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
-                String recipeName = mRecipeAdapter.getItem(position);
-                Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
-                detailIntent.putExtra(Intent.EXTRA_TEXT, recipeName);
-                startActivity(detailIntent);
-            }
-        });
 
         //Button Pressed event
         Button searchBtn = (Button) rootView.findViewById(R.id.search_ingredient_button);
@@ -78,66 +70,55 @@ public class RecipeFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                String ingredientQuery = ingredientInput.getText().toString();
-                filterRecipesByIngredient(ingredientQuery);
+                EditText ingredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
+                mIngredientTyped = ingredientInput.getText().toString();
+                restartLoader();
             }
         });
 
         return rootView;
     }
 
-    public void filterRecipesByIngredient(String ingredientTyped){
+    public void restartLoader(){
+        getLoaderManager().restartLoader(RECIPE_LOADER, null, this);
+    }
 
-        Cursor cursor;
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getLoaderManager().initLoader(RECIPE_LOADER, null,  this);
+        super.onActivityCreated(savedInstanceState);
+    }
 
-        if(ingredientTyped.length() == 0){
-            cursor = queryWithNoParameters();
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        String sortOrder = RecipeContract.RecipeEntry.COL_NAME + " ASC";
+
+        if(mIngredientTyped.length() == 0){
+            return  new CursorLoader(getActivity(),
+                    RecipeContract.RecipeEntry.CONTENT_URI,
+                    RECIPE_COLUMNS,
+                    null,
+                    null,
+                    sortOrder);
         }else{
-            cursor = queryWithParameters(ingredientTyped);
+            return new CursorLoader(getActivity(),
+                    RecipeContract.IngredientEntry.buildRecipesDirUri(mIngredientTyped),
+                    RECIPE_COLUMNS,
+                    null,
+                    null,
+                    sortOrder);
         }
-
-        mRecipeAdapter.clear();
-        while(cursor.moveToNext()){
-            mRecipeAdapter.add(cursor.getString(cursor.getColumnIndex(RecipeContract.RecipeEntry.COL_NAME)));
-        }
-        mRecipeAdapter.notifyDataSetChanged();
-
-        cursor.close();
-
     }
 
-    public Cursor queryWithNoParameters(){
-
-        /*What we will need*/
-        String [] projection = new String[]{RecipeContract.RecipeEntry.COL_NAME};
-        String colName = RecipeContract.RecipeEntry.COL_NAME;
-
-        Cursor cursor = getActivity().getContentResolver().query(
-                RecipeContract.RecipeEntry.CONTENT_URI,
-                projection,
-                null,
-                null,
-                colName + " ASC");
-
-        return cursor;
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        mRecipeAdapter.swapCursor(cursor);
     }
 
-    public Cursor queryWithParameters(String ingredientName){
-
-        /*What we will need*/
-        String [] projection = new String[]{RecipeContract.RecipeEntry.COL_NAME};
-        String colName = RecipeContract.RecipeEntry.COL_NAME;
-
-        Cursor cursor = getActivity().getContentResolver().query(
-                RecipeContract.IngredientEntry.buildRecipesDirUri(ingredientName),
-                projection,
-                null,
-                null,
-                colName + " ASC");
-
-        return cursor;
-
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mRecipeAdapter.swapCursor(null);
     }
-
-
 }
