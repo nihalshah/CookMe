@@ -28,7 +28,7 @@ public class RecipeFragment extends Fragment {
     private static final String LOG_TAG = RecipeFragment.class.getSimpleName();
 
     private RecipeProviderByJSON mListRecipes;
-    private ArrayAdapter<String> mRecipeAdapter;
+    private RecipeAdapter mRecipeAdapter;
 
     public RecipeFragment() {
     }
@@ -38,39 +38,27 @@ public class RecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-
-
-        mListRecipes = new RecipeProviderByJSON(getActivity());
-
         /*Just insert JSON in DB if DB is empty*/
         if(Utility.dataBaseIsEmpty(getActivity())){
+            mListRecipes = new RecipeProviderByJSON(getActivity());
             Utility.insertJSONRecipesToDb(getActivity(), mListRecipes.getCollection_of_recipes());
         }
 
-        mRecipeAdapter = new ArrayAdapter<>(
-                                    getActivity(),
-                                    R.layout.list_item_recipes,
-                                    R.id.list_item_recipes_textview,
-                                    new ArrayList<String>());
+        String sortOrder = RecipeContract.RecipeEntry.COL_NAME + " ASC";
+
+        Cursor cursor = getActivity().getContentResolver().query(
+                RecipeContract.RecipeEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                sortOrder);
+
+        mRecipeAdapter = new RecipeAdapter(getActivity(), cursor, 0);
+
 
         ListView listRecipes = (ListView) rootView.findViewById(R.id.recipes_list);
         listRecipes.setAdapter(mRecipeAdapter);
 
-        final EditText ingredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
-
-        filterRecipesByIngredient(ingredientInput.getText().toString());
-
-        //Item clicked event
-        listRecipes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
-                String recipeName = mRecipeAdapter.getItem(position);
-                Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
-                detailIntent.putExtra(Intent.EXTRA_TEXT, recipeName);
-                startActivity(detailIntent);
-            }
-        });
 
         //Button Pressed event
         Button searchBtn = (Button) rootView.findViewById(R.id.search_ingredient_button);
@@ -78,32 +66,25 @@ public class RecipeFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                String ingredientQuery = ingredientInput.getText().toString();
-                filterRecipesByIngredient(ingredientQuery);
+                EditText ingredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
+                String ingredient = ingredientInput.getText().toString();
+                /*String ingredientQuery = ingredientInput.getText().toString();
+                filterRecipesByIngredient(ingredientQuery);*/
             }
         });
 
         return rootView;
     }
 
-    public void filterRecipesByIngredient(String ingredientTyped){
 
+    public Cursor queryByFilter(String ingredientTyped){
         Cursor cursor;
 
         if(ingredientTyped.length() == 0){
-            cursor = queryWithNoParameters();
+            return cursor = queryWithNoParameters();
         }else{
-            cursor = queryWithParameters(ingredientTyped);
+            return cursor = queryWithParameters(ingredientTyped);
         }
-
-        mRecipeAdapter.clear();
-        while(cursor.moveToNext()){
-            mRecipeAdapter.add(cursor.getString(cursor.getColumnIndex(RecipeContract.RecipeEntry.COL_NAME)));
-        }
-        mRecipeAdapter.notifyDataSetChanged();
-
-        cursor.close();
-
     }
 
     public Cursor queryWithNoParameters(){
