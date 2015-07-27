@@ -35,11 +35,13 @@ public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCal
     //Projection for querying
     private static final String[] RECIPE_COLUMNS = {
                 RecipeContract.RecipeEntry.TABLE_NAME + "." + RecipeContract.RecipeEntry._ID,
-                RecipeContract.RecipeEntry.COL_NAME
+                RecipeContract.RecipeEntry.COL_NAME,
+                RecipeContract.RecipeEntry.COL_INSTRUCTIONS
     };
 
     static final int COL_RECIPE_ID = 0;
     static final int COL_RECIPE_NAME = 1;
+    static final int COL_INSTRUCTIONS = 2;
 
     public RecipeFragment() {
     }
