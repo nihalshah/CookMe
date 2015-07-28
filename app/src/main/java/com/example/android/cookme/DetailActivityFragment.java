@@ -28,15 +28,14 @@ public class DetailActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         Intent receivedIntent = getActivity().getIntent();
-        if(receivedIntent != null && receivedIntent.hasExtra(Intent.EXTRA_TEXT)){
+        if(receivedIntent != null){
 
-            //Get the recipe from the intent and fill all the elements of the layout with it
-            String recipe = receivedIntent.getStringExtra(Intent.EXTRA_TEXT);
+            String uriS = receivedIntent.getDataString();
 
-            TextView recipeName = (TextView) rootView.findViewById(R.id.recipeName_textView);
-            recipeName.setText("Here we will show info of " + recipe + " querying DB");
-
-
+            if(uriS != null){
+                TextView recipeName = (TextView) rootView.findViewById(R.id.recipeName_textView);
+                recipeName.setText(uriS);
+            }
         }
 
         return rootView;

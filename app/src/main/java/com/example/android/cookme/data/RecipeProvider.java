@@ -26,11 +26,10 @@ public class RecipeProvider extends ContentProvider {
     private static final SQLiteQueryBuilder sRecipeIngredientQueryBuilder;
 
     static final int RECIPE = 100;
-    static final int RECIPE_ID_INGREDIENTS = 101;
     static final int INGREDIENT_ID_RECIPES = 102;
-    static final int INGREDIENT_ID_RECIPE_ID = 103;
     static final int INGREDIENT = 104;
     static final int RELATIONSHIP = 105;
+    static final int RELATIONSHIP_WITH_RECIPE_ID = 106;
 
     static{
         sRecipeIngredientQueryBuilder = new SQLiteQueryBuilder();
@@ -53,6 +52,10 @@ public class RecipeProvider extends ContentProvider {
     private static final String sIngredientSelection =
             RecipeContract.IngredientEntry.TABLE_NAME + "." +
                     RecipeContract.IngredientEntry.COL_NAME + " = ? COLLATE NOCASE ";
+
+    private static final String sRecipeSelectionById =
+            RecipeContract.RecipeEntry.TABLE_NAME + "." +
+                    RecipeContract.RecipeEntry._ID + " = ? ";
 
     private Cursor getRecipesByIngredient(Uri uri, String[] projection, String sortOrder){
         String ingredientName = RecipeContract.IngredientEntry.getIngredientFromUri(uri);
@@ -80,6 +83,22 @@ public class RecipeProvider extends ContentProvider {
                 sortOrder);
     }
 
+    private Cursor getAllRecipeData(Uri uri, String[] projection, String sortOrder){
+
+        long recipe_id = RecipeContract.RecipeIngredientRelationship.getRecipeIdFromUri(uri);
+
+        String [] selectionAtgs = new String[]{Long.toString(recipe_id)};
+        String selection = sRecipeSelectionById;
+
+        return sRecipeIngredientQueryBuilder.query(mDbHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionAtgs,
+                null,
+                null,
+                sortOrder);
+    }
+
 
 
     static UriMatcher buildUriMatcher(){
@@ -89,13 +108,11 @@ public class RecipeProvider extends ContentProvider {
 
         // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, RecipeContract.PATH_RECIPE, RECIPE);
-        matcher.addURI(authority, RecipeContract.PATH_RECIPE + "/*/" + RecipeContract.PATH_INGREDIENT,
-                RECIPE_ID_INGREDIENTS);
         matcher.addURI(authority, RecipeContract.PATH_INGREDIENT + "/*/" + RecipeContract.PATH_RECIPE,
                 INGREDIENT_ID_RECIPES);
-        matcher.addURI(authority, RecipeContract.PATH_RELATIONSHIP + "/*/*", INGREDIENT_ID_RECIPE_ID);
         matcher.addURI(authority, RecipeContract.PATH_INGREDIENT, INGREDIENT);
         matcher.addURI(authority, RecipeContract.PATH_RELATIONSHIP, RELATIONSHIP);
+        matcher.addURI(authority, RecipeContract.PATH_RELATIONSHIP + "/#", RELATIONSHIP_WITH_RECIPE_ID);
 
         return matcher;
     }
@@ -146,7 +163,10 @@ public class RecipeProvider extends ContentProvider {
                 returnCursor = getAllRelationships(uri, projection, selectionArgs, sortOrder);
                 break;
             }
-
+            case RELATIONSHIP_WITH_RECIPE_ID:{
+                returnCursor = getAllRecipeData(uri, projection, sortOrder);
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -160,16 +180,16 @@ public class RecipeProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
 
         switch (match){
-            case INGREDIENT_ID_RECIPE_ID:
-                return RecipeContract.RecipeIngredientRelationship.CONTENT_ITEM_TYPE;
             case INGREDIENT_ID_RECIPES:
                 return RecipeContract.IngredientEntry.CONTENT_TYPE;
-            case RECIPE_ID_INGREDIENTS:
-                return RecipeContract.RecipeEntry.CONTENT_TYPE;
             case RECIPE:
                 return RecipeContract.RecipeEntry.CONTENT_TYPE;
             case INGREDIENT:
                 return RecipeContract.IngredientEntry.CONTENT_TYPE;
+            case RELATIONSHIP:
+                return RecipeContract.RecipeIngredientRelationship.CONTENT_TYPE;
+            case RELATIONSHIP_WITH_RECIPE_ID:
+                return RecipeContract.RecipeIngredientRelationship.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

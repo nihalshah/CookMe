@@ -119,6 +119,14 @@ public class RecipeContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
+        public static Uri buildRelationshipUriWithRecipeId(long recipe_id){
+            return CONTENT_URI.buildUpon().appendPath(Long.toString(recipe_id)).build();
+        }
+
+        public static long getRecipeIdFromUri(Uri uri){
+            return Long.parseLong(uri.getPathSegments().get(1));
+        }
+
 
     }
 }
