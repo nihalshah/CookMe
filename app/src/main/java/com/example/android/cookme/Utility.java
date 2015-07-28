@@ -4,6 +4,8 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
 
@@ -11,6 +13,7 @@ import com.example.android.cookme.data.Ingredient;
 import com.example.android.cookme.data.Recipe;
 import com.example.android.cookme.data.RecipeContract;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 /**
@@ -41,6 +44,8 @@ public class Utility {
         return ingredientValues;
     }
 
+    /*Method that checks if the local Db is empty,
+    if it is it return true*/
     public static boolean dataBaseIsEmpty(Context context){
         Cursor cursor = context.getContentResolver().query(
                 RecipeContract.RecipeIngredientRelationship.CONTENT_URI,
@@ -136,6 +141,18 @@ public class Utility {
             }
         }
         Log.v(null, "JSON Already in DB!!!!!");
+    }
+
+    //Method that converts from bitmap to byte array -> Obtained from StackOverflow
+    public static byte[] getBytes(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
+        return stream.toByteArray();
+    }
+
+    //Method that converts from byte array to bitmap -> Obtained from StackOverflow
+    public static Bitmap getImage(byte[] image) {
+        return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 
 
