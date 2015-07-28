@@ -12,7 +12,7 @@ import com.example.android.cookme.data.RecipeContract.RecipeIngredientRelationsh
  */
 public class RecipeDbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     static final String DATABASE_NAME = "recipe.db";
 
@@ -27,8 +27,8 @@ public class RecipeDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_RECIPE_TABLE = "CREATE TABLE " + RecipeEntry.TABLE_NAME + " (" +
                 RecipeEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 RecipeEntry.COL_NAME + " TEXT NOT NULL, " +
-                RecipeEntry.COL_INSTRUCTIONS + " TEXT NOT NULL " + //When we put the Photo we must add a coma
-               // RecipeEntry.COL_PHOTO + " BLOB " +
+                RecipeEntry.COL_INSTRUCTIONS + " TEXT NOT NULL, " + //When we put the Photo we must add a coma
+                RecipeEntry.COL_PHOTO + " BLOB " +
                 ");";
 
         //String for creating the Ingredient Table
@@ -60,8 +60,11 @@ public class RecipeDbHelper extends SQLiteOpenHelper {
                 " UNIQUE (" + RecipeIngredientRelationship.COL_RECIPE_KEY + ", " +
                 RecipeIngredientRelationship.COL_INGREDIENT_KEY + ") ON CONFLICT REPLACE);";
 
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + RecipeEntry.TABLE_NAME + ";");
         sqLiteDatabase.execSQL(SQL_CREATE_RECIPE_TABLE);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + IngredientEntry.TABLE_NAME + ";");
         sqLiteDatabase.execSQL(SQL_CREATE_INGREDIENT_TABLE);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + RecipeIngredientRelationship.TABLE_NAME + ";");
         sqLiteDatabase.execSQL(SQL_CREATE_RELATIONSHIP_TABLE);
 
     }

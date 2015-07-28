@@ -36,12 +36,14 @@ public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCal
     private static final String[] RECIPE_COLUMNS = {
                 RecipeContract.RecipeEntry.TABLE_NAME + "." + RecipeContract.RecipeEntry._ID,
                 RecipeContract.RecipeEntry.COL_NAME,
-                RecipeContract.RecipeEntry.COL_INSTRUCTIONS
+                RecipeContract.RecipeEntry.COL_INSTRUCTIONS,
+                RecipeContract.RecipeEntry.COL_PHOTO
     };
 
     static final int COL_RECIPE_ID = 0;
     static final int COL_RECIPE_NAME = 1;
     static final int COL_INSTRUCTIONS = 2;
+    static final int COL_PHOTO = 3;
 
     public RecipeFragment() {
     }

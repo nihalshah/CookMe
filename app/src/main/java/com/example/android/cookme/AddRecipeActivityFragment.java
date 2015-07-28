@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -44,7 +45,7 @@ public class AddRecipeActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_add_recipe, container, false);
 
-        mImageView = (ImageView) rootView.findViewById(R.id.add_picture_thumbnail);
+        mImageView = (ImageView) rootView.findViewById(R.id.add_picture_imageview);
 
         Button takePictureButton = (Button) rootView.findViewById(R.id.add_picture_button);
         takePictureButton.setOnClickListener(new View.OnClickListener() {
@@ -79,8 +80,14 @@ public class AddRecipeActivityFragment extends Fragment {
                 EditText instructionsInput = (EditText) rootView.findViewById(R.id.add_instruction_input);
                 String instructions = instructionsInput.getText().toString();
 
+                ImageView pictureView = (ImageView) rootView.findViewById(R.id.add_picture_imageview);
+                BitmapDrawable drawable = (BitmapDrawable) pictureView.getDrawable();
+                Bitmap picture = drawable.getBitmap();
+
+                byte picture_in_bytes[] = Utility.getBytes(picture);
+
                 Utility.insertWholeRecipeInDb(getActivity(), recipe_name, instructions,
-                        ingredient_name, units, quantity);
+                        picture_in_bytes, ingredient_name, units, quantity);
 
                 //Message that shows the user that his recipe was added
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity()).
