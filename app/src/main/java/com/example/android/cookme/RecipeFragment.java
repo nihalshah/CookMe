@@ -66,6 +66,20 @@ public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCal
         ListView listRecipes = (ListView) rootView.findViewById(R.id.recipes_list);
         listRecipes.setAdapter(mRecipeAdapter);
 
+        listRecipes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                Cursor cursor = (Cursor) adapterView.getItemAtPosition(i);
+                if(cursor != null){
+                    Intent intent = new Intent(getActivity(), DetailActivity.class).
+                            setData(RecipeContract.RecipeIngredientRelationship.
+                                    buildRelationshipUriWithRecipeId(cursor.getLong(COL_RECIPE_ID)));
+                    startActivity(intent);
+                }
+            }
+        });
+
         //Button Pressed event
         Button searchBtn = (Button) rootView.findViewById(R.id.search_ingredient_button);
         searchBtn.setOnClickListener(new View.OnClickListener() {
