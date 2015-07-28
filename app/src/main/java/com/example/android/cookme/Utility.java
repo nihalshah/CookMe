@@ -79,10 +79,12 @@ public class Utility {
 
     /*Method that insert the whole recipe to the DB*/
     //TODO: this methos will change when we add more than one ingredient by recipe
-    public static void insertWholeRecipeInDb(Context context, String recipeName, String instructions,
+    public static void insertWholeRecipeInDb(Context context, String recipeName, String instructions, byte[] picture,
                                              String ingredientName, String units, double quantity){
 
         ContentValues recipeValues = createRecipeValues(recipeName, instructions);
+        recipeValues.put(RecipeContract.RecipeEntry.COL_PHOTO, picture);
+        
         Uri recipeInserted = context.getContentResolver().insert(
                 RecipeContract.RecipeEntry.CONTENT_URI, recipeValues);
         long recipe_id = ContentUris.parseId(recipeInserted);

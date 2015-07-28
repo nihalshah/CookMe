@@ -100,7 +100,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/add_picture_thumbnail"
+                    android:id="@+id/add_picture_imageview"
                     android:src="@mipmap/ic_launcher"
                     android:layout_weight="2"/>
 
