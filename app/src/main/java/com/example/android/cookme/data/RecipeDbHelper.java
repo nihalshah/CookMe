@@ -60,8 +60,11 @@ public class RecipeDbHelper extends SQLiteOpenHelper {
                 " UNIQUE (" + RecipeIngredientRelationship.COL_RECIPE_KEY + ", " +
                 RecipeIngredientRelationship.COL_INGREDIENT_KEY + ") ON CONFLICT REPLACE);";
 
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + RecipeEntry.TABLE_NAME + ";");
         sqLiteDatabase.execSQL(SQL_CREATE_RECIPE_TABLE);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + IngredientEntry.TABLE_NAME + ";");
         sqLiteDatabase.execSQL(SQL_CREATE_INGREDIENT_TABLE);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + RecipeIngredientRelationship.TABLE_NAME + ";");
         sqLiteDatabase.execSQL(SQL_CREATE_RELATIONSHIP_TABLE);
 
     }
