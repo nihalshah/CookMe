@@ -35,6 +35,7 @@ public class RemoteServer {
             resultStr[i] = "Recipe Name : " + recipeName + "\nRecipe Instructions : " + recipeInstructions;
 
         }
+        
 
         return resultStr;
 
