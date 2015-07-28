@@ -84,7 +84,7 @@ public class Utility {
 
         ContentValues recipeValues = createRecipeValues(recipeName, instructions);
         recipeValues.put(RecipeContract.RecipeEntry.COL_PHOTO, picture);
-        
+
         Uri recipeInserted = context.getContentResolver().insert(
                 RecipeContract.RecipeEntry.CONTENT_URI, recipeValues);
         long recipe_id = ContentUris.parseId(recipeInserted);
