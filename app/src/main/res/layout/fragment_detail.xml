@@ -19,10 +19,11 @@
         android:textSize="20dp" />
 
     <ImageView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/recipe_picture_imageview"
-        android:src="@drawable/no_picture"/>
+        android:src="@drawable/no_picture"
+        android:scaleType="fitXY"/>
 
     <ListView
         android:id="@+id/ingredients_list"
