@@ -2,11 +2,13 @@ package com.example.android.cookme;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.cookme.data.RecipeContract;
@@ -31,7 +33,14 @@ public class RecipeAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
-        //TextView tv = (TextView)view.findViewById(R.id.list_item_recipes_textview);
-        //tv.setText(cursor.getString(cursor.getColumnIndex(RecipeContract.RecipeEntry.COL_NAME)));
+        TextView tv = (TextView)view.findViewById(R.id.list_item_recipes_textview);
+        tv.setText(cursor.getString(RecipeFragment.COL_RECIPE_NAME));
+
+        byte [] image_array = cursor.getBlob(RecipeFragment.COL_PHOTO);
+        if(image_array != null){
+            Bitmap image = Utility.getImage(image_array);
+            ImageView photo_imageView = (ImageView)view.findViewById(R.id.recipe_picture_imageview);
+            photo_imageView.setImageBitmap(image);
+        }
     }
 }

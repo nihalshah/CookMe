@@ -53,11 +53,12 @@ public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCal
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        /*Just insert JSON in DB if DB is empty*/
+        /*Just insert JSON in DB if DB is empty
         if(Utility.dataBaseIsEmpty(getActivity())){
             mListRecipes = new RecipeProviderByJSON(getActivity());
             Utility.insertJSONRecipesToDb(getActivity(), mListRecipes.getCollection_of_recipes());
-        }
+        }*/
+
         mIngredientTyped = "";
 
         // The CursorAdapter will take data from our cursor and populate the ListView.
