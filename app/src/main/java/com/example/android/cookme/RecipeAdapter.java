@@ -18,6 +18,16 @@ import com.example.android.cookme.data.RecipeContract;
  */
 public class RecipeAdapter extends CursorAdapter {
 
+    public static class ViewHolder{
+        public final TextView recipeName;
+        public final ImageView recipePicture;
+
+        public ViewHolder(View view){
+            recipeName = (TextView)view.findViewById(R.id.list_item_recipes_textview);
+            recipePicture = (ImageView)view.findViewById(R.id.recipe_picture_imageview);
+        }
+    }
+
     public RecipeAdapter(Context context, Cursor cursor, int flags){
         super(context, cursor, flags);
     }
@@ -27,20 +37,23 @@ public class RecipeAdapter extends CursorAdapter {
     public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
         View view = LayoutInflater.from(context).inflate(R.layout.list_item_recipes, viewGroup, false);
 
+        ViewHolder viewHolder = new ViewHolder(view);
+        view.setTag(viewHolder);
+
         return view;
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
-        TextView tv = (TextView)view.findViewById(R.id.list_item_recipes_textview);
-        tv.setText(cursor.getString(RecipeFragment.COL_RECIPE_NAME));
+        ViewHolder viewHolder = (ViewHolder) view.getTag();
+
+        viewHolder.recipeName.setText(cursor.getString(RecipeFragment.COL_RECIPE_NAME));
 
         byte [] image_array = cursor.getBlob(RecipeFragment.COL_PHOTO);
         if(image_array != null){
             Bitmap image = Utility.getImage(image_array);
-            ImageView photo_imageView = (ImageView)view.findViewById(R.id.recipe_picture_imageview);
-            photo_imageView.setImageBitmap(image);
+           viewHolder.recipePicture.setImageBitmap(image);
         }
     }
 }
