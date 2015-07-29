@@ -31,7 +31,7 @@ public class RecipeAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
-        TextView tv = (TextView)view.findViewById(R.id.list_item_recipes_textview);
-        tv.setText(cursor.getString(cursor.getColumnIndex(RecipeContract.RecipeEntry.COL_NAME)));
+        //TextView tv = (TextView)view.findViewById(R.id.list_item_recipes_textview);
+        //tv.setText(cursor.getString(cursor.getColumnIndex(RecipeContract.RecipeEntry.COL_NAME)));
     }
 }
