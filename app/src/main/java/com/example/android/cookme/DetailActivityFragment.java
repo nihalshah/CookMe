@@ -85,10 +85,14 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         //Get image from DB
         byte [] array_picture = data.getBlob(COL_PHOTO);
         if(array_picture != null){
+            //TODO:Fixing the size of picture
             Bitmap picture = Utility.getImage(array_picture);
             ImageView photo_view = (ImageView)getView().findViewById(R.id.recipe_picture_imageview);
             photo_view.setImageBitmap(picture);
         }
+
+        TextView instructions = (TextView)getView().findViewById(R.id.instructions_textView);
+        instructions.setText(data.getString(COL_INSTRUCTIONS));
     }
 
     @Override
