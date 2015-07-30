@@ -19,6 +19,8 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import com.example.android.cookme.data.Recipe;
 import com.example.android.cookme.data.RecipeContract;
 
+import org.w3c.dom.Text;
+
 
 /**
  * A placeholder fragment containing a simple view.
@@ -41,6 +43,11 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private static final int COL_INSTRUCTIONS = 2;
     private static final int COL_PHOTO = 3;
 
+    private TextView mNameView;
+    private ImageView mPhotoView;
+    private ListView mIngredientListView;
+    private TextView mInstructionsView;
+
     public DetailActivityFragment() {
     }
 
@@ -48,6 +55,11 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+
+        mNameView = (TextView)rootView.findViewById(R.id.recipeName_textView);
+        mPhotoView = (ImageView)rootView.findViewById(R.id.recipe_picture_imageview);
+        mIngredientListView = (ListView)rootView.findViewById(R.id.ingredients_list);
+        mInstructionsView = (TextView)rootView.findViewById(R.id.instructions_textView);
 
         return rootView;
     }
@@ -79,20 +91,17 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         if(!data.moveToFirst())
             return;
 
-        TextView rec_name = (TextView) getView().findViewById(R.id.recipeName_textView);
-        rec_name.setText(data.getString(COL_RECIPE_NAME));
+        mNameView.setText(data.getString(COL_RECIPE_NAME));
+
+        mInstructionsView.setText(data.getString(COL_INSTRUCTIONS));
 
         //Get image from DB
         byte [] array_picture = data.getBlob(COL_PHOTO);
         if(array_picture != null){
             //TODO:Fixing the size of picture
             Bitmap picture = Utility.getImage(array_picture);
-            ImageView photo_view = (ImageView)getView().findViewById(R.id.recipe_picture_imageview);
-            photo_view.setImageBitmap(picture);
+            mPhotoView.setImageBitmap(picture);
         }
-
-        TextView instructions = (TextView)getView().findViewById(R.id.instructions_textView);
-        instructions.setText(data.getString(COL_INSTRUCTIONS));
     }
 
     @Override
