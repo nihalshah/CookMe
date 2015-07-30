@@ -21,6 +21,8 @@ import com.example.android.cookme.data.RecipeContract;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+
 
 /**
  * A placeholder fragment containing a simple view.
@@ -35,13 +37,20 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             RecipeContract.RecipeEntry.COL_NAME,
             RecipeContract.RecipeEntry.COL_INSTRUCTIONS,
             RecipeContract.RecipeEntry.COL_PHOTO,
-            //TODO: All ingredients in the relation
+            RecipeContract.IngredientEntry.TABLE_NAME + "." + RecipeContract.IngredientEntry._ID,
+            RecipeContract.IngredientEntry.COL_NAME,
+            RecipeContract.RecipeIngredientRelationship.COL_UNITS,
+            RecipeContract.RecipeIngredientRelationship.COL_QUANTITY
     };
 
     private static final int COL_RECIPE_ID = 0;
     private static final int COL_RECIPE_NAME = 1;
     private static final int COL_INSTRUCTIONS = 2;
     private static final int COL_PHOTO = 3;
+    private static final int COL_INGREDIENT_ID = 4;
+    private static final int COL_INGREDIENT_NAME = 5;
+    private static final int COL_UNITS = 6;
+    private static final int COL_QUANTITY = 7;
 
     private TextView mNameView;
     private ImageView mPhotoView;
@@ -92,7 +101,6 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             return;
 
         mNameView.setText(data.getString(COL_RECIPE_NAME));
-
         mInstructionsView.setText(data.getString(COL_INSTRUCTIONS));
 
         //Get image from DB
@@ -102,6 +110,27 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             Bitmap picture = Utility.getImage(array_picture);
             mPhotoView.setImageBitmap(picture);
         }
+
+        ArrayList<String> ingredients = new ArrayList<>();
+
+        String actualIngredient = data.getString(COL_INGREDIENT_NAME);
+        actualIngredient += " " + data.getDouble(COL_QUANTITY) + " " + data.getString(COL_UNITS);
+        ingredients.add(actualIngredient);
+
+        while (data.moveToNext()){
+            actualIngredient = data.getString(COL_INGREDIENT_NAME);
+            actualIngredient += " " + data.getDouble(COL_QUANTITY) + " " + data.getString(COL_UNITS);
+            ingredients.add(actualIngredient);
+        }
+
+        ArrayAdapter<String> ingredientAdapter = new ArrayAdapter<String>(
+                getActivity(),
+                R.layout.list_item_ingredients,     //id of the item layout
+                R.id.list_item_ingredients_textView,//id of the textView to populate with
+                ingredients
+        );
+
+        mIngredientListView.setAdapter(ingredientAdapter);
     }
 
     @Override
