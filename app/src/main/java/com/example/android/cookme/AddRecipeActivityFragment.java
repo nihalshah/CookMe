@@ -97,7 +97,7 @@ public class AddRecipeActivityFragment extends Fragment {
         });
 
         /*Add recipe Button event*/
-
+        //TODO: ADD VALIDATIONS!
         Button addButton = (Button) rootView.findViewById(R.id.add_new_recipe_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,8 +117,8 @@ public class AddRecipeActivityFragment extends Fragment {
 
                 byte picture_in_bytes[] = Utility.getBytes(picture);
 
-                /*Utility.insertWholeRecipeInDb(getActivity(), recipe_name, instructions,
-                        picture_in_bytes, ingredient_name, units, quantity);*/
+                Utility.insertWholeRecipeInDb(getActivity(), recipe_name, instructions,
+                        picture_in_bytes, mIngredientsList);
 
                 //Message that shows the user that his recipe was added
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity()).
