@@ -57,6 +57,7 @@ public class AddRecipeActivityFragment extends Fragment {
         mIngredientsList = new ArrayList<>();
 
         final TextView ingredientsAdded_textview = (TextView)rootView.findViewById(R.id.list_of_ingredients_added);
+        ingredientsAdded_textview.setText(mIngredientAdded);
 
         Button takePictureButton = (Button) rootView.findViewById(R.id.add_picture_button);
         takePictureButton.setOnClickListener(new View.OnClickListener() {
