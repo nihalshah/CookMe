@@ -56,7 +56,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/add_ingredient_name_input"
                 android:hint="@string/add_ingridient_name"
-                android:layout_marginBottom="15dp"/>
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"/>
 
             <EditText
                 android:layout_width="fill_parent"
@@ -73,13 +74,25 @@
                 android:layout_marginBottom="15dp"
                 android:inputType="numberDecimal"/>
 
+            <Button
+                android:id="@+id/add_ingredient_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Ingredient"/>
+
+            <TextView
+                android:id="@+id/list_of_ingredients_added"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
             <EditText
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/add_instruction_input"
                 android:hint="@string/add_instructions"
-                android:layout_marginBottom="15dp"/>
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="20dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -94,8 +107,7 @@
                     android:id="@+id/add_picture_button"
                     android:layout_marginBottom="15dp"
                     android:text="@string/take_picture"
-                    android:layout_weight="4"
-                    />
+                    android:layout_weight="4" />
 
                 <ImageView
                     android:layout_width="wrap_content"
