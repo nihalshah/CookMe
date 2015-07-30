@@ -34,7 +34,8 @@
         <activity
             android:name=".AddRecipeActivity"
             android:label="@string/title_activity_add_recipe"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity"
+            android:noHistory="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.cookme.MainActivity" />

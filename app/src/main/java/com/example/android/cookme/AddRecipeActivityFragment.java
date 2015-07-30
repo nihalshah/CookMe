@@ -100,6 +100,9 @@ public class AddRecipeActivityFragment extends Fragment {
 
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
+
+
+
             }
         });
         return rootView;
