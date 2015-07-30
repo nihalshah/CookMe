@@ -98,8 +98,7 @@ public class AddRecipeActivityFragment extends Fragment {
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
 
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
+                getActivity().finish();
 
 
 
