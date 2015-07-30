@@ -24,8 +24,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.cookme.R;
+import com.example.android.cookme.data.Ingredient;
 
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -37,6 +39,8 @@ public class AddRecipeActivityFragment extends Fragment {
     private Uri mURI;
     private static final int PICK_IMAGE = 0;
     private static final int PICK_IMAGE_FROM_GALLERY = 1;
+    private String mIngredientAdded;
+    private ArrayList<Ingredient> mIngredientsList;
 
 
     public AddRecipeActivityFragment() {
@@ -49,6 +53,11 @@ public class AddRecipeActivityFragment extends Fragment {
 
         mImageView = (ImageView) rootView.findViewById(R.id.add_picture_imageview);
 
+        mIngredientAdded = "INGREDIENTS ADDED : ";
+        mIngredientsList = new ArrayList<>();
+
+        final TextView ingredientsAdded_textview = (TextView)rootView.findViewById(R.id.list_of_ingredients_added);
+
         Button takePictureButton = (Button) rootView.findViewById(R.id.add_picture_button);
         takePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,15 +69,13 @@ public class AddRecipeActivityFragment extends Fragment {
 
         });
 
-        /*Button event*/
 
-        Button addButton = (Button) rootView.findViewById(R.id.add_new_recipe_button);
-        addButton.setOnClickListener(new View.OnClickListener() {
+        /*Add ingredient button event*/
+
+        Button addIngredientButton = (Button) rootView.findViewById(R.id.add_ingredient_button);
+        addIngredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                EditText recipeInput = (EditText) rootView.findViewById(R.id.add_recipe_name_input);
-                String recipe_name = recipeInput.getText().toString();
 
                 EditText ingredientInput = (EditText) rootView.findViewById(R.id.add_ingredient_name_input);
                 String ingredient_name = ingredientInput.getText().toString();
@@ -78,6 +85,30 @@ public class AddRecipeActivityFragment extends Fragment {
 
                 EditText quantityInput = (EditText) rootView.findViewById(R.id.add_quantity_input);
                 double quantity = Double.parseDouble(quantityInput.getText().toString());
+
+                mIngredientsList.add(new Ingredient(ingredient_name, quantity, units));
+
+                mIngredientAdded += ingredient_name + " " + quantity + " " + units + ", ";
+                ingredientsAdded_textview.setText(mIngredientAdded);
+
+                ingredientInput.setText("");
+                unitsInput.setText("");
+                quantityInput.setText("");
+
+            }
+        });
+
+        /*Add recipe Button event*/
+        //TODO: ADD VALIDATIONS!
+        Button addButton = (Button) rootView.findViewById(R.id.add_new_recipe_button);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                EditText recipeInput = (EditText) rootView.findViewById(R.id.add_recipe_name_input);
+                String recipe_name = recipeInput.getText().toString();
+
+
 
                 EditText instructionsInput = (EditText) rootView.findViewById(R.id.add_instruction_input);
                 String instructions = instructionsInput.getText().toString();
@@ -89,7 +120,7 @@ public class AddRecipeActivityFragment extends Fragment {
                 byte picture_in_bytes[] = Utility.getBytes(picture);
 
                 Utility.insertWholeRecipeInDb(getActivity(), recipe_name, instructions,
-                        picture_in_bytes, ingredient_name, units, quantity);
+                        picture_in_bytes, mIngredientsList);
 
                 Context context = getActivity();
                 CharSequence text = "recipe Added!";

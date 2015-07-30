@@ -78,9 +78,8 @@ public class Utility {
     }
 
     /*Method that insert the whole recipe to the DB*/
-    //TODO: this methos will change when we add more than one ingredient by recipe
-    public static void insertWholeRecipeInDb(Context context, String recipeName, String instructions, byte[] picture,
-                                             String ingredientName, String units, double quantity){
+    public static void insertWholeRecipeInDb(Context context, String recipeName, String instructions,
+                                             byte[] picture, ArrayList<Ingredient> ingredients){
 
         ContentValues recipeValues = createRecipeValues(recipeName, instructions);
         recipeValues.put(RecipeContract.RecipeEntry.COL_PHOTO, picture);
@@ -89,23 +88,26 @@ public class Utility {
                 RecipeContract.RecipeEntry.CONTENT_URI, recipeValues);
         long recipe_id = ContentUris.parseId(recipeInserted);
 
-        //check if ingredient exists
-        long ingredient_id = getIngredientId(context, ingredientName);
-        if(ingredient_id == -1L){
-            //Ingredient doesn't exists, so we add it
-            ContentValues ingredientValues = createIngredientValues(ingredientName);
-            Uri ingredient_inserted = context.getContentResolver().insert(
-                    RecipeContract.IngredientEntry.CONTENT_URI,
-                    ingredientValues);
-            ingredient_id = ContentUris.parseId(ingredient_inserted);
-        }else{
-            Log.v(null, "USING EXISTING ID!!! " + ingredient_id);
+        for(Ingredient ingredient : ingredients){
+            //check if ingredient exists
+            long ingredient_id = getIngredientId(context, ingredient.getName());
+            if(ingredient_id == -1L){
+                //Ingredient doesn't exists, so we add it
+                ContentValues ingredientValues = createIngredientValues(ingredient.getName());
+                Uri ingredient_inserted = context.getContentResolver().insert(
+                        RecipeContract.IngredientEntry.CONTENT_URI,
+                        ingredientValues);
+                ingredient_id = ContentUris.parseId(ingredient_inserted);
+            }else{
+                Log.v(null, "USING EXISTING ID!!! " + ingredient_id);
+            }
+
+            ContentValues relationValues = createRelationshipValues(recipe_id, ingredient_id,
+                                                                    ingredient.getUnits(), ingredient.getQuantity());
+
+            context.getContentResolver().insert(RecipeContract.RecipeIngredientRelationship.CONTENT_URI,
+                    relationValues);
         }
-
-        ContentValues relationValues = createRelationshipValues(recipe_id, ingredient_id, units, quantity);
-
-        context.getContentResolver().insert(RecipeContract.RecipeIngredientRelationship.CONTENT_URI,
-                                            relationValues);
 
         Log.v(null, "RECIPE INSERTED!!!!");
 
