@@ -2,6 +2,7 @@ package com.example.android.cookme;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -20,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.cookme.R;
 
@@ -89,12 +91,15 @@ public class AddRecipeActivityFragment extends Fragment {
                 Utility.insertWholeRecipeInDb(getActivity(), recipe_name, instructions,
                         picture_in_bytes, ingredient_name, units, quantity);
 
-                //Message that shows the user that his recipe was added
-                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity()).
-                        setMessage(recipe_name + " recipe added!");
+                Context context = getActivity();
+                CharSequence text = "recipe Added!";
+                int duration = Toast.LENGTH_SHORT;
 
-                AlertDialog alert = alertBuilder.create();
-                alert.show();
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
             }
         });
         return rootView;
