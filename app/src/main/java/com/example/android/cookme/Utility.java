@@ -12,6 +12,7 @@ import android.util.Log;
 import com.example.android.cookme.data.Ingredient;
 import com.example.android.cookme.data.Recipe;
 import com.example.android.cookme.data.RecipeContract;
+import com.example.android.cookme.data.RecipeDbHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -111,6 +112,23 @@ public class Utility {
 
         Log.v(null, "RECIPE INSERTED!!!!");
 
+    }
+
+    public static void deleteRecipeFromDb(Context context, long recipeId){
+
+        String selection = RecipeContract.RecipeEntry.TABLE_NAME + "." + RecipeContract.RecipeEntry._ID
+                 + " = ? ";
+
+        String [] selectionArgs = new String[]{Long.toString(recipeId)};
+        
+        context.getContentResolver().delete(RecipeContract.RecipeEntry.CONTENT_URI,
+                                            selection,
+                                            selectionArgs);
+        selection = RecipeContract.RecipeIngredientRelationship.COL_RECIPE_KEY + " = ? ";
+
+        context.getContentResolver().delete(RecipeContract.RecipeIngredientRelationship.CONTENT_URI,
+                                            selection,
+                                            selectionArgs);
     }
 
     /*Method that insert a whole arrayList of Recipes to the Db

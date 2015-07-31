@@ -41,7 +41,7 @@ public class DetailActivity extends ActionBarActivity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            
+                            deleteRecipe(DetailActivityFragment.getRecipeId());
                         }
                     });
             AlertDialog alert = builder.create();
@@ -51,5 +51,9 @@ public class DetailActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void deleteRecipe(long id){
+        Utility.deleteRecipeFromDb(this, id);
     }
 }
