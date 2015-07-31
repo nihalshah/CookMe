@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 public class DetailActivity extends ActionBarActivity {
@@ -54,6 +55,14 @@ public class DetailActivity extends ActionBarActivity {
     }
 
     public void deleteRecipe(long id){
+
         Utility.deleteRecipeFromDb(this, id);
+        CharSequence text = "Recipe Deleted!";
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(this, text, duration);
+        toast.show();
+
+        this.finish();
     }
 }

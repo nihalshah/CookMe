@@ -120,10 +120,11 @@ public class Utility {
                  + " = ? ";
 
         String [] selectionArgs = new String[]{Long.toString(recipeId)};
-        
+
         context.getContentResolver().delete(RecipeContract.RecipeEntry.CONTENT_URI,
                                             selection,
                                             selectionArgs);
+
         selection = RecipeContract.RecipeIngredientRelationship.COL_RECIPE_KEY + " = ? ";
 
         context.getContentResolver().delete(RecipeContract.RecipeIngredientRelationship.CONTENT_URI,
