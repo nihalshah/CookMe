@@ -42,6 +42,13 @@ public class AddRecipeActivityFragment extends Fragment {
     private String mIngredientAdded;
     private ArrayList<Ingredient> mIngredientsList;
 
+    private EditText mRecipeInput;
+    private EditText mIngredientInput;
+    private EditText mUnitInput;
+    private EditText mQuantityInput;
+    private EditText mInstructionsInput;
+    private TextView mIngredientsAdded_tv;
+
 
     public AddRecipeActivityFragment() {
     }
@@ -49,15 +56,21 @@ public class AddRecipeActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         final View rootView = inflater.inflate(R.layout.fragment_add_recipe, container, false);
 
+        mRecipeInput = (EditText)rootView.findViewById(R.id.add_recipe_name_input);
+        mIngredientInput = (EditText) rootView.findViewById(R.id.add_ingredient_name_input);
+        mUnitInput = (EditText) rootView.findViewById(R.id.add_units_input);
+        mQuantityInput = (EditText) rootView.findViewById(R.id.add_quantity_input);
+        mInstructionsInput = (EditText) rootView.findViewById(R.id.add_instruction_input);
         mImageView = (ImageView) rootView.findViewById(R.id.add_picture_imageview);
 
         mIngredientAdded = "INGREDIENTS ADDED : ";
         mIngredientsList = new ArrayList<>();
 
-        final TextView ingredientsAdded_textview = (TextView)rootView.findViewById(R.id.list_of_ingredients_added);
-        ingredientsAdded_textview.setText(mIngredientAdded);
+        mIngredientsAdded_tv = (TextView)rootView.findViewById(R.id.list_of_ingredients_added);
+        mIngredientsAdded_tv.setText(mIngredientAdded);
 
         Button takePictureButton = (Button) rootView.findViewById(R.id.add_picture_button);
         takePictureButton.setOnClickListener(new View.OnClickListener() {
@@ -78,24 +91,24 @@ public class AddRecipeActivityFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                EditText ingredientInput = (EditText) rootView.findViewById(R.id.add_ingredient_name_input);
-                String ingredient_name = ingredientInput.getText().toString();
+                String ingredient_name = mIngredientInput.getText().toString();
 
-                EditText unitsInput = (EditText) rootView.findViewById(R.id.add_units_input);
-                String units = unitsInput.getText().toString();
+                String units = mUnitInput.getText().toString();
 
-                EditText quantityInput = (EditText) rootView.findViewById(R.id.add_quantity_input);
-                double quantity = Double.parseDouble(quantityInput.getText().toString());
+                String quantityString = mQuantityInput.getText().toString();
 
-                mIngredientsList.add(new Ingredient(ingredient_name, quantity, units));
+                if(validAddingIngredient(ingredient_name, units, quantityString)){
+                    double quantity = Double.parseDouble(quantityString);
 
-                mIngredientAdded += ingredient_name + " " + quantity + " " + units + ", ";
-                ingredientsAdded_textview.setText(mIngredientAdded);
+                    mIngredientsList.add(new Ingredient(ingredient_name, quantity, units));
 
-                ingredientInput.setText("");
-                unitsInput.setText("");
-                quantityInput.setText("");
+                    mIngredientAdded += ingredient_name + " " + quantity + " " + units + ", ";
+                    mIngredientsAdded_tv.setText(mIngredientAdded);
 
+                    mIngredientInput.setText("");
+                    mUnitInput.setText("");
+                    mQuantityInput.setText("");
+                }
             }
         });
 
@@ -106,34 +119,29 @@ public class AddRecipeActivityFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                EditText recipeInput = (EditText) rootView.findViewById(R.id.add_recipe_name_input);
-                String recipe_name = recipeInput.getText().toString();
+                String recipe_name = mRecipeInput.getText().toString();
 
+                String instructions = mInstructionsInput.getText().toString();
 
-
-                EditText instructionsInput = (EditText) rootView.findViewById(R.id.add_instruction_input);
-                String instructions = instructionsInput.getText().toString();
-
-                ImageView pictureView = (ImageView) rootView.findViewById(R.id.add_picture_imageview);
-                BitmapDrawable drawable = (BitmapDrawable) pictureView.getDrawable();
+                BitmapDrawable drawable = (BitmapDrawable) mImageView.getDrawable();
                 Bitmap picture = drawable.getBitmap();
 
                 byte picture_in_bytes[] = Utility.getBytes(picture);
 
-                Utility.insertWholeRecipeInDb(getActivity(), recipe_name, instructions,
-                        picture_in_bytes, mIngredientsList);
+                if(validAddingRecipe(recipe_name, instructions, mIngredientsList)){
+                    Utility.insertWholeRecipeInDb(getActivity(), recipe_name, instructions,
+                            picture_in_bytes, mIngredientsList);
 
-                Context context = getActivity();
-                CharSequence text = "recipe Added!";
-                int duration = Toast.LENGTH_SHORT;
+                    Context context = getActivity();
+                    CharSequence text = "recipe Added!";
+                    int duration = Toast.LENGTH_SHORT;
 
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
 
-                getActivity().finish();
+                    getActivity().finish();
 
-
-
+                }
             }
         });
         return rootView;
@@ -148,6 +156,57 @@ public class AddRecipeActivityFragment extends Fragment {
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private boolean validAddingIngredient(String ing, String untis, String quantity){
+
+        if(ing.length() > 0 && untis.length() > 0 && quantity.length() > 0)
+            return true;
+        else{
+
+            String userHelp = "";
+
+            if(ing.length() == 0)
+                userHelp += "\n- Ingredient name";
+            if(untis.length() == 0)
+                userHelp += "\n- Ingredient units";
+            if(quantity.length() == 0)
+                userHelp += "\n- Ingredient quantity";
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("Missing information:\n " + userHelp)
+                    .setCancelable(false)
+                    .setPositiveButton("Ok", null);
+            AlertDialog alert = builder.create();
+            alert.show();
+            return false;
+        }
+    }
+
+    private boolean validAddingRecipe(String name, String instructions, ArrayList<Ingredient> ingredients){
+
+        if(name.length() > 0 && instructions.length() > 0 && ingredients.isEmpty() == false)
+            return true;
+        else{
+
+            String userHelp = "";
+
+            if(name.length() == 0)
+                userHelp += "\n- Recipe name";
+            if(instructions.length() == 0)
+                userHelp += "\n- Instructions";
+            if(ingredients.isEmpty())
+                userHelp += "\n- Ingredients";
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("Missing information:\n " + userHelp)
+                    .setCancelable(false)
+                    .setPositiveButton("Ok", null);
+            AlertDialog alert = builder.create();
+            alert.show();
+
+            return false;
+        }
     }
 
 
