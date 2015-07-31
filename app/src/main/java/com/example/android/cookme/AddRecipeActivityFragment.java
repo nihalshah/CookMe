@@ -95,17 +95,20 @@ public class AddRecipeActivityFragment extends Fragment {
 
                 String units = mUnitInput.getText().toString();
 
-                double quantity = Double.parseDouble(mQuantityInput.getText().toString());
+                String quantityString = mQuantityInput.getText().toString();
 
-                mIngredientsList.add(new Ingredient(ingredient_name, quantity, units));
+                if(validAddingIngredient(ingredient_name, units, quantityString)){
+                    double quantity = Double.parseDouble(quantityString);
 
-                mIngredientAdded += ingredient_name + " " + quantity + " " + units + ", ";
-                mIngredientsAdded_tv.setText(mIngredientAdded);
+                    mIngredientsList.add(new Ingredient(ingredient_name, quantity, units));
 
-                mIngredientInput.setText("");
-                mUnitInput.setText("");
-                mQuantityInput.setText("");
+                    mIngredientAdded += ingredient_name + " " + quantity + " " + units + ", ";
+                    mIngredientsAdded_tv.setText(mIngredientAdded);
 
+                    mIngredientInput.setText("");
+                    mUnitInput.setText("");
+                    mQuantityInput.setText("");
+                }
             }
         });
 
@@ -119,7 +122,7 @@ public class AddRecipeActivityFragment extends Fragment {
                 String recipe_name = mRecipeInput.getText().toString();
 
                 String instructions = mInstructionsInput.getText().toString();
-                
+
                 BitmapDrawable drawable = (BitmapDrawable) mImageView.getDrawable();
                 Bitmap picture = drawable.getBitmap();
 
@@ -153,6 +156,32 @@ public class AddRecipeActivityFragment extends Fragment {
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private boolean validAddingIngredient(String ing, String untis, String quantity){
+
+        if(ing.length() > 0 && untis.length() > 0 && quantity.length() > 0)
+            return true;
+        else{
+
+            String userHelp = "";
+
+            if(ing.length() == 0)
+                userHelp += "\n- Ingredient name";
+            if(untis.length() == 0)
+                userHelp += "\n- Ingredient units";
+            if(quantity.length() == 0)
+                userHelp += "\n- Ingredient quantity";
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("Missing information:\n " + userHelp)
+                    .setCancelable(false)
+                    .setPositiveButton("Ok", null);
+            AlertDialog alert = builder.create();
+            alert.show();
+            return false;
+        }
+
     }
 
 
