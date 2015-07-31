@@ -27,7 +27,7 @@ public class MainActivity extends ActionBarActivity {
     ActionBar actionBar;
 
     // Tab titles
-    private String[] tabs = { "Remote", "Local"};
+    private String[] tabs = { "Local", "Remote"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -2,6 +2,7 @@ package com.example.android.cookme;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.example.android.cookme.data.RecipeContract;
@@ -82,7 +84,7 @@ public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCal
         });
 
         //Button Pressed event
-        Button searchBtn = (Button) rootView.findViewById(R.id.search_ingredient_button);
+        ImageButton searchBtn = (ImageButton) rootView.findViewById(R.id.search_ingredient_button);
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
