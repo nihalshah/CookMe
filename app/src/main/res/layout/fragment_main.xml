@@ -35,7 +35,7 @@
     <ListView
         android:id="@+id/recipes_list"
         android:layout_width="match_parent"
-        android:layout_height="376dp">
+        android:layout_height="340dp">
 
     </ListView>
 
