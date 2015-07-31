@@ -128,20 +128,20 @@ public class AddRecipeActivityFragment extends Fragment {
 
                 byte picture_in_bytes[] = Utility.getBytes(picture);
 
-                Utility.insertWholeRecipeInDb(getActivity(), recipe_name, instructions,
-                        picture_in_bytes, mIngredientsList);
+                if(validAddingRecipe(recipe_name, instructions, mIngredientsList)){
+                    Utility.insertWholeRecipeInDb(getActivity(), recipe_name, instructions,
+                            picture_in_bytes, mIngredientsList);
 
-                Context context = getActivity();
-                CharSequence text = "recipe Added!";
-                int duration = Toast.LENGTH_SHORT;
+                    Context context = getActivity();
+                    CharSequence text = "recipe Added!";
+                    int duration = Toast.LENGTH_SHORT;
 
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
 
-                getActivity().finish();
+                    getActivity().finish();
 
-
-
+                }
             }
         });
         return rootView;
@@ -181,7 +181,32 @@ public class AddRecipeActivityFragment extends Fragment {
             alert.show();
             return false;
         }
+    }
 
+    private boolean validAddingRecipe(String name, String instructions, ArrayList<Ingredient> ingredients){
+
+        if(name.length() > 0 && instructions.length() > 0 && ingredients.isEmpty() == false)
+            return true;
+        else{
+
+            String userHelp = "";
+
+            if(name.length() == 0)
+                userHelp += "\n- Recipe name";
+            if(instructions.length() == 0)
+                userHelp += "\n- Instructions";
+            if(ingredients.isEmpty())
+                userHelp += "\n- Ingredients";
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("Missing information:\n " + userHelp)
+                    .setCancelable(false)
+                    .setPositiveButton("Ok", null);
+            AlertDialog alert = builder.create();
+            alert.show();
+
+            return false;
+        }
     }
 
 
