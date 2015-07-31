@@ -175,7 +175,7 @@ public class AddRecipeActivityFragment extends Fragment {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage("Missing information:\n " + userHelp)
-                    .setCancelable(false)
+                    .setCancelable(true)
                     .setPositiveButton("Ok", null);
             AlertDialog alert = builder.create();
             alert.show();
@@ -200,7 +200,7 @@ public class AddRecipeActivityFragment extends Fragment {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage("Missing information:\n " + userHelp)
-                    .setCancelable(false)
+                    .setCancelable(true)
                     .setPositiveButton("Ok", null);
             AlertDialog alert = builder.create();
             alert.show();
