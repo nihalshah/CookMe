@@ -1,9 +1,12 @@
 package com.example.android.cookme;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 public class DetailActivity extends ActionBarActivity {
@@ -31,9 +34,35 @@ public class DetailActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Are you sure you wanna delete this recipe?")
+                    .setCancelable(false)
+                    .setNegativeButton("No", null)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            deleteRecipe(DetailActivityFragment.getRecipeId());
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void deleteRecipe(long id){
+
+        Utility.deleteRecipeFromDb(this, id);
+        CharSequence text = "Recipe Deleted!";
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(this, text, duration);
+        toast.show();
+
+        this.finish();
     }
 }

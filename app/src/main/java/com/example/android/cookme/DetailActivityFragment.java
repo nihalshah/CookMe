@@ -31,6 +31,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
 
     private static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
     private static final int DETAIL_LOADER = 0;
+    private static long mActualRecipeId;
 
     private static final String[] RECIPE_COLUMNS = {
             RecipeContract.RecipeEntry.TABLE_NAME + "." + RecipeContract.RecipeEntry._ID,
@@ -100,6 +101,8 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         if(!data.moveToFirst())
             return;
 
+        mActualRecipeId = data.getLong(COL_RECIPE_ID);
+
         mNameView.setText(data.getString(COL_RECIPE_NAME));
         mInstructionsView.setText(data.getString(COL_INSTRUCTIONS));
 
@@ -136,5 +139,10 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    public static long getRecipeId(){
+
+        return mActualRecipeId;
     }
 }
