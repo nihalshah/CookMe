@@ -57,7 +57,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="7"
-                android:text="Recipes with: "
+                android:text="Recipes that have: "
+                android:textStyle="bold"
                 android:textColor="#ffffff"/>
             <Button
                 android:id="@+id/clear_list_ingredients_button"
@@ -74,17 +75,6 @@
             android:id="@+id/ingredients_in_query_textview"
             android:textColor="#ffffff"
             android:paddingBottom="5dp"/>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/add_recipe_button"
-            android:text="@string/add_recipe"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:onClick="sendMessage"
-            android:background="@color/ColorPrimary"
-            android:textColor="#ffffff"/>
 
     </LinearLayout>
 

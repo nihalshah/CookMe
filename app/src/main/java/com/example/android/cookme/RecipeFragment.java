@@ -40,6 +40,7 @@ public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCal
     private ListView mRecipesList;
     private EditText mIngredientInput;
     private TextView mIngredientsQuerying;
+    private Button mClearQuery;
 
     //Projection for querying
     private static final String[] RECIPE_COLUMNS = {
@@ -67,11 +68,13 @@ public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCal
 
         mIngredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
         mIngredientsQuerying = (TextView) rootView.findViewById(R.id.ingredients_in_query_textview);
+        mClearQuery = (Button) rootView.findViewById(R.id.clear_list_ingredients_button);
+        mRecipesList = (ListView) rootView.findViewById(R.id.recipes_list);
+        mSearchButton = (ImageButton) rootView.findViewById(R.id.search_ingredient_button);
 
         // The CursorAdapter will take data from our cursor and populate the ListView.
         mRecipeAdapter = new RecipeAdapter(getActivity(), null, 0);
 
-        mRecipesList = (ListView) rootView.findViewById(R.id.recipes_list);
         mRecipesList.setAdapter(mRecipeAdapter);
 
         mRecipesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -89,7 +92,6 @@ public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCal
         });
 
         //Button Pressed event
-        mSearchButton = (ImageButton) rootView.findViewById(R.id.search_ingredient_button);
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -102,6 +104,17 @@ public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCal
                 else
                     mIngredientsSelected += "-" + mIngredientTyped; //DO NOT CHANGE THE '-' ... necessary for later split
 
+                mIngredientsQuerying.setText(mIngredientsSelected);
+
+                restartLoader();
+            }
+        });
+
+        mClearQuery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                mIngredientsSelected = "";
                 mIngredientsQuerying.setText(mIngredientsSelected);
 
                 restartLoader();
@@ -127,7 +140,7 @@ public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCal
 
         String sortOrder = RecipeContract.RecipeEntry.COL_NAME + " ASC";
 
-        if(mIngredientTyped.length() == 0){
+        if(mIngredientsSelected.length() == 0){
             return  new CursorLoader(getActivity(),
                     RecipeContract.RecipeEntry.CONTENT_URI,
                     RECIPE_COLUMNS,
