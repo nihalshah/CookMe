@@ -27,7 +27,7 @@ import android.widget.TextView;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCallbacks<Cursor>{
+public class LocalRecipeFragment extends Fragment implements  LoaderManager.LoaderCallbacks<Cursor>{
 
 
     private static final int RECIPE_LOADER = 0;
@@ -55,7 +55,7 @@ public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCal
     static final int COL_INSTRUCTIONS = 2;
     static final int COL_PHOTO = 3;
 
-    public RecipeFragment() {
+    public LocalRecipeFragment() {
     }
 
     @Override

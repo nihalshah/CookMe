@@ -17,11 +17,11 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int i) {
         switch (i) {
             case 0:
-                //Fragement for Android Tab
-                return new RecipeFragment();
+                //Fragement for Local Recipe
+                return new RemoteRecipeFragment();
             case 1:
-                //Fragment for Ios Tab
-                return new RecipeFragment();
+                //Fragment for Remote Recipe
+                return new LocalRecipeFragment();
         }
         return null;
 

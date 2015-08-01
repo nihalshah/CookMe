@@ -48,9 +48,9 @@ public class RecipeAdapter extends CursorAdapter {
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        viewHolder.recipeName.setText(cursor.getString(RecipeFragment.COL_RECIPE_NAME));
+        viewHolder.recipeName.setText(cursor.getString(LocalRecipeFragment.COL_RECIPE_NAME));
 
-        byte [] image_array = cursor.getBlob(RecipeFragment.COL_PHOTO);
+        byte [] image_array = cursor.getBlob(LocalRecipeFragment.COL_PHOTO);
         if(image_array != null){
             Bitmap image = Utility.getImage(image_array);
            viewHolder.recipePicture.setImageBitmap(image);
