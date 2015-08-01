@@ -11,6 +11,7 @@
     <LinearLayout
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
+        android:paddingTop="0dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -37,25 +38,42 @@
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/recipes_list"
-        android:paddingRight="15dp"
-        android:paddingTop="15dp"
-        android:paddingLeft="15dp"
-        android:paddingBottom="0dp"
-        android:layout_width="match_parent"
-        android:layout_height="340dp"
-        android:background="#ffffff">
-
-    </ListView>
-
-
     <LinearLayout
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="0dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="0dp"
-        android:background="@android:color/transparent">
+        android:layout_gravity="center_horizontal"
+        android:background="@color/ColorPrimaryLight">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:text="Recipes with: "
+                android:textColor="#ffffff"/>
+            <Button
+                android:id="@+id/clear_list_ingredients_button"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="X" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ingredients_in_query_textview"
+            android:textColor="#ffffff"
+            android:paddingBottom="5dp"/>
 
         <Button
             android:layout_width="match_parent"
@@ -68,7 +86,18 @@
             android:background="@color/ColorPrimary"
             android:textColor="#ffffff"/>
 
-
     </LinearLayout>
+
+    <ListView
+        android:id="@+id/recipes_list"
+        android:paddingRight="15dp"
+        android:paddingTop="0dp"
+        android:paddingLeft="15dp"
+        android:paddingBottom="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="340dp"
+        android:background="#ffffff">
+
+    </ListView>
 
 </LinearLayout>

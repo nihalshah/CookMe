@@ -21,6 +21,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.content.CursorLoader;
+import android.widget.TextView;
 
 
 /**
@@ -34,6 +35,11 @@ public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCal
     private RecipeAdapter mRecipeAdapter;
     private String mIngredientTyped;
     private String mIngredientsSelected;
+
+    private ImageButton mSearchButton;
+    private ListView mRecipesList;
+    private EditText mIngredientInput;
+    private TextView mIngredientsQuerying;
 
     //Projection for querying
     private static final String[] RECIPE_COLUMNS = {
@@ -54,24 +60,21 @@ public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCal
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-        /*Just insert JSON in DB if DB is empty
-        if(Utility.dataBaseIsEmpty(getActivity())){
-            mListRecipes = new RecipeProviderByJSON(getActivity());
-            Utility.insertJSONRecipesToDb(getActivity(), mListRecipes.getCollection_of_recipes());
-        }*/
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         mIngredientTyped = "";
         mIngredientsSelected = "";
 
+        mIngredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
+        mIngredientsQuerying = (TextView) rootView.findViewById(R.id.ingredients_in_query_textview);
+
         // The CursorAdapter will take data from our cursor and populate the ListView.
         mRecipeAdapter = new RecipeAdapter(getActivity(), null, 0);
 
-        ListView listRecipes = (ListView) rootView.findViewById(R.id.recipes_list);
-        listRecipes.setAdapter(mRecipeAdapter);
+        mRecipesList = (ListView) rootView.findViewById(R.id.recipes_list);
+        mRecipesList.setAdapter(mRecipeAdapter);
 
-        listRecipes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mRecipesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -86,17 +89,21 @@ public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCal
         });
 
         //Button Pressed event
-        ImageButton searchBtn = (ImageButton) rootView.findViewById(R.id.search_ingredient_button);
-        searchBtn.setOnClickListener(new View.OnClickListener() {
+        mSearchButton = (ImageButton) rootView.findViewById(R.id.search_ingredient_button);
+        mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                EditText ingredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
-                mIngredientTyped = ingredientInput.getText().toString();
-                if(mIngredientsSelected.length() == 0)
+                mIngredientTyped = mIngredientInput.getText().toString();
+                mIngredientInput.setText("");
+
+                if (mIngredientsSelected.length() == 0)
                     mIngredientsSelected += mIngredientTyped;
                 else
-                    mIngredientsSelected += "-" + mIngredientTyped;
+                    mIngredientsSelected += "-" + mIngredientTyped; //DO NOT CHANGE THE '-' ... necessary for later split
+
+                mIngredientsQuerying.setText(mIngredientsSelected);
+
                 restartLoader();
             }
         });
