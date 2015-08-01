@@ -65,7 +65,7 @@ public class RecipeProvider extends ContentProvider {
                     " = " + RecipeContract.RecipeIngredientRelationship.COL_RECIPE_KEY + " AND " +
                     RecipeContract.IngredientEntry.TABLE_NAME + "." + RecipeContract.IngredientEntry._ID +
                     " = " + RecipeContract.RecipeIngredientRelationship.COL_INGREDIENT_KEY + " AND " +
-                    RecipeContract.IngredientEntry.COL_NAME + " = ? ";
+                    RecipeContract.IngredientEntry.COL_NAME + " = ? COLLATE NOCASE ";
 
     private static final String sSubQueryByIng =
             " AND " + RecipeContract.RecipeEntry.TABLE_NAME + "." + RecipeContract.RecipeEntry._ID +
