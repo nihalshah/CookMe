@@ -33,6 +33,7 @@ public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCal
     private RecipeProviderByJSON mListRecipes;
     private RecipeAdapter mRecipeAdapter;
     private String mIngredientTyped;
+    private String mIngredientsSelected;
 
     //Projection for querying
     private static final String[] RECIPE_COLUMNS = {
@@ -62,6 +63,7 @@ public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCal
         }*/
 
         mIngredientTyped = "";
+        mIngredientsSelected = "";
 
         // The CursorAdapter will take data from our cursor and populate the ListView.
         mRecipeAdapter = new RecipeAdapter(getActivity(), null, 0);
@@ -91,6 +93,10 @@ public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCal
 
                 EditText ingredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
                 mIngredientTyped = ingredientInput.getText().toString();
+                if(mIngredientsSelected.length() == 0)
+                    mIngredientsSelected += mIngredientTyped;
+                else
+                    mIngredientsSelected += "-" + mIngredientTyped;
                 restartLoader();
             }
         });
@@ -123,7 +129,7 @@ public class RecipeFragment extends Fragment implements  LoaderManager.LoaderCal
                     sortOrder);
         }else{
             return new CursorLoader(getActivity(),
-                    RecipeContract.IngredientEntry.buildRecipesDirUri(mIngredientTyped),
+                    RecipeContract.IngredientEntry.buildRecipesDirUri(mIngredientsSelected),
                     RECIPE_COLUMNS,
                     null,
                     null,
