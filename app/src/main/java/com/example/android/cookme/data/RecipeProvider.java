@@ -57,6 +57,42 @@ public class RecipeProvider extends ContentProvider {
             RecipeContract.RecipeEntry.TABLE_NAME + "." +
                     RecipeContract.RecipeEntry._ID + " = ? ";
 
+    private static final String sInitialJoin =
+            " FROM " + RecipeContract.RecipeEntry.TABLE_NAME + ", " +
+                    RecipeContract.IngredientEntry.TABLE_NAME + ", " +
+                    RecipeContract.RecipeIngredientRelationship.TABLE_NAME +
+                    " WHERE " + RecipeContract.RecipeEntry.TABLE_NAME + "." + RecipeContract.RecipeEntry._ID +
+                    " = " + RecipeContract.RecipeIngredientRelationship.COL_RECIPE_KEY + " AND " +
+                    RecipeContract.IngredientEntry.TABLE_NAME + "." + RecipeContract.IngredientEntry._ID +
+                    " = " + RecipeContract.RecipeIngredientRelationship.COL_INGREDIENT_KEY + " AND " +
+                    RecipeContract.IngredientEntry.COL_NAME + " = ? ";
+
+    private static final String sSubQueryByIng =
+            " AND " + RecipeContract.RecipeEntry.TABLE_NAME + "." + RecipeContract.RecipeEntry._ID +
+                    " IN (SELECT " + RecipeContract.RecipeEntry.TABLE_NAME + "." +
+                    RecipeContract.RecipeEntry._ID + sInitialJoin + ")";
+
+    private Cursor getRecipesByListOfIngredients(Uri uri, String [] projection, String sortOrder){
+
+        String queryCompleteSQL = "SELECT ";
+        for(int i = 0; i < projection.length; i++){
+            queryCompleteSQL += projection[i];
+            if(i + 1 != projection.length)
+                queryCompleteSQL += ", ";
+        }
+
+        String [] ingredients = RecipeContract.IngredientEntry.getIngredientFromUri(uri).split("-");
+
+        for(int i = 0; i < ingredients.length; i++){
+            if(i == 0)
+                queryCompleteSQL += sInitialJoin;
+            else
+                queryCompleteSQL += sSubQueryByIng;
+        }
+
+        return mDbHelper.getReadableDatabase().rawQuery(queryCompleteSQL, ingredients);
+    }
+
     private Cursor getRecipesByIngredient(Uri uri, String[] projection, String sortOrder){
         String ingredientName = RecipeContract.IngredientEntry.getIngredientFromUri(uri);
 
@@ -132,7 +168,7 @@ public class RecipeProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)){
 
             case INGREDIENT_ID_RECIPES:{
-                returnCursor = getRecipesByIngredient(uri, projection, sortOrder);
+                returnCursor = getRecipesByListOfIngredients(uri, projection, sortOrder);
                 break;
             }
             case INGREDIENT:{
