@@ -11,6 +11,7 @@
     <LinearLayout
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
+        android:paddingTop="0dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -37,10 +38,50 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/ColorPrimaryLight">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:text="Recipes that have: "
+                android:textStyle="bold"
+                android:textColor="#ffffff"/>
+            <Button
+                android:id="@+id/clear_list_ingredients_button"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="X" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ingredients_in_query_textview"
+            android:textColor="#ffffff"
+            android:paddingBottom="5dp"/>
+
+    </LinearLayout>
+
     <ListView
         android:id="@+id/recipes_list"
         android:paddingRight="15dp"
-        android:paddingTop="15dp"
+        android:paddingTop="0dp"
         android:paddingLeft="15dp"
         android:paddingBottom="0dp"
         android:layout_width="match_parent"
@@ -48,27 +89,5 @@
         android:background="#ffffff">
 
     </ListView>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="0dp"
-        android:background="@android:color/transparent">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/add_recipe_button"
-            android:text="@string/add_recipe"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:onClick="sendMessage"
-            android:background="@color/ColorPrimary"
-            android:textColor="#ffffff"/>
-
-
-    </LinearLayout>
 
 </LinearLayout>

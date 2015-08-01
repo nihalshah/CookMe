@@ -102,12 +102,6 @@ public class MainActivity extends ActionBarActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
 
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        //TO DO
-
-        // Create a Search Interface http://developer.android.com/guide/topics/search/search-dialog.html
-
         return super.onCreateOptionsMenu(menu);
 
 
@@ -119,10 +113,8 @@ public class MainActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.action_search:
-                //openSearch();
-                return true;
-            case R.id.action_settings:
+            case R.id.action_add_recipe:
+                sendMessage();
                 //openSettings();
                 return true;
             default:
@@ -131,7 +123,7 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    public void sendMessage(View view)
+    public void sendMessage()
     {
         Intent intent = new Intent(MainActivity.this, AddRecipeActivity.class);
         startActivity(intent);
