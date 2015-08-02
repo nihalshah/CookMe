@@ -117,6 +117,10 @@ public class MainActivity extends ActionBarActivity {
                 sendMessage();
                 //openSettings();
                 return true;
+            case R.id.action_add_recipe_2:
+                sendMessage();
+                //openSettings();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
