@@ -66,7 +66,7 @@ public class AddRecipeActivityFragment extends Fragment {
         mInstructionsInput = (EditText) rootView.findViewById(R.id.add_instruction_input);
         mImageView = (ImageView) rootView.findViewById(R.id.add_picture_imageview);
 
-        mIngredientAdded = "INGREDIENTS ADDED : ";
+        mIngredientAdded = "Ingredients Added : ";
         mIngredientsList = new ArrayList<>();
 
         mIngredientsAdded_tv = (TextView)rootView.findViewById(R.id.list_of_ingredients_added);
