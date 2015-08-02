@@ -61,7 +61,7 @@ public class RemoteRecipeFragment extends Fragment implements  LoaderManager.Loa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_remote_recipe, container, false);
 
         mIngredientTyped = "";
         mIngredientsSelected = "";

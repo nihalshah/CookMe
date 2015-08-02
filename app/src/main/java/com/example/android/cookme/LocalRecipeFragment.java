@@ -2,10 +2,8 @@ package com.example.android.cookme;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +15,7 @@ import android.widget.ListView;
 
 import com.example.android.cookme.data.RecipeContract;
 import com.example.android.cookme.data.RecipeProviderByJSON;
-import android.support.v4.app.Fragment;
+
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.content.CursorLoader;
@@ -61,7 +59,7 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_local_recipe, container, false);
 
         mIngredientTyped = "";
         mIngredientsSelected = "";
