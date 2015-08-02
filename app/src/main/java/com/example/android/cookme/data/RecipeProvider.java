@@ -26,11 +26,10 @@ public class RecipeProvider extends ContentProvider {
     private static final SQLiteQueryBuilder sRecipeIngredientQueryBuilder;
 
     static final int RECIPE = 100;
-    static final int RECIPE_ID_INGREDIENTS = 101;
     static final int INGREDIENT_ID_RECIPES = 102;
-    static final int INGREDIENT_ID_RECIPE_ID = 103;
     static final int INGREDIENT = 104;
     static final int RELATIONSHIP = 105;
+    static final int RELATIONSHIP_WITH_RECIPE_ID = 106;
 
     static{
         sRecipeIngredientQueryBuilder = new SQLiteQueryBuilder();
@@ -54,6 +53,46 @@ public class RecipeProvider extends ContentProvider {
             RecipeContract.IngredientEntry.TABLE_NAME + "." +
                     RecipeContract.IngredientEntry.COL_NAME + " = ? COLLATE NOCASE ";
 
+    private static final String sRecipeSelectionById =
+            RecipeContract.RecipeEntry.TABLE_NAME + "." +
+                    RecipeContract.RecipeEntry._ID + " = ? ";
+
+    private static final String sInitialJoin =
+            " FROM " + RecipeContract.RecipeEntry.TABLE_NAME + ", " +
+                    RecipeContract.IngredientEntry.TABLE_NAME + ", " +
+                    RecipeContract.RecipeIngredientRelationship.TABLE_NAME +
+                    " WHERE " + RecipeContract.RecipeEntry.TABLE_NAME + "." + RecipeContract.RecipeEntry._ID +
+                    " = " + RecipeContract.RecipeIngredientRelationship.COL_RECIPE_KEY + " AND " +
+                    RecipeContract.IngredientEntry.TABLE_NAME + "." + RecipeContract.IngredientEntry._ID +
+                    " = " + RecipeContract.RecipeIngredientRelationship.COL_INGREDIENT_KEY + " AND " +
+                    RecipeContract.IngredientEntry.COL_NAME + " = ? COLLATE NOCASE ";
+
+    private static final String sSubQueryByIng =
+            " AND " + RecipeContract.RecipeEntry.TABLE_NAME + "." + RecipeContract.RecipeEntry._ID +
+                    " IN (SELECT " + RecipeContract.RecipeEntry.TABLE_NAME + "." +
+                    RecipeContract.RecipeEntry._ID + sInitialJoin + ")";
+
+    private Cursor getRecipesByListOfIngredients(Uri uri, String [] projection, String sortOrder){
+
+        String queryCompleteSQL = "SELECT ";
+        for(int i = 0; i < projection.length; i++){
+            queryCompleteSQL += projection[i];
+            if(i + 1 != projection.length)
+                queryCompleteSQL += ", ";
+        }
+
+        String [] ingredients = RecipeContract.IngredientEntry.getIngredientFromUri(uri).split("-");
+
+        for(int i = 0; i < ingredients.length; i++){
+            if(i == 0)
+                queryCompleteSQL += sInitialJoin;
+            else
+                queryCompleteSQL += sSubQueryByIng;
+        }
+
+        return mDbHelper.getReadableDatabase().rawQuery(queryCompleteSQL, ingredients);
+    }
+
     private Cursor getRecipesByIngredient(Uri uri, String[] projection, String sortOrder){
         String ingredientName = RecipeContract.IngredientEntry.getIngredientFromUri(uri);
 
@@ -69,12 +108,28 @@ public class RecipeProvider extends ContentProvider {
                 sortOrder);
     }
 
-    private Cursor getAllRelationships(Uri uri, String[] projection, String sortOrder){
+    private Cursor getAllRelationships(Uri uri, String[] projection, String[] selectionArgs,  String sortOrder){
 
         return  sRecipeIngredientQueryBuilder.query(mDbHelper.getReadableDatabase(),
                 projection,
                 null,
                 null,
+                null,
+                null,
+                sortOrder);
+    }
+
+    private Cursor getAllRecipeData(Uri uri, String[] projection, String sortOrder){
+
+        long recipe_id = RecipeContract.RecipeIngredientRelationship.getRecipeIdFromUri(uri);
+
+        String [] selectionAtgs = new String[]{Long.toString(recipe_id)};
+        String selection = sRecipeSelectionById;
+
+        return sRecipeIngredientQueryBuilder.query(mDbHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionAtgs,
                 null,
                 null,
                 sortOrder);
@@ -89,13 +144,11 @@ public class RecipeProvider extends ContentProvider {
 
         // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, RecipeContract.PATH_RECIPE, RECIPE);
-        matcher.addURI(authority, RecipeContract.PATH_RECIPE + "/*/" + RecipeContract.PATH_INGREDIENT,
-                RECIPE_ID_INGREDIENTS);
         matcher.addURI(authority, RecipeContract.PATH_INGREDIENT + "/*/" + RecipeContract.PATH_RECIPE,
                 INGREDIENT_ID_RECIPES);
-        matcher.addURI(authority, RecipeContract.PATH_RELATIONSHIP + "/*/*", INGREDIENT_ID_RECIPE_ID);
         matcher.addURI(authority, RecipeContract.PATH_INGREDIENT, INGREDIENT);
         matcher.addURI(authority, RecipeContract.PATH_RELATIONSHIP, RELATIONSHIP);
+        matcher.addURI(authority, RecipeContract.PATH_RELATIONSHIP + "/#", RELATIONSHIP_WITH_RECIPE_ID);
 
         return matcher;
     }
@@ -115,7 +168,7 @@ public class RecipeProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)){
 
             case INGREDIENT_ID_RECIPES:{
-                returnCursor = getRecipesByIngredient(uri, projection, sortOrder);
+                returnCursor = getRecipesByListOfIngredients(uri, projection, sortOrder);
                 break;
             }
             case INGREDIENT:{
@@ -143,19 +196,13 @@ public class RecipeProvider extends ContentProvider {
                 break;
             }
             case RELATIONSHIP:{
-                returnCursor = getAllRelationships(uri, projection, sortOrder);
-                /*returnCursor = mDbHelper.getReadableDatabase().query(
-                        RecipeContract.RecipeIngredientRelationship.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder
-                );*/
+                returnCursor = getAllRelationships(uri, projection, selectionArgs, sortOrder);
                 break;
             }
-
+            case RELATIONSHIP_WITH_RECIPE_ID:{
+                returnCursor = getAllRecipeData(uri, projection, sortOrder);
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -169,16 +216,16 @@ public class RecipeProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
 
         switch (match){
-            case INGREDIENT_ID_RECIPE_ID:
-                return RecipeContract.RecipeIngredientRelationship.CONTENT_ITEM_TYPE;
             case INGREDIENT_ID_RECIPES:
                 return RecipeContract.IngredientEntry.CONTENT_TYPE;
-            case RECIPE_ID_INGREDIENTS:
-                return RecipeContract.RecipeEntry.CONTENT_TYPE;
             case RECIPE:
                 return RecipeContract.RecipeEntry.CONTENT_TYPE;
             case INGREDIENT:
                 return RecipeContract.IngredientEntry.CONTENT_TYPE;
+            case RELATIONSHIP:
+                return RecipeContract.RecipeIngredientRelationship.CONTENT_TYPE;
+            case RELATIONSHIP_WITH_RECIPE_ID:
+                return RecipeContract.RecipeIngredientRelationship.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

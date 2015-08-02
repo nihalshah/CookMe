@@ -4,13 +4,17 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
 
 import com.example.android.cookme.data.Ingredient;
 import com.example.android.cookme.data.Recipe;
 import com.example.android.cookme.data.RecipeContract;
+import com.example.android.cookme.data.RecipeDbHelper;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 /**
@@ -41,6 +45,8 @@ public class Utility {
         return ingredientValues;
     }
 
+    /*Method that checks if the local Db is empty,
+    if it is it return true*/
     public static boolean dataBaseIsEmpty(Context context){
         Cursor cursor = context.getContentResolver().query(
                 RecipeContract.RecipeIngredientRelationship.CONTENT_URI,
@@ -56,7 +62,7 @@ public class Utility {
     /*Method that checks if ingredient is already in DB, it return the id*/
     public static long getIngredientId(Context context, String ingredientName){
 
-        String selection = RecipeContract.IngredientEntry.COL_NAME + " = ? ";
+        String selection = RecipeContract.IngredientEntry.COL_NAME + " = ? COLLATE NOCASE ";
         String selectionArgs [] = new String[]{ingredientName};
 
         Cursor cursor = context.getContentResolver().query(
@@ -73,35 +79,57 @@ public class Utility {
     }
 
     /*Method that insert the whole recipe to the DB*/
-    //TODO: this methos will change when we add more than one ingredient by recipe
     public static void insertWholeRecipeInDb(Context context, String recipeName, String instructions,
-                                             String ingredientName, String units, double quantity){
+                                             byte[] picture, ArrayList<Ingredient> ingredients){
 
         ContentValues recipeValues = createRecipeValues(recipeName, instructions);
+        recipeValues.put(RecipeContract.RecipeEntry.COL_PHOTO, picture);
+
         Uri recipeInserted = context.getContentResolver().insert(
                 RecipeContract.RecipeEntry.CONTENT_URI, recipeValues);
         long recipe_id = ContentUris.parseId(recipeInserted);
 
-        //check if ingredient exists
-        long ingredient_id = getIngredientId(context, ingredientName);
-        if(ingredient_id == -1L){
-            //Ingredient doesn't exists, so we add it
-            ContentValues ingredientValues = createIngredientValues(ingredientName);
-            Uri ingredient_inserted = context.getContentResolver().insert(
-                    RecipeContract.IngredientEntry.CONTENT_URI,
-                    ingredientValues);
-            ingredient_id = ContentUris.parseId(ingredient_inserted);
-        }else{
-            Log.v(null, "USING EXISTING ID!!! " + ingredient_id);
+        for(Ingredient ingredient : ingredients){
+            //check if ingredient exists
+            long ingredient_id = getIngredientId(context, ingredient.getName());
+            if(ingredient_id == -1L){
+                //Ingredient doesn't exists, so we add it
+                ContentValues ingredientValues = createIngredientValues(ingredient.getName());
+                Uri ingredient_inserted = context.getContentResolver().insert(
+                        RecipeContract.IngredientEntry.CONTENT_URI,
+                        ingredientValues);
+                ingredient_id = ContentUris.parseId(ingredient_inserted);
+            }else{
+                Log.v(null, "USING EXISTING ID!!! " + ingredient_id);
+            }
+
+            ContentValues relationValues = createRelationshipValues(recipe_id, ingredient_id,
+                                                                    ingredient.getUnits(), ingredient.getQuantity());
+
+            context.getContentResolver().insert(RecipeContract.RecipeIngredientRelationship.CONTENT_URI,
+                    relationValues);
         }
-
-        ContentValues relationValues = createRelationshipValues(recipe_id, ingredient_id, units, quantity);
-
-        context.getContentResolver().insert(RecipeContract.RecipeIngredientRelationship.CONTENT_URI,
-                                            relationValues);
 
         Log.v(null, "RECIPE INSERTED!!!!");
 
+    }
+
+    public static void deleteRecipeFromDb(Context context, long recipeId){
+
+        String selection = RecipeContract.RecipeEntry.TABLE_NAME + "." + RecipeContract.RecipeEntry._ID
+                 + " = ? ";
+
+        String [] selectionArgs = new String[]{Long.toString(recipeId)};
+
+        context.getContentResolver().delete(RecipeContract.RecipeEntry.CONTENT_URI,
+                                            selection,
+                                            selectionArgs);
+
+        selection = RecipeContract.RecipeIngredientRelationship.COL_RECIPE_KEY + " = ? ";
+
+        context.getContentResolver().delete(RecipeContract.RecipeIngredientRelationship.CONTENT_URI,
+                                            selection,
+                                            selectionArgs);
     }
 
     /*Method that insert a whole arrayList of Recipes to the Db
@@ -136,6 +164,18 @@ public class Utility {
             }
         }
         Log.v(null, "JSON Already in DB!!!!!");
+    }
+
+    //Method that converts from bitmap to byte array -> Obtained from StackOverflow
+    public static byte[] getBytes(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
+        return stream.toByteArray();
+    }
+
+    //Method that converts from byte array to bitmap -> Obtained from StackOverflow
+    public static Bitmap getImage(byte[] image) {
+        return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 
 
