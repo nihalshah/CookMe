@@ -43,6 +43,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private static final int DETAIL_LOADER = 0;
     private static long mActualRecipeId;
     private String mShareString;
+    private ShareActionProvider mShareActionProvider;
 
     private static final String[] RECIPE_COLUMNS = {
             RecipeContract.RecipeEntry.TABLE_NAME + "." + RecipeContract.RecipeEntry._ID,
@@ -83,6 +84,8 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         mIngredientListView = (ListView)rootView.findViewById(R.id.ingredients_list);
         mInstructionsView = (TextView)rootView.findViewById(R.id.instructions_textView);
 
+        mShareString = "Check this recipe: ";
+
         return rootView;
     }
 
@@ -93,7 +96,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
 
         MenuItem menuItem = menu.findItem(R.id.action_share);
 
-        ShareActionProvider mShareActionProvider =
+        mShareActionProvider =
                 (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
 
         if(mShareActionProvider != null){
@@ -101,6 +104,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         }else{
             Log.v(LOG_TAG, "The Share Action Provider is null");
         }
+
     }
 
     @Override
@@ -110,6 +114,9 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             case R.id.action_delete_recipe:{
                 deleteConfirmation();
                 return true;
+            }
+            case R.id.action_share:{
+
             }
         }
         return false;
@@ -152,11 +159,12 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         if(!data.moveToFirst())
             return;
 
+
         mActualRecipeId = data.getLong(COL_RECIPE_ID);
 
         mNameView.setText(data.getString(COL_RECIPE_NAME));
 
-        mShareString = data.getString(COL_RECIPE_NAME);
+        mShareString += data.getString(COL_RECIPE_NAME);
 
         mInstructionsView.setText(data.getString(COL_INSTRUCTIONS));
 
@@ -188,13 +196,17 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         );
 
         mIngredientListView.setAdapter(ingredientAdapter);
+
+        if(mShareActionProvider != null){
+            mShareActionProvider.setShareIntent(createRecipeShareIntent());
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
-    
+
 
     public void deleteRecipe(long id){
 

@@ -118,8 +118,7 @@
                         android:id="@+id/add_units_input"
                         android:textSize="15dp"
                         android:textAlignment="center"
-                        android:gravity="center"
-                        android:inputType="numberDecimal"/>
+                        android:gravity="center"/>
 
                 </LinearLayout>
 
@@ -147,7 +146,8 @@
                         android:id="@+id/add_quantity_input"
                         android:textSize="15dp"
                         android:textAlignment="center"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:inputType="numberDecimal"/>
 
                 </LinearLayout>
 
