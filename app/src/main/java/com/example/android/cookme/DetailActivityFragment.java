@@ -1,5 +1,7 @@
 package com.example.android.cookme;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -25,6 +27,7 @@ import com.example.android.cookme.data.Recipe;
 import com.example.android.cookme.data.RecipeContract;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -99,6 +102,19 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             Log.v(LOG_TAG, "The Share Action Provider is null");
         }
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.action_delete_recipe:{
+                deleteConfirmation();
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public Intent createRecipeShareIntent(){
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -178,9 +194,32 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
+    
 
-    public static long getRecipeId(){
+    public void deleteRecipe(long id){
 
-        return mActualRecipeId;
+        Utility.deleteRecipeFromDb(getActivity(), id);
+        CharSequence text = "Recipe Deleted!";
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(getActivity(), text, duration);
+        toast.show();
+
+        getActivity().finish();
+    }
+
+    public void deleteConfirmation(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Are you sure you wanna delete this recipe?")
+                .setCancelable(false)
+                .setNegativeButton("No", null)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        deleteRecipe(mActualRecipeId);
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }
