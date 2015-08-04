@@ -8,7 +8,12 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -18,6 +23,8 @@ import android.widget.TextView;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import com.example.android.cookme.data.Recipe;
 import com.example.android.cookme.data.RecipeContract;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 
 import org.w3c.dom.Text;
 
@@ -32,6 +39,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
     private static final int DETAIL_LOADER = 0;
     private static long mActualRecipeId;
+    private String mShareString;
 
     private static final String[] RECIPE_COLUMNS = {
             RecipeContract.RecipeEntry.TABLE_NAME + "." + RecipeContract.RecipeEntry._ID,
@@ -59,6 +67,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private TextView mInstructionsView;
 
     public DetailActivityFragment() {
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -72,6 +81,32 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         mInstructionsView = (TextView)rootView.findViewById(R.id.instructions_textView);
 
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        inflater.inflate(R.menu.detail_fragment, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+
+        ShareActionProvider mShareActionProvider =
+                (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+
+        if(mShareActionProvider != null){
+            mShareActionProvider.setShareIntent(createRecipeShareIntent());
+        }else{
+            Log.v(LOG_TAG, "The Share Action Provider is null");
+        }
+    }
+
+    public Intent createRecipeShareIntent(){
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, mShareString);
+
+        return shareIntent;
     }
 
     @Override
@@ -104,6 +139,9 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         mActualRecipeId = data.getLong(COL_RECIPE_ID);
 
         mNameView.setText(data.getString(COL_RECIPE_NAME));
+
+        mShareString = data.getString(COL_RECIPE_NAME);
+
         mInstructionsView.setText(data.getString(COL_INSTRUCTIONS));
 
         //Get image from DB
