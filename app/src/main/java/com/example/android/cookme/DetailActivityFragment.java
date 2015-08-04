@@ -44,6 +44,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private static long mActualRecipeId;
     private String mShareString;
     private ShareActionProvider mShareActionProvider;
+    private static final String HASHTAG = "#EasyCook";
 
     private static final String[] RECIPE_COLUMNS = {
             RecipeContract.RecipeEntry.TABLE_NAME + "." + RecipeContract.RecipeEntry._ID,
@@ -84,7 +85,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         mIngredientListView = (ListView)rootView.findViewById(R.id.ingredients_list);
         mInstructionsView = (TextView)rootView.findViewById(R.id.instructions_textView);
 
-        mShareString = "Check this recipe: ";
+        mShareString = "Check out this recipe!";
 
         return rootView;
     }
@@ -162,11 +163,12 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
 
         mActualRecipeId = data.getLong(COL_RECIPE_ID);
 
-        mNameView.setText(data.getString(COL_RECIPE_NAME));
+        String name = data.getString(COL_RECIPE_NAME);
+        mNameView.setText(name);
+        mShareString += "\n\n" + name.toUpperCase() + "\n";
 
-        mShareString += data.getString(COL_RECIPE_NAME);
-
-        mInstructionsView.setText(data.getString(COL_INSTRUCTIONS));
+        String instructions = data.getString(COL_INSTRUCTIONS);
+        mInstructionsView.setText(instructions);
 
         //Get image from DB
         byte [] array_picture = data.getBlob(COL_PHOTO);
@@ -181,11 +183,13 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         String actualIngredient = data.getString(COL_INGREDIENT_NAME);
         actualIngredient += " " + data.getDouble(COL_QUANTITY) + " " + data.getString(COL_UNITS);
         ingredients.add(actualIngredient);
+        mShareString += "\n" + actualIngredient;
 
         while (data.moveToNext()){
             actualIngredient = data.getString(COL_INGREDIENT_NAME);
             actualIngredient += " " + data.getDouble(COL_QUANTITY) + " " + data.getString(COL_UNITS);
             ingredients.add(actualIngredient);
+            mShareString += "\n" + actualIngredient;
         }
 
         ArrayAdapter<String> ingredientAdapter = new ArrayAdapter<String>(
@@ -196,6 +200,8 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         );
 
         mIngredientListView.setAdapter(ingredientAdapter);
+
+        mShareString += "\n\nSteps: \n" + instructions + "\n\n" + HASHTAG;
 
         if(mShareActionProvider != null){
             mShareActionProvider.setShareIntent(createRecipeShareIntent());
