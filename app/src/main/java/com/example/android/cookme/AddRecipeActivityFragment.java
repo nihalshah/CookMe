@@ -40,6 +40,7 @@ public class AddRecipeActivityFragment extends Fragment {
     private static final int PICK_IMAGE = 0;
     private static final int PICK_IMAGE_FROM_GALLERY = 1;
     private String mIngredientAdded;
+    private String mInstructionsAdded;
     private ArrayList<Ingredient> mIngredientsList;
 
     private EditText mRecipeInput;
@@ -48,6 +49,8 @@ public class AddRecipeActivityFragment extends Fragment {
     private EditText mQuantityInput;
     private EditText mInstructionsInput;
     private TextView mIngredientsAdded_tv;
+    private TextView mInstructionsAdded_tv;
+    private int instruction_count = 1;
 
 
     public AddRecipeActivityFragment() {
@@ -68,9 +71,14 @@ public class AddRecipeActivityFragment extends Fragment {
 
         mIngredientAdded = "Ingredients Added : ";
         mIngredientsList = new ArrayList<>();
+        mInstructionsAdded = "";
 
         mIngredientsAdded_tv = (TextView)rootView.findViewById(R.id.list_of_ingredients_added);
         mIngredientsAdded_tv.setText(mIngredientAdded);
+
+        mInstructionsAdded_tv = (TextView)rootView.findViewById(R.id.list_of_instructions_added);
+        mInstructionsAdded_tv.setText(mInstructionsAdded);
+
 
         Button takePictureButton = (Button) rootView.findViewById(R.id.add_picture_button);
         takePictureButton.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +120,23 @@ public class AddRecipeActivityFragment extends Fragment {
             }
         });
 
+        Button addInstructionButton = (Button) rootView.findViewById(R.id.add_instruction_button);
+        addInstructionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String instruction = mInstructionsInput.getText().toString();
+
+                if(validAddingInstruction(instruction)){
+
+                    mInstructionsAdded += "\t" + (instruction_count++) + ". " + instruction + ".\n";
+                    mInstructionsAdded_tv.setText(mInstructionsAdded);
+
+                    mInstructionsInput.setText("");
+                }
+            }
+        });
+
         /*Add recipe Button event*/
         //TODO: ADD VALIDATIONS!
         Button addButton = (Button) rootView.findViewById(R.id.add_new_recipe_button);
@@ -121,15 +146,15 @@ public class AddRecipeActivityFragment extends Fragment {
 
                 String recipe_name = mRecipeInput.getText().toString();
 
-                String instructions = mInstructionsInput.getText().toString();
+                //String instructions = mInstructionsInput.getText().toString();
 
                 BitmapDrawable drawable = (BitmapDrawable) mImageView.getDrawable();
                 Bitmap picture = drawable.getBitmap();
 
                 byte picture_in_bytes[] = Utility.getBytes(picture);
 
-                if(validAddingRecipe(recipe_name, instructions, mIngredientsList)){
-                    Utility.insertWholeRecipeInDb(getActivity(), recipe_name, instructions,
+                if(validAddingRecipe(recipe_name, mInstructionsAdded, mIngredientsList)){
+                    Utility.insertWholeRecipeInDb(getActivity(), recipe_name, mInstructionsAdded,
                             picture_in_bytes, mIngredientsList);
 
                     Context context = getActivity();
@@ -193,7 +218,7 @@ public class AddRecipeActivityFragment extends Fragment {
 
             if(name.length() == 0)
                 userHelp += "\n- Recipe name";
-            if(instructions.length() == 0)
+            if(mInstructionsAdded.length() == 0)
                 userHelp += "\n- Instructions";
             if(ingredients.isEmpty())
                 userHelp += "\n- Ingredients";
@@ -205,6 +230,27 @@ public class AddRecipeActivityFragment extends Fragment {
             AlertDialog alert = builder.create();
             alert.show();
 
+            return false;
+        }
+    }
+
+    private boolean validAddingInstruction(String instruction){
+
+        if(instruction.length() > 0)
+            return true;
+        else{
+
+            String userHelp = "";
+
+            if(instruction.length() == 0)
+                userHelp += "\n- Instruction";
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("Missing information:\n " + userHelp)
+                    .setCancelable(true)
+                    .setPositiveButton("Ok", null);
+            AlertDialog alert = builder.create();
+            alert.show();
             return false;
         }
     }
