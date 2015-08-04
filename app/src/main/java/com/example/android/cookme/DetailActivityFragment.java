@@ -202,6 +202,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         mIngredientListView.setAdapter(ingredientAdapter);
 
         mShareString += "\n\nSteps: \n" + instructions + "\n\n" + HASHTAG;
+        mShareString += "\n" + "https://www.facebook.com";
 
         if(mShareActionProvider != null){
             mShareActionProvider.setShareIntent(createRecipeShareIntent());
