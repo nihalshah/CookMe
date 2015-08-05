@@ -51,6 +51,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             RecipeContract.RecipeEntry.COL_NAME,
             RecipeContract.RecipeEntry.COL_INSTRUCTIONS,
             RecipeContract.RecipeEntry.COL_PHOTO,
+            RecipeContract.RecipeEntry.COL_PATH_PHOTO,
             RecipeContract.IngredientEntry.TABLE_NAME + "." + RecipeContract.IngredientEntry._ID,
             RecipeContract.IngredientEntry.COL_NAME,
             RecipeContract.RecipeIngredientRelationship.COL_UNITS,
@@ -61,10 +62,11 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private static final int COL_RECIPE_NAME = 1;
     private static final int COL_INSTRUCTIONS = 2;
     private static final int COL_PHOTO = 3;
-    private static final int COL_INGREDIENT_ID = 4;
-    private static final int COL_INGREDIENT_NAME = 5;
-    private static final int COL_UNITS = 6;
-    private static final int COL_QUANTITY = 7;
+    private static final int COL_PATH_PHOTO = 4;
+    private static final int COL_INGREDIENT_ID = 5;
+    private static final int COL_INGREDIENT_NAME = 6;
+    private static final int COL_UNITS = 7;
+    private static final int COL_QUANTITY = 8;
 
     private TextView mNameView;
     private ImageView mPhotoView;

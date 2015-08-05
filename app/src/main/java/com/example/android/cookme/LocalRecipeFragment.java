@@ -45,13 +45,15 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
                 RecipeContract.RecipeEntry.TABLE_NAME + "." + RecipeContract.RecipeEntry._ID,
                 RecipeContract.RecipeEntry.COL_NAME,
                 RecipeContract.RecipeEntry.COL_INSTRUCTIONS,
-                RecipeContract.RecipeEntry.COL_PHOTO
+                RecipeContract.RecipeEntry.COL_PHOTO,
+                RecipeContract.RecipeEntry.COL_PATH_PHOTO
     };
 
     static final int COL_RECIPE_ID = 0;
     static final int COL_RECIPE_NAME = 1;
     static final int COL_INSTRUCTIONS = 2;
     static final int COL_PHOTO = 3;
+    static final int COL_PATH_PHOTO = 4;
 
     public LocalRecipeFragment() {
     }

@@ -153,7 +153,6 @@ public class AddRecipeActivityFragment extends Fragment {
         });
 
         /*Add recipe Button event*/
-        //TODO: ADD VALIDATIONS!
         Button addButton = (Button) rootView.findViewById(R.id.add_new_recipe_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,7 +169,7 @@ public class AddRecipeActivityFragment extends Fragment {
 
                 if(validAddingRecipe(recipe_name, mInstructionsAdded, mIngredientsList)){
                     Utility.insertWholeRecipeInDb(getActivity(), recipe_name, mInstructionsAdded,
-                            picture_in_bytes, mIngredientsList);
+                            mCurrentPhotoPath, picture_in_bytes, mIngredientsList);
 
                     Context context = getActivity();
                     CharSequence text = recipe_name + " recipe Added!";
