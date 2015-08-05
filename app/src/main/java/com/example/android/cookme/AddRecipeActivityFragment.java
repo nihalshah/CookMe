@@ -2,6 +2,7 @@ package com.example.android.cookme;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -139,6 +140,18 @@ public class AddRecipeActivityFragment extends Fragment {
             }
         });
 
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse("file://" + mCurrentPhotoPath), "image/*");
+                startActivity(intent);
+
+
+            }
+        });
+
         /*Add recipe Button event*/
         //TODO: ADD VALIDATIONS!
         Button addButton = (Button) rootView.findViewById(R.id.add_new_recipe_button);
@@ -227,11 +240,6 @@ public class AddRecipeActivityFragment extends Fragment {
     }
 
     private void setPic() {
-        Context context = getActivity();
-        CharSequence text = "Setting pic";
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
 
         // Get the dimensions of the View
         int targetW = mImageView.getWidth();
@@ -258,8 +266,9 @@ public class AddRecipeActivityFragment extends Fragment {
 
     private boolean validAddingIngredient(String ing, String untis, String quantity){
 
-        if(ing.length() > 0 && untis.length() > 0 && quantity.length() > 0)
+        if(ing.length() > 0 && untis.length() > 0 && quantity.length() > 0) {
             return true;
+        }
         else{
 
             String userHelp = "";
