@@ -2,10 +2,12 @@ package com.example.android.cookme;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Environment;
@@ -27,18 +29,19 @@ import com.example.android.cookme.R;
 import com.example.android.cookme.data.Ingredient;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class AddRecipeActivityFragment extends Fragment {
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_TAKE_PHOTO = 1;
     private ImageView mImageView;
     private Uri mURI;
-    private static final int PICK_IMAGE = 0;
-    private static final int PICK_IMAGE_FROM_GALLERY = 1;
     private String mIngredientAdded;
     private String mInstructionsAdded;
     private ArrayList<Ingredient> mIngredientsList;
@@ -51,6 +54,7 @@ public class AddRecipeActivityFragment extends Fragment {
     private TextView mIngredientsAdded_tv;
     private TextView mInstructionsAdded_tv;
     private int instruction_count = 1;
+    String mCurrentPhotoPath;
 
 
     public AddRecipeActivityFragment() {
@@ -84,8 +88,7 @@ public class AddRecipeActivityFragment extends Fragment {
         takePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, 1888);
+                dispatchTakePictureIntent();
             }
 
 
@@ -137,6 +140,18 @@ public class AddRecipeActivityFragment extends Fragment {
             }
         });
 
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse("file://" + mCurrentPhotoPath), "image/*");
+                startActivity(intent);
+
+
+            }
+        });
+
         /*Add recipe Button event*/
         //TODO: ADD VALIDATIONS!
         Button addButton = (Button) rootView.findViewById(R.id.add_new_recipe_button);
@@ -175,18 +190,85 @@ public class AddRecipeActivityFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.v("LOG", "" + requestCode);
-        if (requestCode == 1888 && resultCode == Activity.RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            mImageView.setImageBitmap(photo);
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
+            setPic();
         }
 
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+
+
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(photoFile));
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
+    private void setPic() {
+
+        // Get the dimensions of the View
+        int targetW = mImageView.getWidth();
+        int targetH = mImageView.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        mImageView.setImageBitmap(bitmap);
+    }
+
     private boolean validAddingIngredient(String ing, String untis, String quantity){
 
-        if(ing.length() > 0 && untis.length() > 0 && quantity.length() > 0)
+        if(ing.length() > 0 && untis.length() > 0 && quantity.length() > 0) {
             return true;
+        }
         else{
 
             String userHelp = "";
