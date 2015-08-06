@@ -5,9 +5,11 @@
     tools:context=".MainActivity">
     <item android:id="@+id/action_add_recipe" android:title="@string/add_new_recipe_button"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/limit" android:title="Limit"
+        android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/action_add_recipe_2"
         android:icon="@drawable/ic_add_box_white_24dp"
-        android:title="@string/add_new_recipe_button"
+        android:title="Add Recipe"
         cook_me:showAsAction="ifRoom" />
 
 </menu>

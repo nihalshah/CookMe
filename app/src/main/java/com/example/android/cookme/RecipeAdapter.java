@@ -3,7 +3,6 @@ package com.example.android.cookme;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +10,11 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.android.cookme.data.RecipeContract;
-
 /**
  * Created by eduardovaca on 27/07/15.
  */
 public class RecipeAdapter extends CursorAdapter {
+
 
     public static class ViewHolder{
         public final TextView recipeName;

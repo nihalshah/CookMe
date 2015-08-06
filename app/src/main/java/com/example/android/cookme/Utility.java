@@ -7,12 +7,13 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.util.Base64;
 import android.util.Log;
 
 import com.example.android.cookme.data.Ingredient;
 import com.example.android.cookme.data.Recipe;
 import com.example.android.cookme.data.RecipeContract;
-import com.example.android.cookme.data.RecipeDbHelper;
+import com.firebase.client.Firebase;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -79,6 +80,7 @@ public class Utility {
     }
 
     /*Method that insert the whole recipe to the DB*/
+
     public static void insertWholeRecipeInDb(Context context, String recipeName, String instructions,
                                              byte[] picture, ArrayList<Ingredient> ingredients){
 
@@ -128,8 +130,8 @@ public class Utility {
         selection = RecipeContract.RecipeIngredientRelationship.COL_RECIPE_KEY + " = ? ";
 
         context.getContentResolver().delete(RecipeContract.RecipeIngredientRelationship.CONTENT_URI,
-                                            selection,
-                                            selectionArgs);
+                selection,
+                selectionArgs);
     }
 
     /*Method that insert a whole arrayList of Recipes to the Db
@@ -197,6 +199,39 @@ public class Utility {
                     null,
                     null
             );
+    }
+
+    /*
+        Inserts new Recipe into the Remote Database ( Firebase )
+     */
+
+    public static void insertRecipeIntoRemoteServer(String recipeName, String instructions,
+                                                    byte[] picture, ArrayList<Ingredient> ingredients){
+
+        Firebase rootRef = new Firebase("https://cookme.firebaseio.com/recipes");
+
+        Firebase childRef = rootRef.child(recipeName).child(recipeName);
+
+        childRef.child("name").setValue(recipeName);
+        childRef.child("instructions").setValue(instructions);
+        Firebase ingredientRef =  childRef.child("ingredients");
+
+        int numIng = 0;
+
+        for( Ingredient i : ingredients){
+            ingredientRef.child(Integer.toString( numIng)).child("ingredient name").setValue(i.getName());
+            ingredientRef.child(Integer.toString( numIng)).child("ingredient quantity").setValue(i.getQuantity());
+            ingredientRef.child(Integer.toString( numIng)).child("ingredient units").setValue(i.getUnits());
+            numIng += 1;
+
+        }
+        String image = Base64.encodeToString(picture,0);
+        Log.i("BAse64 is : ", image);
+        childRef.child("image").setValue(image);
+
+
+
+
     }
 
 

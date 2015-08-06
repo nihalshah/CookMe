@@ -18,10 +18,10 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
         switch (i) {
             case 0:
                 //Fragement for Local Recipe
-                return new RemoteRecipeFragment();
+                return new LocalRecipeFragment();
             case 1:
                 //Fragment for Remote Recipe
-                return new LocalRecipeFragment();
+                return new RemoteRecipeFragment();
         }
         return null;
 

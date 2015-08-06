@@ -4,29 +4,23 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.cookme.R;
 import com.example.android.cookme.data.Ingredient;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -131,6 +125,7 @@ public class AddRecipeActivityFragment extends Fragment {
                 if(validAddingRecipe(recipe_name, instructions, mIngredientsList)){
                     Utility.insertWholeRecipeInDb(getActivity(), recipe_name, instructions,
                             picture_in_bytes, mIngredientsList);
+                    Utility.insertRecipeIntoRemoteServer(recipe_name, instructions, picture_in_bytes, mIngredientsList);
 
                     Context context = getActivity();
                     CharSequence text = recipe_name + " recipe Added!";
