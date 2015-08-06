@@ -36,7 +36,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/add_recipe_name_image"
-                    android:src="@mipmap/ic_launcher"
+                    android:src="@drawable/recipe"
                     android:layout_weight="1"
                     />
 
@@ -125,7 +125,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/add_picture_imageview"
-                    android:src="@mipmap/ic_launcher"
+                    android:src="@drawable/logo"
                     android:layout_weight="2"/>
 
                 <Button
