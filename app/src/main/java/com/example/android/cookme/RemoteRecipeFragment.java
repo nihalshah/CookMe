@@ -253,9 +253,13 @@ public class RemoteRecipeFragment extends Fragment {
 
                 recipeList = buffer.toString();
                 Log.i("Recipe is : ", recipeList);
-                JSONObject arr = new JSONObject(recipeList);
+                JSONArray arr = new JSONArray(recipeList);
                 Log.i("JSON is : ", arr.toString());
-                result.add(convertRecipe(arr));
+                for(int i =0; i < arr.length(); i++){
+                    JSONObject r = arr.getJSONObject(i);
+                    result.add(convertRecipe(r));
+                }
+
 
                 return result;
 //                try {
@@ -295,9 +299,9 @@ public class RemoteRecipeFragment extends Fragment {
             String name = obj.getString("name");
             String instructions = obj.getString("instructions");
             LinkedList<Ingredient> ingredients = getIngredients(obj);
-            String image = obj.getString("image");
+            //String image = obj.getString("image");
 
-            return new Recipe(name, ingredients, instructions, image);
+            return new Recipe(name, ingredients, instructions);
         }
 
     }
