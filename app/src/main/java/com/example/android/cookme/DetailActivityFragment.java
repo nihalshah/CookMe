@@ -11,6 +11,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,6 +47,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private ShareActionProvider mShareActionProvider;
     private static final String HASHTAG = "#EasyCook";
 
+
     private static final String[] RECIPE_COLUMNS = {
             RecipeContract.RecipeEntry.TABLE_NAME + "." + RecipeContract.RecipeEntry._ID,
             RecipeContract.RecipeEntry.COL_NAME,
@@ -72,6 +74,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private ImageView mPhotoView;
     private ListView mIngredientListView;
     private TextView mInstructionsView;
+    private CardView mCardViewTitle;
 
     public DetailActivityFragment() {
         setHasOptionsMenu(true);
