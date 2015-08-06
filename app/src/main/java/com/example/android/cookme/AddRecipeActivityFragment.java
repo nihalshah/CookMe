@@ -71,7 +71,7 @@ public class AddRecipeActivityFragment extends Fragment {
 
         mIngredientAdded = "Ingredients Added : ";
         mIngredientsList = new ArrayList<>();
-        mInstructionsAdded = "";
+        mInstructionsAdded = "Instructions Added : ";
 
         mIngredientsAdded_tv = (TextView)rootView.findViewById(R.id.list_of_ingredients_added);
         mIngredientsAdded_tv.setText(mIngredientAdded);
@@ -119,6 +119,7 @@ public class AddRecipeActivityFragment extends Fragment {
             }
         });
 
+        /*Add instructions button */
         Button addInstructionButton = (Button) rootView.findViewById(R.id.add_instruction_button);
         addInstructionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +129,7 @@ public class AddRecipeActivityFragment extends Fragment {
 
                 if(validAddingInstruction(instruction)){
 
-                    mInstructionsAdded += "\t" + (instruction_count++) + ". " + instruction + ".\n";
+                    mInstructionsAdded += "\n" + (instruction_count++) + ". " + instruction + ".";
                     mInstructionsAdded_tv.setText(mInstructionsAdded);
 
                     mInstructionsInput.setText("");
