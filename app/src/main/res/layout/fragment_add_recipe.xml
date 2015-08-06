@@ -196,8 +196,8 @@
                     android:layout_gravity="center_vertical"/>
 
                 <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:id="@+id/add_picture_imageview"
                     android:src="@drawable/logo"
                     android:layout_weight="4"/>

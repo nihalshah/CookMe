@@ -79,8 +79,8 @@
 
     <ListView
         android:id="@+id/recipes_list"
-        android:paddingRight="15dp"
-        android:paddingLeft="15dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#ffffff">
