@@ -8,16 +8,15 @@
     <!-- The avatar -->
     <ImageView
         android:id="@+id/recipe_picture_imageview"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="4dp"
         android:scaleType="centerCrop"
         android:src="@drawable/no_picture"
-        android:paddingLeft="16dp"
-        android:paddingRight="4dp"/>
+         />
 
     <!-- The 2-row textual layout -->
     <LinearLayout
@@ -39,6 +38,8 @@
             android:layout_height="wrap_content"
             android:text="Recipe"
             android:fontFamily="Roboto Regular"
+            android:textStyle="bold"
+            android:textColor="@color/ColorPrimaryDark"
             android:textSize="16sp"/>
 
         <!-- Second row -->
@@ -48,7 +49,8 @@
             android:layout_height="wrap_content"
             android:text="Num of Ingridients"
             android:fontFamily="Roboto Regular"
-            android:textSize="14sp"/>
+            android:textSize="14sp"
+            android:textColor="@color/ColorPrimaryLight"/>
     </LinearLayout>
 
 </RelativeLayout>
