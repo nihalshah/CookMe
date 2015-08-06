@@ -44,7 +44,8 @@
                     android:id="@+id/add_recipe_name_input"
                     android:hint="@string/add_recipe_name"
                     android:layout_marginBottom="15dp"
-                    android:layout_weight="7"/>
+                    android:layout_weight="7"
+                    android:fontFamily="sans-serif-light"/>
             </LinearLayout>
 
             <LinearLayout
@@ -67,7 +68,8 @@
                     android:hint="@string/add_ingredient_name"
                     android:layout_marginBottom="15dp"
                     android:layout_marginTop="15dp"
-                    android:layout_weight="7"/>
+                    android:layout_weight="7"
+                    android:fontFamily="sans-serif-light"/>
 
             </LinearLayout>
 
@@ -89,7 +91,8 @@
                     android:id="@+id/add_units_input"
                     android:hint="@string/add_ingredient_units"
                     android:layout_marginBottom="15dp"
-                    android:layout_weight="7"/>
+                    android:layout_weight="7"
+                    android:fontFamily="sans-serif-light"/>
 
             </LinearLayout>
 
@@ -112,7 +115,8 @@
                     android:hint="@string/add_ingredient_quantity"
                     android:layout_marginBottom="15dp"
                     android:inputType="numberDecimal"
-                    android:layout_weight="7"/>
+                    android:layout_weight="7"
+                    android:fontFamily="sans-serif-light"/>
 
             </LinearLayout>
 
@@ -122,13 +126,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Add Ingredient"
-                android:layout_gravity="right"/>
+                android:layout_gravity="right"
+                android:fontFamily="sans-serif-bold"/>
 
             <TextView
                 android:id="@+id/list_of_ingredients_added"
                 android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -149,7 +155,8 @@
                     android:hint="@string/add_instructions"
                     android:layout_marginBottom="15dp"
                     android:layout_marginTop="20dp"
-                    android:layout_weight="7"/>
+                    android:layout_weight="7"
+                    android:fontFamily="sans-serif-light"/>
 
             </LinearLayout>
 
@@ -159,7 +166,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Add Instruction"
-                android:layout_gravity="right"/>
+                android:layout_gravity="right"
+                android:fontFamily="sans-serif-bold"/>
 
 
             <TextView
@@ -169,7 +177,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-condensed"
+                android:fontFamily="sans-serif-light"
                 android:textSize="15sp"/>
 
             <LinearLayout
@@ -200,7 +208,8 @@
                     android:id="@+id/add_picture_button"
                     android:layout_marginBottom="15dp"
                     android:text="@string/take_picture"
-                    android:layout_weight="3" />
+                    android:layout_weight="3"
+                    android:fontFamily="sans-serif-bold"/>
             </LinearLayout>
 
 
@@ -210,7 +219,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="35dp"
-                android:text="@string/add_new_recipe_button"/>
+                android:text="@string/add_new_recipe_button"
+                android:fontFamily="sans-serif-black"
+                android:textSize="20dp"/>
 
 
         </LinearLayout>
