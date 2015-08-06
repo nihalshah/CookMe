@@ -109,7 +109,8 @@
                         android:text="@string/add_ingridient_units"
                         android:textColor="@color/ColorPrimaryLight"
                         android:fontFamily="sans-serif-condensed"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        />
 
                     <EditText
                         android:layout_width="fill_parent"
@@ -118,6 +119,8 @@
                         android:textSize="15dp"
                         android:textAlignment="center"
                         android:gravity="center"/>
+
+
 
                 </LinearLayout>
 
@@ -145,7 +148,8 @@
                         android:id="@+id/add_quantity_input"
                         android:textSize="15dp"
                         android:textAlignment="center"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:inputType="numberDecimal"/>
 
                 </LinearLayout>
 
@@ -197,6 +201,25 @@
                     android:textSize="15dp"
                     android:id="@+id/add_instruction_input"
                     android:gravity="center" />
+
+                <Button
+                    android:id="@+id/add_instruction_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Instruction"
+                    android:layout_gravity="right"/>
+
+
+                <TextView
+                    android:id="@+id/list_of_instructions_added"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="15sp"
+                    android:textColor="@color/ColorPrimaryLight"/>
             </LinearLayout>
 
 
@@ -218,8 +241,8 @@
                     android:layout_weight="4" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:id="@+id/add_picture_imageview"
                     android:src="@mipmap/ic_launcher"
                     android:layout_weight="2"/>

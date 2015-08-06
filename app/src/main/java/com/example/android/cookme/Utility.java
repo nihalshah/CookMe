@@ -33,10 +33,12 @@ public class Utility {
         return relationValues;
     }
 
-    public static ContentValues createRecipeValues(String name, String instructions){
+    public static ContentValues createRecipeValues(String name, String instructions, byte[] photo, String path){
         ContentValues recipeValues = new ContentValues();
         recipeValues.put(RecipeContract.RecipeEntry.COL_NAME, name);
         recipeValues.put(RecipeContract.RecipeEntry.COL_INSTRUCTIONS, instructions);
+        recipeValues.put(RecipeContract.RecipeEntry.COL_PHOTO, photo);
+        recipeValues.put(RecipeContract.RecipeEntry.COL_PATH_PHOTO, path);
         return recipeValues;
     }
 
@@ -81,11 +83,10 @@ public class Utility {
 
     /*Method that insert the whole recipe to the DB*/
 
-    public static void insertWholeRecipeInDb(Context context, String recipeName, String instructions,
+    public static void insertWholeRecipeInDb(Context context, String recipeName, String instructions, String photo_path,
                                              byte[] picture, ArrayList<Ingredient> ingredients){
 
-        ContentValues recipeValues = createRecipeValues(recipeName, instructions);
-        recipeValues.put(RecipeContract.RecipeEntry.COL_PHOTO, picture);
+        ContentValues recipeValues = createRecipeValues(recipeName, instructions, picture, photo_path);
 
         Uri recipeInserted = context.getContentResolver().insert(
                 RecipeContract.RecipeEntry.CONTENT_URI, recipeValues);
@@ -134,39 +135,6 @@ public class Utility {
                 selectionArgs);
     }
 
-    /*Method that insert a whole arrayList of Recipes to the Db
-    I would do this on Async Task but is just one time, and its for testing*/
-    public static void insertJSONRecipesToDb(Context context, ArrayList<Recipe> list_recipes){
-
-        for(Recipe recipe : list_recipes){
-            //Insert the recipe in table Recipe
-            ContentValues recipeValues = createRecipeValues(recipe.getName(), recipe.getInstructions());
-            Uri recipe_inserted = context.getContentResolver().insert(
-                    RecipeContract.RecipeEntry.CONTENT_URI,
-                    recipeValues);
-            long recipe_id = ContentUris.parseId(recipe_inserted);
-            for(Ingredient ingredient : recipe.getIngredients()){
-                //Insert the ingredients of recipe
-                long ingredient_id = getIngredientId(context, ingredient.getName());
-                if(ingredient_id == -1){
-                    //Ingredient doesn't exists, so we add it
-                    ContentValues ingredientValues = createIngredientValues(ingredient.getName());
-                    Uri ingredient_inserted = context.getContentResolver().insert(
-                            RecipeContract.IngredientEntry.CONTENT_URI,
-                            ingredientValues);
-                    ingredient_id = ContentUris.parseId(ingredient_inserted);
-                }
-                //Now we add the relation
-                ContentValues relationValues = createRelationshipValues(recipe_id,
-                                                                        ingredient_id,
-                                                                        ingredient.getUnits(),
-                                                                        ingredient.getQuantity());
-                context.getContentResolver().insert(RecipeContract.RecipeIngredientRelationship.CONTENT_URI,
-                                                    relationValues);
-            }
-        }
-        Log.v(null, "JSON Already in DB!!!!!");
-    }
 
     //Method that converts from bitmap to byte array -> Obtained from StackOverflow
     public static byte[] getBytes(Bitmap bitmap) {

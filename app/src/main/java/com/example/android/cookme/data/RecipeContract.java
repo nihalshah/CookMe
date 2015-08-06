@@ -35,6 +35,9 @@ public class RecipeContract {
         //Photo of the recipe
         public static final String COL_PHOTO = "photo";
 
+        //Path of photo
+        public static final String COL_PATH_PHOTO = "path_photo";
+
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_RECIPE).build();
 

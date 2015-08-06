@@ -3,6 +3,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_delete_recipe">Delete recipe</string>
+    <string name="action_share">Share</string>
 
     <!--- Strings for the Search Layout -->
     <string name="input_ingredient_hint">Type an ingredient</string>

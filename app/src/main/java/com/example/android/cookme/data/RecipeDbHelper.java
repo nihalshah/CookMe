@@ -12,7 +12,7 @@ import com.example.android.cookme.data.RecipeContract.RecipeIngredientRelationsh
  */
 public class RecipeDbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 5;
 
     static final String DATABASE_NAME = "recipe.db";
 
@@ -27,8 +27,9 @@ public class RecipeDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_RECIPE_TABLE = "CREATE TABLE " + RecipeEntry.TABLE_NAME + " (" +
                 RecipeEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 RecipeEntry.COL_NAME + " TEXT NOT NULL, " +
-                RecipeEntry.COL_INSTRUCTIONS + " TEXT NOT NULL, " + //When we put the Photo we must add a coma
-                RecipeEntry.COL_PHOTO + " BLOB " +
+                RecipeEntry.COL_INSTRUCTIONS + " TEXT NOT NULL, " +
+                RecipeEntry.COL_PHOTO + " BLOB, " +
+                RecipeEntry.COL_PATH_PHOTO + " TEXT " +
                 ");";
 
         //String for creating the Ingredient Table
