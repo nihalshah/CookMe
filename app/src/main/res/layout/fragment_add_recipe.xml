@@ -29,234 +29,199 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1"
+                android:orientation="horizontal">
 
-                >
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/add_recipe_name_image"
-                    android:text="@string/add_recipe_name"
-                    android:textColor="@color/ColorPrimary"
-                    android:fontFamily="sans-serif-condensed"
-
-                    android:textSize="15sp" />
+                    android:src="@drawable/recipe"
+                    android:layout_weight="2" />
 
                 <EditText
-                    android:layout_width="fill_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="15dp"
                     android:id="@+id/add_recipe_name_input"
-                    android:textAlignment="center"
-                    android:gravity="center"/>
+                    android:hint="@string/add_recipe_name"
+                    android:layout_marginBottom="15dp"
+                    android:layout_weight="7"
+                    android:fontFamily="sans-serif-light"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:paddingTop="20dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/add_ingrient_tile"
-                    android:text="@string/add_ingridient_title"
-                    android:textColor="@color/ColorPrimary"
-                    android:fontFamily="sans-serif-condensed"
-                    android:textSize="15sp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="0"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="15dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/add_ingredient_name"
-                        android:text="@string/add_ingridient_name"
-                        android:textColor="@color/ColorPrimaryLight"
-                        android:fontFamily="sans-serif-condensed"
-                        android:textSize="15sp" />
-
-                    <EditText
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/add_ingredient_name_input"
-                        android:textSize="15dp"
-                        android:textAlignment="center"
-                        android:gravity="center"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="0"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="15dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/add_ingredient_units"
-                        android:text="@string/add_ingridient_units"
-                        android:textColor="@color/ColorPrimaryLight"
-                        android:fontFamily="sans-serif-condensed"
-                        android:textSize="15sp"
-                        />
-
-                    <EditText
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/add_units_input"
-                        android:textSize="15dp"
-                        android:textAlignment="center"
-                        android:gravity="center"/>
-
-
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="0"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="15dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/add_ingredient_quantity"
-                        android:text="@string/add_ingridient_quantity"
-                        android:textColor="@color/ColorPrimaryLight"
-                        android:fontFamily="sans-serif-condensed"
-                        android:textSize="15sp" />
-
-                    <EditText
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/add_quantity_input"
-                        android:textSize="15dp"
-                        android:textAlignment="center"
-                        android:gravity="center"
-                        android:inputType="numberDecimal"/>
-
-                </LinearLayout>
-
-
-                <Button
-                    android:id="@+id/add_ingredient_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Add Ingredient"
-                    android:layout_gravity="right"/>
-
-
-                <TextView
-                    android:id="@+id/list_of_ingredients_added"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-condensed"
-                    android:textSize="15sp"
-                    android:textColor="@color/ColorPrimaryLight"/>
-
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1"
-
-                android:layout_marginTop="45dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/add_instruction_title"
-                    android:text="@string/add_instructions"
-                    android:textColor="@color/ColorPrimary"
-                    android:fontFamily="sans-serif-condensed"
-
-                    android:textSize="15sp" />
+                    android:src="@drawable/ingredient"
+                    android:layout_weight="2"
+                    android:layout_gravity="center_vertical"/>
 
                 <EditText
-                    android:layout_width="fill_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="15dp"
-                    android:id="@+id/add_instruction_input"
-                    android:gravity="center" />
+                    android:id="@+id/add_ingredient_name_input"
+                    android:hint="@string/add_ingredient_name"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="7"
+                    android:fontFamily="sans-serif-light"/>
 
-                <Button
-                    android:id="@+id/add_instruction_button"
-                    android:layout_width="wrap_content"
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Add Instruction"
-                    android:layout_gravity="right"/>
+                    android:src="@drawable/units"
+                    android:layout_weight="2"
+                    android:layout_gravity="center_vertical"/>
 
-
-                <TextView
-                    android:id="@+id/list_of_instructions_added"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-condensed"
-                    android:textSize="15sp"
-                    android:textColor="@color/ColorPrimaryLight"/>
+                    android:id="@+id/add_units_input"
+                    android:hint="@string/add_ingredient_units"
+                    android:layout_marginBottom="15dp"
+                    android:layout_weight="7"
+                    android:fontFamily="sans-serif-light"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/quantity"
+                    android:layout_weight="2"
+                    android:layout_gravity="center_vertical"/>
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/add_quantity_input"
+                    android:hint="@string/add_ingredient_quantity"
+                    android:layout_marginBottom="15dp"
+                    android:inputType="numberDecimal"
+                    android:layout_weight="7"
+                    android:fontFamily="sans-serif-light"/>
+
             </LinearLayout>
 
 
+            <Button
+                android:id="@+id/add_ingredient_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Ingredient"
+                android:layout_gravity="right"
+                android:fontFamily="sans-serif-bold"/>
 
+            <TextView
+                android:id="@+id/list_of_ingredients_added"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/instructions"
+                    android:layout_weight="2"
+                    android:layout_gravity="center_vertical"/>
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/add_instruction_input"
+                    android:hint="@string/add_instructions"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_weight="7"
+                    android:fontFamily="sans-serif-light"/>
+
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/add_instruction_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Instruction"
+                android:layout_gravity="right"
+                android:fontFamily="sans-serif-bold"/>
+
+
+            <TextView
+                android:id="@+id/list_of_instructions_added"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:textSize="15sp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_weight="0"
+                android:paddingTop="30dp"
                 android:layout_gravity="center_horizontal">
 
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/photo"
+                    android:layout_weight="2"
+                    android:layout_gravity="center_vertical"/>
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/add_picture_imageview"
+                    android:src="@drawable/logo"
+                    android:layout_weight="4"/>
+
                 <Button
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/add_picture_button"
                     android:layout_marginBottom="15dp"
                     android:text="@string/take_picture"
-                    android:layout_weight="4" />
-
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:id="@+id/add_picture_imageview"
-                    android:src="@mipmap/ic_launcher"
-                    android:layout_weight="2"/>
-
+                    android:layout_weight="3"
+                    android:fontFamily="sans-serif-bold"/>
             </LinearLayout>
 
 
             <Button
                 android:id="@+id/add_new_recipe_button"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="35dp"
-                android:text="@string/add_new_recipe_button"/>
+                android:text="@string/add_new_recipe_button"
+                android:fontFamily="sans-serif-black"
+                android:textSize="20dp"/>
 
 
         </LinearLayout>
