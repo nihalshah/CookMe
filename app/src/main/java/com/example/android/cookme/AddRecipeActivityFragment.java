@@ -56,6 +56,8 @@ public class AddRecipeActivityFragment extends Fragment {
     private static final String STATE_INGREDIENTS_LIST = "ingredientList";
     private static final String STATE_INGREDIENTS_TEXTVIEW = "ingredientsTextView";
     private static final String STATE_INSTRUCTIONS_LIST = "instructionsList";
+    private static final String STATE_PHOTO = "photoState";
+    private static final String STATE_PHOTO_PATH = "photoPathState";
 
 
     public AddRecipeActivityFragment() {
@@ -199,6 +201,11 @@ public class AddRecipeActivityFragment extends Fragment {
                 mInstructionsAdded = savedInstanceState.getString(STATE_INSTRUCTIONS_LIST);
                 mInstructionsAdded_tv.setText(mInstructionsAdded);
             }
+            if(savedInstanceState.containsKey(STATE_PHOTO)){
+                mImageView.setImageBitmap(savedInstanceState.<Bitmap>getParcelable(STATE_PHOTO));
+            }
+            if(savedInstanceState.containsKey(STATE_PHOTO_PATH))
+                mCurrentPhotoPath = savedInstanceState.getString(STATE_PHOTO_PATH);
         }
 
         return rootView;
@@ -210,6 +217,12 @@ public class AddRecipeActivityFragment extends Fragment {
         outState.putParcelableArrayList(STATE_INGREDIENTS_LIST, mIngredientsList);
         outState.putString(STATE_INGREDIENTS_TEXTVIEW, mIngredientAdded);
         outState.putString(STATE_INSTRUCTIONS_LIST, mInstructionsAdded);
+        if(mCurrentPhotoPath != null){
+            BitmapDrawable drawable = (BitmapDrawable) mImageView.getDrawable();
+            Bitmap picture = drawable.getBitmap();
+            outState.putParcelable(STATE_PHOTO, picture);
+            outState.putString(STATE_PHOTO_PATH, mCurrentPhotoPath);
+        }
         super.onSaveInstanceState(outState);
     }
 
