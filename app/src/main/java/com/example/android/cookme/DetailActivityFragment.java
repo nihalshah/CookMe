@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -47,6 +48,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private String mShareString;
     private ShareActionProvider mShareActionProvider;
     private static final String HASHTAG = "#EasyCook";
+    private String photoPath;
 
 
     private static final String[] RECIPE_COLUMNS = {
@@ -135,8 +137,15 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     public Intent createRecipeShareIntent(){
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, mShareString);
+        if(photoPath == null){
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, mShareString);
+        }else{
+            shareIntent.setType("*/*");
+            Uri imageUri = Uri.parse("file://" + photoPath);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, mShareString);
+        }
 
         return shareIntent;
     }
@@ -186,27 +195,29 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             mPhotoView.setImageBitmap(picture);
         }
 
+        photoPath = data.getString(COL_PATH_PHOTO);
+
         ArrayList<String> ingredients = new ArrayList<>();
-        /*
+
         String actualIngredient = data.getString(COL_INGREDIENT_NAME);
         actualIngredient += " " + data.getDouble(COL_QUANTITY) + " " + data.getString(COL_UNITS);
         ingredients.add(actualIngredient);
         mShareString += "\n" + actualIngredient;
-        /*
+
         while (data.moveToNext()){
             actualIngredient = data.getString(COL_INGREDIENT_NAME);
             actualIngredient += " " + data.getDouble(COL_QUANTITY) + " " + data.getString(COL_UNITS);
             ingredients.add(actualIngredient);
             mShareString += "\n" + actualIngredient;
         }
-        /*
+
         ArrayAdapter<String> ingredientAdapter = new ArrayAdapter<String>(
                 getActivity(),
                 R.layout.list_item_ingredients,     //id of the item layout
                 R.id.list_item_ingredients_textView,//id of the textView to populate with
                 ingredients
         );
-        */
+
 
         mIngedientAdapter = new IngredientAdapter(getActivity(), data, 0);
 
