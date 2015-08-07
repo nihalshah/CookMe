@@ -47,7 +47,7 @@ android:id="@+id/list_item_ingredients">
 
         <!-- Second row -->
         <TextView
-            android:id="@+id/emailTextView"
+            android:id="@+id/list_item_ingredients_attributesTextView"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Num of Ingridients"

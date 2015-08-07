@@ -67,15 +67,17 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private static final int COL_PHOTO = 3;
     private static final int COL_PATH_PHOTO = 4;
     private static final int COL_INGREDIENT_ID = 5;
-    private static final int COL_INGREDIENT_NAME = 6;
-    private static final int COL_UNITS = 7;
-    private static final int COL_QUANTITY = 8;
+    static final int COL_INGREDIENT_NAME = 6;
+    static final int COL_UNITS = 7;
+    static final int COL_QUANTITY = 8;
 
     private TextView mNameView;
     private ImageView mPhotoView;
     private ListView mIngredientListView;
     private TextView mInstructionsView;
     private CardView mCardViewTitle;
+
+    private IngredientAdapter mIngedientAdapter;
 
     public DetailActivityFragment() {
         setHasOptionsMenu(true);
@@ -185,27 +187,30 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         }
 
         ArrayList<String> ingredients = new ArrayList<>();
-
+        /*
         String actualIngredient = data.getString(COL_INGREDIENT_NAME);
         actualIngredient += " " + data.getDouble(COL_QUANTITY) + " " + data.getString(COL_UNITS);
         ingredients.add(actualIngredient);
         mShareString += "\n" + actualIngredient;
-
+        /*
         while (data.moveToNext()){
             actualIngredient = data.getString(COL_INGREDIENT_NAME);
             actualIngredient += " " + data.getDouble(COL_QUANTITY) + " " + data.getString(COL_UNITS);
             ingredients.add(actualIngredient);
             mShareString += "\n" + actualIngredient;
         }
-
+        /*
         ArrayAdapter<String> ingredientAdapter = new ArrayAdapter<String>(
                 getActivity(),
                 R.layout.list_item_ingredients,     //id of the item layout
                 R.id.list_item_ingredients_textView,//id of the textView to populate with
                 ingredients
         );
+        */
 
-        mIngredientListView.setAdapter(ingredientAdapter);
+        mIngedientAdapter = new IngredientAdapter(getActivity(), data, 0);
+
+        mIngredientListView.setAdapter(mIngedientAdapter);
         //TO DO CHECK IF FALSE;
         setListViewHeightBasedOnItems(mIngredientListView);
 
