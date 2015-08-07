@@ -168,7 +168,7 @@ public class AddRecipeActivityFragment extends Fragment {
                 if(validAddingRecipe(recipe_name, mInstructionsAdded, mIngredientsList)){
                     Utility.insertWholeRecipeInDb(getActivity(), recipe_name, mInstructionsAdded,
                             mCurrentPhotoPath, picture_in_bytes, mIngredientsList);
-                     Utility.insertRecipeIntoRemoteServer(recipe_name, instructions, picture_in_bytes, mIngredientsList);
+                     Utility.insertRecipeIntoRemoteServer(recipe_name, mInstructionsAdded, picture_in_bytes, mIngredientsList);
                  }
 
                     Context context = getActivity();

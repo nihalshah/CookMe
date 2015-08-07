@@ -193,8 +193,9 @@ public class Utility {
             numIng += 1;
 
         }
-        String image = Base64.encodeToString(picture,0);
+        String image = Base64.encodeToString(picture, Base64.URL_SAFE);
         Log.i("BAse64 is : ", image);
+        image = image.replace("\n", "").replace("\r", "");
         childRef.child("image").setValue(image);
 
 
