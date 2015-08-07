@@ -25,7 +25,7 @@ android:id="@+id/list_item_ingredients">
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/recipe_picture_imageview"
+        android:layout_toRightOf="@+id/ing_picture_imageview"
         android:orientation="vertical"
         android:paddingLeft="16dp"
         android:paddingTop="20dp"
