@@ -175,8 +175,8 @@ public class AddRecipeActivityFragment extends Fragment {
                 if(validAddingRecipe(recipe_name, mInstructionsAdded, mIngredientsList)){
                     Utility.insertWholeRecipeInDb(getActivity(), recipe_name, mInstructionsAdded,
                             mCurrentPhotoPath, picture_in_bytes, mIngredientsList);
-                     Utility.insertRecipeIntoRemoteServer(recipe_name, mInstructionsAdded, picture_in_bytes, mIngredientsList);
-                 }
+                     Utility.insertRecipeIntoRemoteServer(recipe_name, mInstructionsAdded,
+                                                            picture_in_bytes, mIngredientsList);
 
                     Context context = getActivity();
                     CharSequence text = recipe_name + " recipe Added!";
@@ -186,9 +186,9 @@ public class AddRecipeActivityFragment extends Fragment {
                     toast.show();
 
                     getActivity().finish();
-
                 }
-            });
+            }
+        });
 
         if(savedInstanceState != null){
             if(savedInstanceState.containsKey(STATE_INGREDIENTS_LIST))
