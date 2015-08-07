@@ -9,6 +9,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,10 +26,12 @@ public class RecipeAdapter extends CursorAdapter {
     public static class ViewHolder{
         public final TextView recipeName;
         public final ImageView recipePicture;
+        public final TextView numberIngredients;
 
         public ViewHolder(View view){
             recipeName = (TextView)view.findViewById(R.id.list_item_recipes_textview);
             recipePicture = (ImageView)view.findViewById(R.id.recipe_picture_imageview);
+            numberIngredients = (TextView)view.findViewById(R.id.number_ingredients_textview);
         }
     }
 
@@ -53,6 +56,11 @@ public class RecipeAdapter extends CursorAdapter {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
         viewHolder.recipeName.setText(cursor.getString(LocalRecipeFragment.COL_RECIPE_NAME));
+
+        int numberIng = (Utility.getNumberIngredientsPerRecipe(
+                context, cursor.getLong(LocalRecipeFragment.COL_RECIPE_ID)));
+
+        viewHolder.numberIngredients.setText("# Ingredients: " + numberIng);
 
         byte [] image_array = cursor.getBlob(LocalRecipeFragment.COL_PHOTO);
         if(image_array != null){
