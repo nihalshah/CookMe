@@ -195,7 +195,12 @@ public class AddRecipeActivityFragment extends Fragment {
                 mIngredientAdded = savedInstanceState.getString(STATE_INGREDIENTS_TEXTVIEW);
                 mIngredientsAdded_tv.setText(mIngredientAdded);
             }
+            if(savedInstanceState.containsKey(STATE_INSTRUCTIONS_LIST)){
+                mInstructionsAdded = savedInstanceState.getString(STATE_INSTRUCTIONS_LIST);
+                mInstructionsAdded_tv.setText(mInstructionsAdded);
+            }
         }
+
         return rootView;
     }
 
@@ -204,6 +209,7 @@ public class AddRecipeActivityFragment extends Fragment {
 
         outState.putParcelableArrayList(STATE_INGREDIENTS_LIST, mIngredientsList);
         outState.putString(STATE_INGREDIENTS_TEXTVIEW, mIngredientAdded);
+        outState.putString(STATE_INSTRUCTIONS_LIST, mInstructionsAdded);
         super.onSaveInstanceState(outState);
     }
 
