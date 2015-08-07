@@ -1,11 +1,22 @@
 package com.example.android.cookme;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+<<<<<<< HEAD
 import android.net.Uri;
+||||||| merged common ancestors
+=======
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.net.Uri;
+>>>>>>> detailActImage
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -48,7 +59,6 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private String mShareString;
     private ShareActionProvider mShareActionProvider;
     private static final String HASHTAG = "#EasyCook";
-    private String photoPath;
 
 
     private static final String[] RECIPE_COLUMNS = {
@@ -78,6 +88,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private ListView mIngredientListView;
     private TextView mInstructionsView;
     private CardView mCardViewTitle;
+    private String mPhotoPath;
 
     private IngredientAdapter mIngedientAdapter;
 
@@ -96,6 +107,27 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         mInstructionsView = (TextView)rootView.findViewById(R.id.instructions_textView);
 
         mShareString = "Check out this recipe!";
+        // Listener for displaying image full size;
+
+        mPhotoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                if(mPhotoPath != null){
+                    intent.setDataAndType(Uri.parse("file://" + mPhotoPath), "image/*");
+                    startActivity(intent);
+                } else{
+                    Context context = getActivity();
+                    CharSequence text = "No image to display!";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+
+
+            }
+        });
 
         return rootView;
     }
@@ -137,7 +169,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     public Intent createRecipeShareIntent(){
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-        if(photoPath == null){
+        if(mPhotoPath == null){
             shareIntent.setType("text/plain");
             shareIntent.putExtra(Intent.EXTRA_TEXT, mShareString);
         }else{
@@ -192,10 +224,11 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         if(array_picture != null){
             //TODO:Fixing the size of picture
             Bitmap picture = Utility.getImage(array_picture);
-            mPhotoView.setImageBitmap(picture);
+            mPhotoView.setImageBitmap(getCircularBitmap(picture));
         }
 
-        photoPath = data.getString(COL_PATH_PHOTO);
+
+        mPhotoPath = data.getString(COL_PATH_PHOTO);
 
         ArrayList<String> ingredients = new ArrayList<>();
 
@@ -303,5 +336,37 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             return false;
         }
 
+    }
+
+    public static Bitmap getCircularBitmap(Bitmap bitmap) {
+        Bitmap output;
+
+        if (bitmap.getWidth() > bitmap.getHeight()) {
+            output = Bitmap.createBitmap(bitmap.getHeight(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        } else {
+            output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getWidth(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+        float r = 0;
+
+        if (bitmap.getWidth() > bitmap.getHeight()) {
+            r = bitmap.getHeight() / 2;
+        } else {
+            r = bitmap.getWidth() / 2;
+        }
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawCircle(r, r, r, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        return output;
     }
 }
