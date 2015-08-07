@@ -3,6 +3,11 @@ package com.example.android.cookme;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -69,12 +74,12 @@ public class RemoteRecipeAdapter extends ArrayAdapter<Recipe> {
         View v = convertView;
         if (v == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.list_item_remote_recipes, null);
+            v = inflater.inflate(R.layout.list_item_recipes, null);
         }
 
         Recipe r = remote_recipes.get(position);
         TextView text = (TextView) v.findViewById(R.id.list_item_recipes_textview);
-        ImageView img = (ImageView) v.findViewById(R.id.remote_recipe_imageview);
+        ImageView img = (ImageView) v.findViewById(R.id.recipe_picture_imageview);
         text.setText(r.getName());
 
         String imageString = r.getImage();
@@ -82,7 +87,7 @@ public class RemoteRecipeAdapter extends ArrayAdapter<Recipe> {
         byte [] decodedString = Base64.decode(imageString, Base64.URL_SAFE);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-        img.setImageBitmap(decodedByte); 
+        img.setImageBitmap(getCircularBitmap(decodedByte));
 
         return v;
     }
@@ -95,6 +100,37 @@ public class RemoteRecipeAdapter extends ArrayAdapter<Recipe> {
         this.remote_recipes = itemList;
     }
 
+    public static Bitmap getCircularBitmap(Bitmap bitmap) {
+        Bitmap output;
+
+        if (bitmap.getWidth() > bitmap.getHeight()) {
+            output = Bitmap.createBitmap(bitmap.getHeight(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        } else {
+            output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getWidth(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+        float r = 0;
+
+        if (bitmap.getWidth() > bitmap.getHeight()) {
+            r = bitmap.getHeight() / 2;
+        } else {
+            r = bitmap.getWidth() / 2;
+        }
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawCircle(r, r, r, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        return output;
+    }
 
 
 
