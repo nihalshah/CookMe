@@ -1,8 +1,11 @@
 package com.example.android.cookme.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
-public class Ingredient implements Serializable{
+public class Ingredient implements Parcelable{
 
 	//enum for having the Units of measure as constants
 //	public enum Units {ML, CUPS, SPOONS, QUARTS, GRAMS};
@@ -31,4 +34,15 @@ public class Ingredient implements Serializable{
 		return unit;
 	}
 
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel parcel, int i) {
+		parcel.writeString(name);
+		parcel.writeDouble(quantity);
+		parcel.writeString(unit);
+	}
 }
