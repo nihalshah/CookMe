@@ -1,10 +1,15 @@
 package com.example.android.cookme;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.cookme.data.Recipe;
@@ -69,7 +74,15 @@ public class RemoteRecipeAdapter extends ArrayAdapter<Recipe> {
 
         Recipe r = remote_recipes.get(position);
         TextView text = (TextView) v.findViewById(R.id.list_item_recipes_textview);
+        ImageView img = (ImageView) v.findViewById(R.id.remote_recipe_imageview);
         text.setText(r.getName());
+
+        String imageString = r.getImage();
+        Log.i("Image in Adapter", imageString);
+        byte [] decodedString = Base64.decode(imageString, Base64.URL_SAFE);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+        img.setImageBitmap(decodedByte); 
 
         return v;
     }

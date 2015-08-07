@@ -19,7 +19,7 @@
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_weight="1"
-        android:id="@+id/remote_recipe_picture_imageview"
+        android:id="@+id/remote_recipe_imageview"
         android:src="@drawable/no_picture"/>
 
 

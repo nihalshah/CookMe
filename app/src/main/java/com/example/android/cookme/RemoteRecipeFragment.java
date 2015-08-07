@@ -299,9 +299,9 @@ public class RemoteRecipeFragment extends Fragment {
             String name = obj.getString("name");
             String instructions = obj.getString("instructions");
             LinkedList<Ingredient> ingredients = getIngredients(obj);
-            //String image = obj.getString("image");
+            String image = obj.getString("image");
 
-            return new Recipe(name, ingredients, instructions);
+            return new Recipe(name, ingredients, instructions, image);
         }
 
     }
