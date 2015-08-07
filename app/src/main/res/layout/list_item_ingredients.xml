@@ -1,11 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/list_item_ingredients_textView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="?android:attr/listPreferredItemHeight"
-    android:gravity="center"
-    android:layout_gravity="center_horizontal"
-    android:textAlignment="center">
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:minHeight="72dp"
+android:id="@+id/list_item_ingredients">
 
-</TextView>
+
+
+    <!-- The avatar -->
+    <ImageView
+        android:id="@+id/recipe_picture_imageview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="4dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ingredient"
+        />
+
+    <!-- The 2-row textual layout -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/recipe_picture_imageview"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:paddingRight="16dp"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_alignParentRight="true">
+
+        <!-- First row -->
+        <TextView
+            android:id="@+id/list_item_ingredient_textView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Recipe"
+            android:fontFamily="Roboto Regular"
+            android:textStyle="bold"
+            android:textColor="@color/ColorPrimaryDark"
+            android:textSize="16sp"/>
+
+        <!-- Second row -->
+        <TextView
+            android:id="@+id/emailTextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Num of Ingridients"
+            android:fontFamily="Roboto Regular"
+            android:textSize="14sp"
+            android:textColor="@color/ColorPrimaryLight"/>
+    </LinearLayout>
+
+</RelativeLayout>
