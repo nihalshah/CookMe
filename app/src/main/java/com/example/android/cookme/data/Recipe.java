@@ -9,13 +9,13 @@ public class Recipe implements  Serializable{
 	private String name;
 	private LinkedList<Ingredient> ingredients;
 	private String instructions;
-//	private String image;
+	private String image;
 
-	public Recipe(String name, LinkedList<Ingredient> ingredients, String instructions){
+	public Recipe(String name, LinkedList<Ingredient> ingredients, String instructions, String image){
 		this.name = name;
 		this.ingredients = ingredients;
 		this.instructions = instructions;
-	//	this.image = image;
+		this.image = image;
 	}
 
 	//Constructor in case it recieves an array instead of list of ingredients
@@ -34,7 +34,7 @@ public class Recipe implements  Serializable{
 		return name;
 	}
 
-//	public String getImage(){ return  image; }
+	public String getImage(){ return  image; }
 
 	public LinkedList<Ingredient> getIngredients(){
 		return ingredients;

@@ -40,9 +40,9 @@ public class RecipeProviderByJSON {
                 String name = dish.getString("name");
                 LinkedList<Ingredient>allIngredients = getIngredients(dish);
                 String instructions = dish.getString("instructions");
-        //        String image = dish.getString("image");
+                String image = dish.getString("image");
                 //Log.v(LOG_TAG, "Adding Recipe to collection...");
-                collection_of_recipes.add(new Recipe(name, allIngredients ,instructions));
+                collection_of_recipes.add(new Recipe(name, allIngredients ,instructions,image));
             }
         } catch (JSONException e) {
             e.printStackTrace();
