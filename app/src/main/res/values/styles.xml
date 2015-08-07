@@ -7,4 +7,15 @@
         <item name="colorPrimaryDark">@color/ColorPrimaryDark</item>
     </style>
 
+    <!-- Main activity theme. -->
+    <style name="RecipeTheme" parent="AppTheme">
+        <item name="actionBarStyle">@style/ActionBar.Solid.EasyCook.NoTitle</item>
+    </style>
+
+    <!-- main activity action bar styles -->
+    <style name="ActionBar.Solid.EasyCook.NoTitle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="displayOptions">useLogo|showHome</item>
+        <item name="logo">@drawable/logo_title</item>
+    </style>
+
 </resources>
