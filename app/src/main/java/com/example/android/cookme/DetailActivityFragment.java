@@ -187,12 +187,12 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         }
 
         ArrayList<String> ingredients = new ArrayList<>();
-
+        /*
         String actualIngredient = data.getString(COL_INGREDIENT_NAME);
         actualIngredient += " " + data.getDouble(COL_QUANTITY) + " " + data.getString(COL_UNITS);
         ingredients.add(actualIngredient);
         mShareString += "\n" + actualIngredient;
-
+        /*
         while (data.moveToNext()){
             actualIngredient = data.getString(COL_INGREDIENT_NAME);
             actualIngredient += " " + data.getDouble(COL_QUANTITY) + " " + data.getString(COL_UNITS);
@@ -208,7 +208,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         );
         */
 
-        mIngedientAdapter = new IngredientAdapter(getActivity(), null, 0);
+        mIngedientAdapter = new IngredientAdapter(getActivity(), data, 0);
 
         mIngredientListView.setAdapter(mIngedientAdapter);
         //TO DO CHECK IF FALSE;

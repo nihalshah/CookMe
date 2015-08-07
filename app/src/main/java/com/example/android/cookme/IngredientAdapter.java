@@ -42,7 +42,7 @@ public class IngredientAdapter extends CursorAdapter {
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
-        View view = LayoutInflater.from(context).inflate(R.layout.list_item_recipes, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item_ingredients, viewGroup, false);
 
         ViewHolder viewHolder = new ViewHolder(view);
         view.setTag(viewHolder);
@@ -54,10 +54,11 @@ public class IngredientAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
-
-        viewHolder.ingName.setText(cursor.getString(DetailActivityFragment.COL_INGREDIENT_NAME));
+        String name = "name";
+        name = cursor.getString(DetailActivityFragment.COL_INGREDIENT_NAME);
+        viewHolder.ingName.setText(name);
         String attributes = "Units: " + cursor.getString(DetailActivityFragment.COL_UNITS) +
-                            "  Quatity: " + cursor.getString(DetailActivityFragment.COL_QUANTITY);
+                            "  Quatity: " + cursor.getDouble(DetailActivityFragment.COL_QUANTITY);
         viewHolder.ingAttributes.setText(attributes);
 
 
