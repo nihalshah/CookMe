@@ -52,6 +52,11 @@ public class AddRecipeActivityFragment extends Fragment {
     private int instruction_count = 1;
     String mCurrentPhotoPath;
 
+    //Variables for maintaining state of fragment
+    private static final String STATE_INGREDIENTS_LIST = "ingredientList";
+    private static final String STATE_INGREDIENTS_TEXTVIEW = "ingredientsTextView";
+    private static final String STATE_INSTRUCTIONS_LIST = "instructionsList";
+
 
     public AddRecipeActivityFragment() {
     }
@@ -182,12 +187,23 @@ public class AddRecipeActivityFragment extends Fragment {
 
                 }
             });
+
+        if(savedInstanceState != null){
+            if(savedInstanceState.containsKey(STATE_INGREDIENTS_LIST))
+                mIngredientsList = savedInstanceState.getParcelableArrayList(STATE_INGREDIENTS_LIST);
+            if(savedInstanceState.containsKey(STATE_INGREDIENTS_TEXTVIEW)){
+                mIngredientAdded = savedInstanceState.getString(STATE_INGREDIENTS_TEXTVIEW);
+                mIngredientsAdded_tv.setText(mIngredientAdded);
+            }
+        }
         return rootView;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        
+
+        outState.putParcelableArrayList(STATE_INGREDIENTS_LIST, mIngredientsList);
+        outState.putString(STATE_INGREDIENTS_TEXTVIEW, mIngredientAdded);
         super.onSaveInstanceState(outState);
     }
 
