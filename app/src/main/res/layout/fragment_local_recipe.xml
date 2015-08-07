@@ -24,7 +24,7 @@
             android:layout_weight="5"
             android:hint="@string/input_ingredient_hint"
             android:textColorHint="#ffffff"
-            android:inputType="text"
+            android:inputType="textCapSentences"
             android:textColor="#ffffff"/>
 
         <ImageButton
