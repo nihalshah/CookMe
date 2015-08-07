@@ -6,17 +6,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-<<<<<<< HEAD
+
 import android.net.Uri;
-||||||| merged common ancestors
-=======
+
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
-import android.net.Uri;
->>>>>>> detailActImage
+
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -174,7 +172,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             shareIntent.putExtra(Intent.EXTRA_TEXT, mShareString);
         }else{
             shareIntent.setType("*/*");
-            Uri imageUri = Uri.parse("file://" + photoPath);
+            Uri imageUri = Uri.parse("file://" + mPhotoPath);
             shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
             shareIntent.putExtra(Intent.EXTRA_TEXT, mShareString);
         }
