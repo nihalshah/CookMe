@@ -45,7 +45,8 @@
                     android:hint="@string/add_recipe_name"
                     android:layout_marginBottom="15dp"
                     android:layout_weight="7"
-                    android:fontFamily="sans-serif-light"/>
+                    android:fontFamily="sans-serif-light"
+                    android:inputType="textCapSentences"/>
             </LinearLayout>
 
             <LinearLayout
@@ -69,7 +70,8 @@
                     android:layout_marginBottom="15dp"
                     android:layout_marginTop="15dp"
                     android:layout_weight="7"
-                    android:fontFamily="sans-serif-light"/>
+                    android:fontFamily="sans-serif-light"
+                    android:inputType="textCapSentences"/>
 
             </LinearLayout>
 
@@ -156,7 +158,8 @@
                     android:layout_marginBottom="15dp"
                     android:layout_marginTop="20dp"
                     android:layout_weight="7"
-                    android:fontFamily="sans-serif-light"/>
+                    android:fontFamily="sans-serif-light"
+                    android:inputType="textCapSentences"/>
 
             </LinearLayout>
 

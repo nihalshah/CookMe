@@ -48,19 +48,6 @@ public class Utility {
         return ingredientValues;
     }
 
-    /*Method that checks if the local Db is empty,
-    if it is it return true*/
-    public static boolean dataBaseIsEmpty(Context context){
-        Cursor cursor = context.getContentResolver().query(
-                RecipeContract.RecipeIngredientRelationship.CONTENT_URI,
-                null,
-                null,
-                null,
-                null);
-        if(cursor.moveToFirst())
-            return false;
-        return true;
-    }
 
     /*Method that checks if ingredient is already in DB, it return the id*/
     public static long getIngredientId(Context context, String ingredientName){
@@ -198,9 +185,18 @@ public class Utility {
         image = image.replace("\n", "").replace("\r", "");
         childRef.child("image").setValue(image);
 
+    }
 
+    public static int getNumberIngredientsPerRecipe(Context context, long recipe_id){
 
+        Cursor cursor = context.getContentResolver().query(
+                RecipeContract.RecipeIngredientRelationship.buildRelationshipUriWithRecipeId(recipe_id),
+                null,
+                null,
+                null,
+                null);
 
+        return cursor.getCount();
     }
 
 

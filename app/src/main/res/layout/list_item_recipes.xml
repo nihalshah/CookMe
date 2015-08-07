@@ -44,10 +44,9 @@
 
         <!-- Second row -->
         <TextView
-            android:id="@+id/emailTextView"
+            android:id="@+id/number_ingredients_textview"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Num of Ingridients"
             android:fontFamily="Roboto Regular"
             android:textSize="14sp"
             android:textColor="@color/ColorPrimaryLight"/>
