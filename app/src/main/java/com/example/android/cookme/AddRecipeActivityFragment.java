@@ -186,6 +186,12 @@ public class AddRecipeActivityFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.v("LOG", "" + requestCode);
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
