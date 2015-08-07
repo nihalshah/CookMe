@@ -73,14 +73,14 @@
             android:layout_height="wrap_content"
             android:id="@+id/ingredients_in_query_textview"
             android:textColor="#ffffff"
-            android:paddingBottom="5dp"/>
+            android:paddingBottom="0dp"/>
 
     </LinearLayout>
 
     <ListView
         android:id="@+id/recipes_list"
-        android:paddingRight="15dp"
-        android:paddingLeft="15dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#ffffff">
