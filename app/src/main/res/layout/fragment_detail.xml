@@ -41,7 +41,10 @@
                     android:layout_alignParentTop="true"
                     android:textSize="24sp"
                     android:maxLines="3"
+                    android:fontFamily="Roboto Regular"
+                    android:textStyle="bold"
                     android:padding="8dp"
+                    android:textColor="@color/ColorPrimaryDark"
                     />
 
 
