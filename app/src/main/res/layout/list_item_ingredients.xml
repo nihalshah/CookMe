@@ -10,7 +10,7 @@ android:id="@+id/list_item_ingredients">
 
     <!-- The avatar -->
     <ImageView
-        android:id="@+id/recipe_picture_imageview"
+        android:id="@+id/ing_picture_imageview"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentLeft="true"
@@ -36,7 +36,7 @@ android:id="@+id/list_item_ingredients">
 
         <!-- First row -->
         <TextView
-            android:id="@+id/list_item_ingredient_textView"
+            android:id="@+id/list_item_ingredients_textView"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Recipe"
