@@ -78,7 +78,7 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
         mIngredientsQuerying = (TextView) rootView.findViewById(R.id.ingredients_in_query_textview);
         mClearQuery = (Button) rootView.findViewById(R.id.clear_list_ingredients_button);
         mRecipesList = (ListView) rootView.findViewById(R.id.recipes_list);
-        mSearchButton = (ImageButton) rootView.findViewById(R.id.search_ingredient_button);
+        //mSearchButton = (ImageButton) rootView.findViewById(R.id.search_ingredient_button);
 
         // The CursorAdapter will take data from our cursor and populate the ListView.
         mRecipeAdapter = new RecipeAdapter(getActivity(), null, 0);

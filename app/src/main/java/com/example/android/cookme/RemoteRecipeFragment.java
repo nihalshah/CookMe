@@ -1,13 +1,17 @@
 package com.example.android.cookme;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -78,7 +82,7 @@ public class RemoteRecipeFragment extends Fragment {
         mIngredientsQuerying = (TextView) rootView.findViewById(R.id.ingredients_in_query_textview);
         mClearQuery = (Button) rootView.findViewById(R.id.clear_list_ingredients_button);
         mRecipesList = (ListView) rootView.findViewById(R.id.recipes_list);
-        mSearchButton = (ImageButton) rootView.findViewById(R.id.search_ingredient_button);
+        //mSearchButton = (ImageButton) rootView.findViewById(R.id.search_ingredient_button);
 
 
         mRecipesList.setAdapter(mremoteRecipeAdapter);
@@ -99,24 +103,26 @@ public class RemoteRecipeFragment extends Fragment {
             }
         });
 
-        //Button Pressed event
-        mSearchButton.setOnClickListener(new View.OnClickListener() {
+        mIngredientInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
-                mIngredientTyped = mIngredientInput.getText().toString();
-                mIngredientInput.setText("");
+                    //TODO Search into remote function
 
-                if (mIngredientsSelected.length() == 0)
-                    mIngredientsSelected += mIngredientTyped;
-                else
-                    mIngredientsSelected += "-" + mIngredientTyped; //DO NOT CHANGE THE '-' ... necessary for later split
-
-                mIngredientsQuerying.setText(mIngredientsSelected);
-
-                //restartLoader();
+                    InputMethodManager inputManager =
+                            (InputMethodManager) getActivity().
+                                    getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputManager.hideSoftInputFromWindow(
+                            getActivity().getCurrentFocus().getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
+                    return true;
+                }
+                return false;
             }
         });
+
+        /*
 
         mClearQuery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +134,8 @@ public class RemoteRecipeFragment extends Fragment {
                // restartLoader();
             }
         });
+
+        */
 
         return rootView;
     }
