@@ -25,15 +25,12 @@
             android:hint="@string/input_ingredient_hint"
             android:textColorHint="#ffffff"
             android:inputType="textCapSentences"
-            android:textColor="#ffffff"/>
+            android:textColor="#ffffff"
+            android:textSize="14sp"
+            android:drawableLeft="@drawable/ic_search_white_24dp"
+            android:imeOptions="actionSearch"/>
 
-        <ImageButton
-            android:id="@+id/search_ingredient_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/ic_search_white_36dp"
-            android:background="@color/ColorPrimary"/>
+
 
     </LinearLayout>
 

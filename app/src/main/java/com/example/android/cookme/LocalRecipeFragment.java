@@ -1,12 +1,18 @@
 package com.example.android.cookme;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +26,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.content.CursorLoader;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 /**
@@ -39,6 +46,7 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
     private EditText mIngredientInput;
     private TextView mIngredientsQuerying;
     private Button mClearQuery;
+    public boolean InSearchMode = false;
 
     //Projection for querying
     private static final String[] RECIPE_COLUMNS = {
@@ -82,7 +90,7 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(i);
-                if(cursor != null){
+                if (cursor != null) {
                     Intent intent = new Intent(getActivity(), DetailActivity.class).
                             setData(RecipeContract.RecipeIngredientRelationship.
                                     buildRelationshipUriWithRecipeId(cursor.getLong(COL_RECIPE_ID)));
@@ -90,6 +98,78 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
                 }
             }
         });
+
+        mIngredientInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    mIngredientTyped = mIngredientInput.getText().toString();
+                    mIngredientInput.setText("");
+
+                    if (mIngredientsSelected.length() == 0)
+                        mIngredientsSelected += mIngredientTyped;
+                    else
+                        mIngredientsSelected += "-" + mIngredientTyped; //DO NOT CHANGE THE '-' ... necessary for later split
+
+                    mIngredientsQuerying.setText(mIngredientsSelected);
+                    restartLoader();
+                    InSearchMode = true;
+
+                    InputMethodManager inputManager =
+                            (InputMethodManager) getActivity().
+                                    getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputManager.hideSoftInputFromWindow(
+                            getActivity().getCurrentFocus().getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        rootView.setFocusableInTouchMode(true);
+        rootView.requestFocus();
+        rootView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+                        Toast.makeText(getActivity(), "Back Pressed", Toast.LENGTH_SHORT).show();
+                        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        mIngredientsSelected = "";
+                        mIngredientsQuerying.setText(mIngredientsSelected);
+                        restartLoader();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+        /*
+        rootView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    Context context = getActivity();
+                    CharSequence text = "Back button pressed";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                    getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    mIngredientsSelected = "";
+                    mIngredientsQuerying.setText(mIngredientsSelected);
+                    restartLoader();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
+        */
+
+        /*
 
         //Button Pressed event
         mSearchButton.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +189,8 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
                 restartLoader();
             }
         });
+
+        */
 
         mClearQuery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,4 +248,7 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
     public void onLoaderReset(Loader<Cursor> loader) {
         mRecipeAdapter.swapCursor(null);
     }
+
+
+
 }
