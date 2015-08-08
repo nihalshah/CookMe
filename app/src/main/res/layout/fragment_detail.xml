@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.cookme.DetailActivityFragment"
-    android:id="@+id/recipeLayout">
+    android:id="@+id/recipeLayout"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,6 +29,7 @@
                     android:layout_alignParentTop="true"
                     android:scaleType="fitCenter"
                     android:layout_gravity="center_horizontal"
+                    android:paddingTop="@dimen/activity_vertical_margin"
                     />
 
                 <TextView

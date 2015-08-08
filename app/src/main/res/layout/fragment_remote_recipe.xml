@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/activity_vertical_margin"
 
     android:orientation="vertical"
     tools:context=".MainActivityFragment"
@@ -25,58 +24,16 @@
             android:layout_weight="5"
             android:hint="@string/input_ingredient_hint"
             android:textColorHint="#ffffff"
-            android:inputType="text"
-            android:textColor="#ffffff"/>
-
-        <ImageButton
-            android:id="@+id/search_ingredient_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/ic_search_white_36dp"
-            android:background="@color/ColorPrimary"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="0dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center_horizontal"
-        android:background="@color/ColorPrimaryLight">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="7"
-                android:text="Recipes that have: "
-                android:textStyle="bold"
-                android:textColor="#ffffff"/>
-            <Button
-                android:id="@+id/clear_list_ingredients_button"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:text="X" />
-
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/ingredients_in_query_textview"
+            android:inputType="textCapSentences"
             android:textColor="#ffffff"
-            android:paddingBottom="5dp"/>
+            android:textSize="14sp"
+            android:drawableLeft="@drawable/ic_search_white_24dp"
+            android:imeOptions="actionSearch"/>
+
 
     </LinearLayout>
+
+
 
     <ListView
         android:id="@+id/recipes_list"
