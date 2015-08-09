@@ -3,6 +3,7 @@ package com.example.android.cookme;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -100,15 +101,23 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
                     Intent intent = new Intent(getActivity(), DetailActivity.class).
                             setData(RecipeContract.RecipeIngredientRelationship.
                                     buildRelationshipUriWithRecipeId(cursor.getLong(COL_RECIPE_ID)));
-                    String transitionName = getString(R.string.transition_album_cover);
-                    mAvatar = (ImageView) view.findViewById(R.id.recipe_picture_imageview);
-                    ActivityOptionsCompat options =
-                            ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                                    mAvatar,   // The view which starts the transition
-                                    transitionName    // The transitionName of the view we’re transitioning to
-                            );
-                    ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
-                    //startActivity(intent);
+                    //Apply animation if lollipop is present
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        // Call some material design APIs here
+                        String transitionName = getString(R.string.transition_album_cover);
+                        mAvatar = (ImageView) view.findViewById(R.id.recipe_picture_imageview);
+                        ActivityOptionsCompat options =
+                                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                                        mAvatar,   // The view which starts the transition
+                                        transitionName    // The transitionName of the view we’re transitioning to
+                                );
+                        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
+                    } else {
+                        // Implement this feature without material design
+                        startActivity(intent);
+                    }
+
+
                 }
             }
         });
