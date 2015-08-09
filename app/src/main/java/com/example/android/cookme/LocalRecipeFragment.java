@@ -150,6 +150,8 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
             }
         });
 
+        /*
+
         rootView.setFocusableInTouchMode(true);
         rootView.requestFocus();
         rootView.setOnKeyListener(new View.OnKeyListener() {
@@ -158,7 +160,7 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                     if (keyCode == KeyEvent.KEYCODE_BACK) {
                         Toast.makeText(getActivity(), "Back Pressed", Toast.LENGTH_SHORT).show();
-                        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        //getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                         mIngredientsSelected = "";
                         mIngredientsQuerying.setText(mIngredientsSelected);
                         restartLoader();
@@ -265,12 +267,33 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         mRecipeAdapter.swapCursor(cursor);
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK && InSearchMode) {
+                        Toast.makeText(getActivity(), "Back Pressed", Toast.LENGTH_SHORT).show();
+                        //getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        mIngredientsSelected = "";
+                        mIngredientsQuerying.setText(mIngredientsSelected);
+                        restartLoader();
+                        InSearchMode = false;
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mRecipeAdapter.swapCursor(null);
     }
+
+
 
 
 
