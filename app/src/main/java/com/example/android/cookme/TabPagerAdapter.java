@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 public class TabPagerAdapter extends FragmentStatePagerAdapter {
+    private String[] tabs = { "Local", "Remote"};
     public TabPagerAdapter(FragmentManager fm) {
         super(fm);
 
@@ -31,6 +32,11 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
 
         return 2; //No of Tabs
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return tabs[position];
     }
 
 }
