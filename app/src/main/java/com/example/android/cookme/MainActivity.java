@@ -34,37 +34,13 @@ public class MainActivity extends ActionBarActivity {
 
         // Initilization
         viewPager = (ViewPager) findViewById(R.id.pager);
-        actionBar = getSupportActionBar();
+        getSupportActionBar().setElevation(0f);
         mAdapter = new TabPagerAdapter(getSupportFragmentManager());
 
         viewPager.setAdapter(mAdapter);
-        actionBar.setHomeButtonEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 
-        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
 
-            public void onTabSelected(Tab tab, FragmentTransaction ft) {
-                // Pass the position on tab click to ViewPager
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-
-            public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-                // TODO Auto-generated method stub
-            }
-
-            public void onTabReselected(Tab tab, FragmentTransaction ft) {
-                // TODO Auto-generated method stub
-            }
-
-        };
-
-
-        // Adding Tabs
-        for (String tab_name : tabs) {
-            actionBar.addTab(actionBar.newTab().setText(tab_name)
-                    .setTabListener(tabListener));
-        }
 
         /**
          * on swiping the viewpager make respective tab selected
@@ -75,7 +51,7 @@ public class MainActivity extends ActionBarActivity {
             public void onPageSelected(int position) {
                 // on changing the page
                 // make respected tab selected
-                actionBar.setSelectedNavigationItem(position);
+
             }
 
             @Override
