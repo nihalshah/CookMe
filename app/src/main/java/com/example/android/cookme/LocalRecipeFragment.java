@@ -3,7 +3,10 @@ package com.example.android.cookme;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -17,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.android.cookme.data.RecipeContract;
@@ -41,11 +45,12 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
     private String mIngredientTyped;
     private String mIngredientsSelected;
 
-    private ImageButton mSearchButton;
+    private ImageView mAvatar;
     private ListView mRecipesList;
     private EditText mIngredientInput;
     private TextView mIngredientsQuerying;
     private Button mClearQuery;
+    private TextView TitleTransition;
     public boolean InSearchMode = false;
 
     //Projection for querying
@@ -78,6 +83,8 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
         mIngredientsQuerying = (TextView) rootView.findViewById(R.id.ingredients_in_query_textview);
         mClearQuery = (Button) rootView.findViewById(R.id.clear_list_ingredients_button);
         mRecipesList = (ListView) rootView.findViewById(R.id.recipes_list);
+
+
         //mSearchButton = (ImageButton) rootView.findViewById(R.id.search_ingredient_button);
 
         // The CursorAdapter will take data from our cursor and populate the ListView.
@@ -94,7 +101,23 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
                     Intent intent = new Intent(getActivity(), DetailActivity.class).
                             setData(RecipeContract.RecipeIngredientRelationship.
                                     buildRelationshipUriWithRecipeId(cursor.getLong(COL_RECIPE_ID)));
-                    startActivity(intent);
+                    //Apply animation if lollipop is present
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        // Call some material design APIs here
+                        String transitionName = getString(R.string.transition_album_cover);
+                        mAvatar = (ImageView) view.findViewById(R.id.recipe_picture_imageview);
+                        ActivityOptionsCompat options =
+                                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                                        mAvatar,   // The view which starts the transition
+                                        transitionName    // The transitionName of the view we’re transitioning to
+                                );
+                        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
+                    } else {
+                        // Implement this feature without material design
+                        startActivity(intent);
+                    }
+
+
                 }
             }
         });

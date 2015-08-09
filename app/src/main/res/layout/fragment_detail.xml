@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.android.cookme.DetailActivityFragment"
-    android:id="@+id/recipeLayout"
-    >
+    android:id="@+id/recipeLayout">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,112 +13,145 @@
         android:orientation="vertical"
         android:choiceMode="multipleChoice">
 
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardBackgroundColor="@color/ColorPrimary"
+            card_view:contentPaddingBottom="@dimen/activity_vertical_margin"
+            >
+
+            <!-- Your card content -->
 
 
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@color/ColorPrimary"
-                >
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="@color/ColorPrimary"
+                    >
 
-                <ImageView
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:id="@+id/recipe_picture_imageview"
-                    android:layout_alignParentTop="true"
-                    android:scaleType="fitCenter"
-                    android:layout_gravity="center_horizontal"
-                    android:paddingTop="@dimen/activity_vertical_margin"
-                    />
+                    <ImageView
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:id="@+id/recipe_picture_imageview"
+                        android:layout_alignParentTop="true"
+                        android:scaleType="fitCenter"
+                        android:layout_gravity="center_horizontal"
+                        android:paddingTop="@dimen/activity_vertical_margin"
+                        android:transitionName="@string/transition_album_cover"
+                        />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/recipeName_textView"
-                    android:layout_below="@+id/recipe_picture_imageview"
-                    android:layout_alignParentTop="true"
-                    android:textSize="24sp"
-                    android:maxLines="3"
-                    android:fontFamily="Roboto Regular"
-                    android:textStyle="bold"
-                    android:padding="8dp"
-                    android:textColor="#ffffff"
-                    />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/recipeName_textView"
+                        android:layout_below="@+id/recipe_picture_imageview"
+                        android:layout_alignParentTop="true"
+                        android:textSize="24sp"
+                        android:maxLines="3"
+                        android:fontFamily="Roboto Regular"
+                        android:textStyle="bold"
+                        android:padding="8dp"
+                        android:textColor="#ffffff"
+                        />
 
 
             </LinearLayout>
 
+        </android.support.v7.widget.CardView>
 
 
 
-
-        <ListView
-            android:id="@+id/ingredients_list"
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textAlignment="center" />
+            android:paddingTop="@dimen/activity_vertical_margin"
+            card_view:cardUseCompatPadding="true"
+            card_view:cardCornerRadius="4dp">
 
+            <!-- Your card content -->
 
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="72dp"
-            android:id="@+id/Instructions_layout">
-
-
-
-            <!-- The avatar -->
-            <ImageView
-                android:id="@+id/instructions_icon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="4dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/instructions"
+            <ListView
+                android:id="@+id/ingredients_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textAlignment="center"
                 />
 
-            <!-- The 2-row textual layout -->
-            <LinearLayout
-                android:layout_width="fill_parent"
+
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardUseCompatPadding="true"
+            card_view:cardCornerRadius="4dp">>
+            <!-- Your card content -->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/instructions_icon"
-                android:orientation="vertical"
-                android:paddingLeft="16dp"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:paddingRight="16dp"
-                android:layout_alignWithParentIfMissing="true"
-                android:layout_alignParentRight="true">
+                android:minHeight="72dp"
+                android:id="@+id/Instructions_layout">
 
-                <!-- First row -->
-                <TextView
-                    android:id="@+id/instructions_title"
+
+
+                <!-- The avatar -->
+                <ImageView
+                    android:id="@+id/instructions_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="4dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/instructions"
+                    />
+
+                <!-- The 2-row textual layout -->
+                <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Instructions:"
-                    android:fontFamily="Roboto Regular"
-                    android:textStyle="bold"
-                    android:textColor="@color/ColorPrimaryDark"
-                    android:textSize="16sp"/>
+                    android:layout_toRightOf="@+id/instructions_icon"
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp"
+                    android:paddingRight="16dp"
+                    android:layout_alignWithParentIfMissing="true"
+                    android:layout_alignParentRight="true">
 
-                <!-- Second row -->
-                <TextView
-                    android:id="@+id/instructions_textView"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Num of Ingridients"
-                    android:fontFamily="Roboto Regular"
-                    android:textSize="14sp"
-                    android:textColor="@color/ColorPrimaryLight"/>
-            </LinearLayout>
+                    <!-- First row -->
+                    <TextView
+                        android:id="@+id/instructions_title"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Instructions:"
+                        android:fontFamily="Roboto Regular"
+                        android:textStyle="bold"
+                        android:textColor="@color/ColorPrimaryDark"
+                        android:textSize="16sp"/>
 
-        </RelativeLayout>
+                    <!-- Second row -->
+                    <TextView
+                        android:id="@+id/instructions_textView"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Num of Ingridients"
+                        android:fontFamily="Roboto Regular"
+                        android:textSize="14sp"
+                        android:textColor="@color/ColorPrimaryLight"/>
+                </LinearLayout>
+
+            </RelativeLayout>
+
+
+
+        </android.support.v7.widget.CardView>
+
 
 
 </LinearLayout>
