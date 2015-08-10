@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class Recipe implements  Serializable{
+public class Recipe implements Serializable {
 
 	private String name;
-	private LinkedList<Ingredient> ingredients;
+	private LinkedList<Ingredient> ingredients = new LinkedList<Ingredient>();
 	private String instructions;
 	private String image;
 
@@ -58,4 +58,50 @@ public class Recipe implements  Serializable{
 			ingredientsStrings.add(ing.getName() + " " + ing.getQuantity() + " " + ing.getUnits());
 		return ingredientsStrings;
 	}
+
+
+	/*
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+
+		dest.writeString(name);
+		dest.writeString(instructions);
+		dest.writeString(image);
+		dest.writeTypedList(ingredients);
+
+	}
+
+
+    public Recipe(Parcel source){
+
+        this.name = source.readString();
+        Log.i("Name is :", name);
+        this.instructions = source.readString();
+        this.image = source.readString();
+       // this.ingredients = null;
+        source.readTypedList(this.ingredients, Ingredient.CREATOR);
+
+    }
+
+
+
+    public static final Parcelable.Creator<Recipe> CREATOR
+            = new Parcelable.Creator<Recipe>() {
+        public Recipe createFromParcel(Parcel in) {
+            return new Recipe(in);
+        }
+
+        public Recipe[] newArray(int size) {
+            return new Recipe[size];
+        }
+    };
+
+	*/
+
+
 }

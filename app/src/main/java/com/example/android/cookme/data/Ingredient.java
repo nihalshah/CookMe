@@ -45,4 +45,22 @@ public class Ingredient implements Parcelable, Serializable{
 		parcel.writeDouble(quantity);
 		parcel.writeString(unit);
 	}
+
+	public Ingredient (Parcel in){
+		name = in.readString();
+		quantity = in.readDouble();
+		unit = in.readString();
+	}
+
+	public static final Parcelable.Creator<Ingredient> CREATOR
+			= new Parcelable.Creator<Ingredient>() {
+		public Ingredient createFromParcel(Parcel in) {
+			return new Ingredient(in);
+		}
+
+		public Ingredient[] newArray(int size) {
+			return new Ingredient[size];
+		}
+	};
+
 }

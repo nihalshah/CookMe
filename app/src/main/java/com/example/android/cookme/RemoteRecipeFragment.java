@@ -88,8 +88,8 @@ public class RemoteRecipeFragment extends Fragment {
         mRecipesList.setAdapter(mremoteRecipeAdapter);
 
         // Exec async load task
-        RemoteRecipeTask remoteRecipeTask = new RemoteRecipeTask();
-        remoteRecipeTask.execute();
+        final RemoteRecipeTask remoteRecipeTask = new RemoteRecipeTask();
+        remoteRecipeTask.execute("Get");
 
 
         mRecipesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -97,6 +97,7 @@ public class RemoteRecipeFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 Recipe r = mremoteRecipeAdapter.getItem(i);
+                Log.i("In setOnClic..... : ", " ");
                 Intent intent = new Intent(getActivity(), Remote_Detail_Activity.class).
                         putExtra(Intent.EXTRA_TEXT, r);
                 startActivity(intent);
@@ -119,6 +120,7 @@ public class RemoteRecipeFragment extends Fragment {
                     return true;
                 }
                 return false;
+
             }
         });
 
@@ -171,33 +173,6 @@ public class RemoteRecipeFragment extends Fragment {
             return allIngredients;
         }
 
-        /*
-            Extracts Recipe Data from JSON
-         */
-
-//        public List<Recipe> getRecipeDataFromString(String recipeList) throws JSONException {
-//
-//            JSONObject recipeJSON = new JSONObject(recipeList);
-//            JSONArray recipeArrayJSON = new JSONArray(recipeList);
-//
-//            int length = recipeArrayJSON.length();
-//            List<Recipe> recipeList = new ArrayList<Recipe>();
-//
-//            for( int i =0; i< length; i++){
-//
-//                JSONObject individualRecipe = recipeArrayJSON.getJSONObject(i);
-//                String recipeName = individualRecipe.getString("name");
-//                String recipeInstructions = individualRecipe.getString("instructions");
-//                LinkedList<Ingredient> ingredients = getIngredients(individualRecipe);
-//                resultStr[i] = "Recipe Name : " + recipeName + "\nRecipe Instructions : " + recipeInstructions;
-//
-//            }
-//
-//            return resultStr;
-//
-//
-//
-//        }
 
         /*
 
@@ -212,7 +187,7 @@ public class RemoteRecipeFragment extends Fragment {
             super.onPostExecute(result);
             if( result != null){
 
-                mremoteRecipeAdapter.clear();
+               mremoteRecipeAdapter.clear();
 
                 for(Recipe recipe : result){
                     mremoteRecipeAdapter.add(recipe);
@@ -230,10 +205,16 @@ public class RemoteRecipeFragment extends Fragment {
             ArrayList<Recipe> result = new ArrayList<Recipe>();
 
             try {
-                final String base = "http://45.55.139.196:5000/";
-               // final String buildUri = base.concat("burrito");
+                String base = "http://45.55.139.196:5000/";
+                String buildUri;
+                if( params[0].equals("Search")) {
+                    buildUri = base.concat("/ingredient/"+params[1]);
+                }
+                else{
+                    buildUri = base;
+                }
 
-                URL url = new URL(base);
+                URL url = new URL(buildUri);
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();

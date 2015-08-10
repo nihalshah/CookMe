@@ -191,8 +191,8 @@ public class AddRecipeActivityFragment extends Fragment {
         });
 
         if(savedInstanceState != null){
-            if(savedInstanceState.containsKey(STATE_INGREDIENTS_LIST))
-                mIngredientsList = savedInstanceState.getParcelableArrayList(STATE_INGREDIENTS_LIST);
+            //if(savedInstanceState.containsKey(STATE_INGREDIENTS_LIST))
+              //  mIngredientsList = savedInstanceState.getParcelableArrayList(STATE_INGREDIENTS_LIST);
             if(savedInstanceState.containsKey(STATE_INGREDIENTS_TEXTVIEW)){
                 mIngredientAdded = savedInstanceState.getString(STATE_INGREDIENTS_TEXTVIEW);
                 mIngredientsAdded_tv.setText(mIngredientAdded);
@@ -214,7 +214,7 @@ public class AddRecipeActivityFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
 
-        outState.putParcelableArrayList(STATE_INGREDIENTS_LIST, mIngredientsList);
+       // outState.putParcelableArrayList(STATE_INGREDIENTS_LIST, mIngredientsList);
         outState.putString(STATE_INGREDIENTS_TEXTVIEW, mIngredientAdded);
         outState.putString(STATE_INSTRUCTIONS_LIST, mInstructionsAdded);
         if(mCurrentPhotoPath != null){

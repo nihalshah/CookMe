@@ -10,9 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.android.cookme.data.Ingredient;
 import com.example.android.cookme.data.Recipe;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 /**
@@ -20,31 +26,51 @@ import com.example.android.cookme.data.Recipe;
  */
 public class Remote_Detail_ActivityFragment extends Fragment {
 
+;
+
+
     public Remote_Detail_ActivityFragment() {
     }
+/*
 
+    The Details of a Remote Recipe once a User has clicked on the recipe from the list.
+
+ */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        ArrayList<Ingredient> ingredientArrayList = new ArrayList<Ingredient>();
+
+
+
         View rootView =  inflater.inflate(R.layout.fragment_remote__detail_, container, false);
 
         TextView name = (TextView) rootView.findViewById(R.id.detail_recipe_name);
-        TextView ins = (TextView) rootView.findViewById(R.id.remote_instructions);
+        TextView instructions = (TextView) rootView.findViewById(R.id.remote_instructions);
         ImageView img = (ImageView) rootView.findViewById(R.id.remote_recipe_picture_imageview);
+
+        ListView ingredients = (ListView) rootView.findViewById(R.id.ingredients_list_remote);
+
 
         Intent intent = getActivity().getIntent();
 
         if(intent!= null && intent.hasExtra(Intent.EXTRA_TEXT)){
 
             Recipe r = (Recipe) intent.getSerializableExtra(Intent.EXTRA_TEXT);
+
             name.setText(r.getName());
-            ins.setText(r.getInstructions());
+            instructions.setText(r.getInstructions());
+            LinkedList<Ingredient> i = r.getIngredients();
+
+            RemoteIngredientAdapter remoteIngredientAdapter = new RemoteIngredientAdapter(getActivity(), R.id.ingredients_list_remote, i);
+
+            ingredients.setAdapter(remoteIngredientAdapter);
+            setListViewHeightBasedOnItems(ingredients);
 
             String imageString = r.getImage();
-
             byte [] decodedString = Base64.decode(imageString, Base64.URL_SAFE);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
             img.setImageBitmap(decodedByte);
 
 
@@ -55,5 +81,44 @@ public class Remote_Detail_ActivityFragment extends Fragment {
 
 
         return rootView;
+    }
+
+    /**
+     * Sets ListView height dynamically based on the height of the items.
+     *
+     * @param listView to be resized
+     * @return true if the listView is successfully resized, false otherwise
+     */
+    public static boolean setListViewHeightBasedOnItems(ListView listView) {
+
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter != null) {
+
+            int numberOfItems = listAdapter.getCount();
+
+            // Get total height of all items.
+            int totalItemsHeight = 0;
+            for (int itemPos = 0; itemPos < numberOfItems; itemPos++) {
+                View item = listAdapter.getView(itemPos, null, listView);
+                item.measure(0, 0);
+                totalItemsHeight += item.getMeasuredHeight();
+            }
+
+            // Get total height of all item dividers.
+            int totalDividersHeight = listView.getDividerHeight() *
+                    (numberOfItems - 1);
+
+            // Set list height.
+            ViewGroup.LayoutParams params = listView.getLayoutParams();
+            params.height = totalItemsHeight + totalDividersHeight;
+            listView.setLayoutParams(params);
+            listView.requestLayout();
+
+            return true;
+
+        } else {
+            return false;
+        }
+
     }
 }
