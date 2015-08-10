@@ -30,17 +30,6 @@ public class RemoteRecipeAdapter extends ArrayAdapter<Recipe> {
     private ArrayList<Recipe> remote_recipes;
     private Context context;
 
-//    public static class ViewHolder{
-//        public final TextView recipeName;
-//        public final ImageView recipePicture;
-//
-//        public ViewHolder(View view){
-//            recipeName = (TextView)view.findViewById(R.id.list_item_recipes_textview);
-//            recipePicture = (ImageView)view.findViewById(R.id.recipe_picture_imageview);
-//        }
-//    }
-
-
 
     public RemoteRecipeAdapter(Context context, int resource, ArrayList<Recipe> objects) {
         super(context, resource, objects);
@@ -132,30 +121,5 @@ public class RemoteRecipeAdapter extends ArrayAdapter<Recipe> {
         return output;
     }
 
-
-
-//    public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
-//        View view = LayoutInflater.from(context).inflate(R.layout.list_item_recipes, viewGroup, false);
-//
-//        ViewHolder viewHolder = new ViewHolder(view);
-//        view.setTag(viewHolder);
-//
-//        return view;
-//    }
-//
-//
-//    public void bindView(View view, Context context,Recipe recipe) {
-//
-//        ViewHolder viewHolder = (ViewHolder) view.getTag();
-//
-//        viewHolder.recipeName.setText(String.valueOf(recipe.getName()));
-//
-////        byte [] image_array = cursor.getBlob(LocalRecipeFragment.COL_PHOTO);
-////        if(image_array != null){
-////            Bitmap image = Utility.getImage(image_array);
-////            viewHolder.recipePicture.setImageBitmap(image);
-////        }
-//    }
-//
 
 }

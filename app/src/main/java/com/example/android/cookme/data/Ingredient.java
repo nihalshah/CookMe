@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 
-public class Ingredient implements Parcelable{
+public class Ingredient implements Parcelable, Serializable{
 
 	//enum for having the Units of measure as constants
 //	public enum Units {ML, CUPS, SPOONS, QUARTS, GRAMS};
@@ -45,4 +45,22 @@ public class Ingredient implements Parcelable{
 		parcel.writeDouble(quantity);
 		parcel.writeString(unit);
 	}
+
+	public Ingredient (Parcel in){
+		name = in.readString();
+		quantity = in.readDouble();
+		unit = in.readString();
+	}
+
+	public static final Parcelable.Creator<Ingredient> CREATOR
+			= new Parcelable.Creator<Ingredient>() {
+		public Ingredient createFromParcel(Parcel in) {
+			return new Ingredient(in);
+		}
+
+		public Ingredient[] newArray(int size) {
+			return new Ingredient[size];
+		}
+	};
+
 }
