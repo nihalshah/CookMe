@@ -122,6 +122,13 @@ android:id="@+id/recipeLayout">
 
     </RelativeLayout>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_recipe_to_local_button"
+        android:layout_gravity="center_horizontal"
+        android:text="Add to my recipes"/>
+
 
 </LinearLayout>
 </ScrollView>
