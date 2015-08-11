@@ -49,18 +49,10 @@ import java.util.LinkedList;
 public class RemoteRecipeFragment extends Fragment {
 
 
-    private static final int RECIPE_LOADER = 0;
-    private RecipeProviderByJSON mListRecipes;
-    private RecipeAdapter mRecipeAdapter;
-    private String mIngredientTyped;
-    private String mIngredientsSelected;
-    private RemoteRecipeAdapter mremoteRecipeAdapter;
+    private RemoteRecipeAdapter mRemoteRecipeAdapter;
 
-    private ImageButton mSearchButton;
     private ListView mRecipesList;
     private EditText mIngredientInput;
-    private TextView mIngredientsQuerying;
-    private Button mClearQuery;
     private boolean inSearch = false;
 
 
@@ -77,20 +69,15 @@ public class RemoteRecipeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_remote_recipe, container, false);
 
         ArrayList<Recipe> list = new ArrayList<Recipe>();
-        mremoteRecipeAdapter  = new RemoteRecipeAdapter(getActivity(),0, list);
+        mRemoteRecipeAdapter  = new RemoteRecipeAdapter(getActivity(),0, list);
 
-
-        mIngredientTyped = "";
-        mIngredientsSelected = "";
 
         mIngredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
-        mIngredientsQuerying = (TextView) rootView.findViewById(R.id.ingredients_in_query_textview);
-        mClearQuery = (Button) rootView.findViewById(R.id.clear_list_ingredients_button);
         mRecipesList = (ListView) rootView.findViewById(R.id.recipes_list);
         //mSearchButton = (ImageButton) rootView.findViewById(R.id.search_ingredient_button);
 
 
-        mRecipesList.setAdapter(mremoteRecipeAdapter);
+        mRecipesList.setAdapter(mRemoteRecipeAdapter);
 
         // Exec async load task
         final RemoteRecipeTask remoteRecipeTask = new RemoteRecipeTask();
@@ -101,7 +88,7 @@ public class RemoteRecipeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                Recipe actualRecipe = mremoteRecipeAdapter.getItem(i);
+                Recipe actualRecipe = mRemoteRecipeAdapter.getItem(i);
                 String actualImage = actualRecipe.getImage();
                 String imagePath = actualImage;
                 try {
@@ -227,10 +214,10 @@ public class RemoteRecipeFragment extends Fragment {
             }
             if( result != null){
 
-               mremoteRecipeAdapter.clear();
+               mRemoteRecipeAdapter.clear();
 
                 for(Recipe recipe : result){
-                    mremoteRecipeAdapter.add(recipe);
+                    mRemoteRecipeAdapter.add(recipe);
                 }
 
             }
