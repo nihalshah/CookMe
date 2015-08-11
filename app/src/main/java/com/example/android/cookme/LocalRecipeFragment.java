@@ -210,8 +210,7 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                     if (keyCode == KeyEvent.KEYCODE_BACK && InSearchMode) {
-                        Toast.makeText(getActivity(), "Back Pressed", Toast.LENGTH_SHORT).show();
-                        //getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        
                         mIngredientsSelected = "";
                         mIngredientsQuerying.setText(mIngredientsSelected);
                         restartLoader();
