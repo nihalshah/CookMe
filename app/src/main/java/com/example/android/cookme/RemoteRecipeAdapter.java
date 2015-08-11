@@ -73,10 +73,15 @@ public class RemoteRecipeAdapter extends ArrayAdapter<Recipe> {
         }
 
         Recipe r = remote_recipes.get(position);
-
+        int num_ingredients = r.getIngredients().size();
         TextView text = (TextView) v.findViewById(R.id.list_item_recipes_textview);
         ImageView img = (ImageView) v.findViewById(R.id.recipe_picture_imageview);
         text.setText(r.getName());
+
+        TextView num_ing = (TextView) v.findViewById(R.id.number_ingredients_textview);
+        num_ing.setText("# Ingredients: " + num_ingredients);
+
+
 
         String imageStringReference = r.getImage();
         File filePath = new File(imageStringReference);
