@@ -1,6 +1,7 @@
 package com.example.android.cookme;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -62,6 +63,7 @@ public class RemoteRecipeFragment extends Fragment {
     private EditText mIngredientInput;
     private TextView mIngredientsQuerying;
     private Button mClearQuery;
+    private boolean inSearch = false;
 
 
     public RemoteRecipeFragment() {
@@ -115,6 +117,9 @@ public class RemoteRecipeFragment extends Fragment {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
                     //TODO Search into remote function
+                    inSearch = true;
+                    new RemoteRecipeTask().execute("Search", mIngredientInput.getText().toString());
+
 
                     InputMethodManager inputManager =
                             (InputMethodManager) getActivity().
@@ -186,16 +191,32 @@ public class RemoteRecipeFragment extends Fragment {
 
          */
         Dialog splash;
+        ProgressDialog Searchdialog;
         @Override
         protected void onPreExecute(){
+            Searchdialog = new ProgressDialog(getActivity());
+
             splash = new Dialog(getActivity(), R.style.splash);
-            splash.show();
+            if(inSearch){
+               Searchdialog.setMessage("Searching in the server...");
+                 Searchdialog.show();
+            } else{
+                splash.show();
+            }
+
+
         }
 
         @Override
         protected void onPostExecute(ArrayList<Recipe> result) {
 
             super.onPostExecute(result);
+            if (inSearch){
+                if(Searchdialog.isShowing()) {
+                    Searchdialog.dismiss();
+                }
+
+            }
             if(splash.isShowing()){
                 splash.dismiss();
             }
@@ -222,7 +243,7 @@ public class RemoteRecipeFragment extends Fragment {
                 String base = "http://45.55.139.196:5000/";
                 String buildUri;
                 if( params[0].equals("Search")) {
-                    buildUri = base.concat("/ingredient/"+params[1]);
+                    buildUri = base.concat("ingredient/"+params[1]);
                 }
                 else{
                     buildUri = base;
