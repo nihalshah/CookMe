@@ -101,10 +101,17 @@ public class RemoteRecipeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                Recipe r = mremoteRecipeAdapter.getItem(i);
-                Log.i("In setOnClic..... : ", " ");
+                Recipe actualRecipe = mremoteRecipeAdapter.getItem(i);
+                String actualImage = actualRecipe.getImage();
+                String imagePath = actualImage;
+                try {
+                    imagePath = insertBase64IntoLocalFile(actualImage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                actualRecipe.setImage(imagePath);
                 Intent intent = new Intent(getActivity(), Remote_Detail_Activity.class).
-                        putExtra(Intent.EXTRA_TEXT, r);
+                        putExtra(Intent.EXTRA_TEXT, actualRecipe);
                 startActivity(intent);
             }
         });
@@ -148,6 +155,19 @@ public class RemoteRecipeFragment extends Fragment {
     }
 
 
+    private String insertBase64IntoLocalFile(String image) throws IOException {
+
+        String storagePath = getActivity().getFilesDir().getPath();
+        File fileHoldingImagePath = new File(storagePath + "imagePath.txt");
+
+        FileOutputStream stream = new FileOutputStream(fileHoldingImagePath);
+        try{
+            stream.write(image.getBytes());
+        }finally {
+            stream.close();
+        }
+        return fileHoldingImagePath.getPath();
+    }
 
 
     public class RemoteRecipeTask extends AsyncTask<String, Void, ArrayList<Recipe>>{
@@ -303,24 +323,9 @@ public class RemoteRecipeFragment extends Fragment {
             LinkedList<Ingredient> ingredients = getIngredients(obj);
             String image = obj.getString("image");
 
-            String imagePath = insertBase64IntoLocalFile(image);
-
-            return new Recipe(name, ingredients, instructions, imagePath);
+            return new Recipe(name, ingredients, instructions, image);
         }
 
-        private String insertBase64IntoLocalFile(String image) throws IOException {
-
-            String storagePath = getActivity().getFilesDir().getPath();
-            File fileHoldingImagePath = new File(storagePath + "imagePath.txt");
-
-            FileOutputStream stream = new FileOutputStream(fileHoldingImagePath);
-            try{
-                stream.write(image.getBytes());
-            }finally {
-                stream.close();
-            }
-            return fileHoldingImagePath.getPath();
-        }
 
     }
 

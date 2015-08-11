@@ -59,6 +59,9 @@ public class Recipe implements Serializable {
 		return ingredientsStrings;
 	}
 
+	public void setImage(String image) {
+		this.image = image;
+	}
 
 	/*
 	@Override
