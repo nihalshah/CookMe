@@ -78,7 +78,7 @@ public class RemoteRecipeAdapter extends ArrayAdapter<Recipe> {
         byte [] decodedString = Base64.decode(imageString, Base64.URL_SAFE);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-        img.setImageBitmap(getCircularBitmap(decodedByte));
+        //img.setImageBitmap(getCircularBitmap(decodedByte));
 
         return v;
     }
