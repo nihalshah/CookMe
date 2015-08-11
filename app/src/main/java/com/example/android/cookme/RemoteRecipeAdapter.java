@@ -115,6 +115,7 @@ public class RemoteRecipeAdapter extends ArrayAdapter<Recipe> {
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
         //img.setImageBitmap(getCircularBitmap(decodedByte));
+        img.setImageBitmap(decodedByte);
 
         return v;
     }
