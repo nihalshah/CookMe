@@ -190,11 +190,13 @@ public class RemoteRecipeFragment extends Fragment {
         ProgressDialog dialog;
         @Override
         protected void onPreExecute(){
+            dialog = new ProgressDialog(getActivity());
+
+            splash = new Dialog(getActivity(), R.style.splash);
             if(inSearch){
-                ProgressDialog dialog = ProgressDialog.show(getActivity(), "",
-                        "Searching in the server...", true);
+                dialog.setMessage("Searching in the server...");
+                 dialog.show();
             } else{
-                splash = new Dialog(getActivity(), R.style.splash);
                 splash.show();
             }
 
@@ -205,12 +207,15 @@ public class RemoteRecipeFragment extends Fragment {
         protected void onPostExecute(ArrayList<Recipe> result) {
 
             super.onPostExecute(result);
-            if(splash != null && splash.isShowing()){
-                splash.dismiss();
-            } else if(dialog.isShowing()){
-                dialog.dismiss();
-            }
+            if (inSearch){
+                if(dialog.isShowing()) {
+                    dialog.dismiss();
+                }
 
+            }
+            if(splash.isShowing()){
+                splash.dismiss();
+            }
             if( result != null){
 
                mremoteRecipeAdapter.clear();
