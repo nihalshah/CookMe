@@ -253,7 +253,6 @@ public class RemoteRecipeFragment extends Fragment {
                 recipeList = buffer.toString();
                 Log.i("Recipe is : ", recipeList);
                 JSONArray arr = new JSONArray(recipeList);
-                Log.i("JSON is : ", arr.toString());
                 for(int i =0; i < arr.length(); i++){
                     JSONObject r = arr.getJSONObject(i);
                     result.add(convertRecipe(r));

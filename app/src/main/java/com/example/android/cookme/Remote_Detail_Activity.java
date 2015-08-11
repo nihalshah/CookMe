@@ -12,6 +12,7 @@ public class Remote_Detail_Activity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remote__detail_);
+        getSupportActionBar().setElevation(0f);
         /*
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()

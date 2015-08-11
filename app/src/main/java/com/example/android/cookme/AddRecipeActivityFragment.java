@@ -270,6 +270,7 @@ public class AddRecipeActivityFragment extends Fragment {
                 // Error occurred while creating the File
 
             }
+
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
