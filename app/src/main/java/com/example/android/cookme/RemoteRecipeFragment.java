@@ -54,6 +54,9 @@ public class RemoteRecipeFragment extends Fragment {
     private ListView mRecipesList;
     private EditText mIngredientInput;
     private boolean inSearch = false;
+    private Dialog splash;
+    private ProgressDialog Searchdialog;
+    private boolean haveRequested;
 
 
     public RemoteRecipeFragment() {
@@ -62,7 +65,6 @@ public class RemoteRecipeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
 
 
         super.onCreate(savedInstanceState);
@@ -80,9 +82,10 @@ public class RemoteRecipeFragment extends Fragment {
         mRecipesList.setAdapter(mRemoteRecipeAdapter);
 
         // Exec async load task
-        final RemoteRecipeTask remoteRecipeTask = new RemoteRecipeTask();
-        remoteRecipeTask.execute("Get");
-
+        if(!haveRequested){
+            final RemoteRecipeTask remoteRecipeTask = new RemoteRecipeTask();
+            remoteRecipeTask.execute("Get");
+        }
 
         mRecipesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -130,6 +133,8 @@ public class RemoteRecipeFragment extends Fragment {
 
         return rootView;
     }
+
+
 
 
     private String insertBase64IntoLocalFile(String image) throws IOException {
@@ -182,8 +187,6 @@ public class RemoteRecipeFragment extends Fragment {
             "GET's" data from Remote DataBase.
 
          */
-        Dialog splash;
-        ProgressDialog Searchdialog;
         @Override
         protected void onPreExecute(){
             Searchdialog = new ProgressDialog(getActivity());
@@ -196,13 +199,13 @@ public class RemoteRecipeFragment extends Fragment {
                 splash.show();
             }
 
-
         }
 
         @Override
         protected void onPostExecute(ArrayList<Recipe> result) {
 
             super.onPostExecute(result);
+            haveRequested = true;
             if (inSearch){
                 if(Searchdialog.isShowing()) {
                     Searchdialog.dismiss();
