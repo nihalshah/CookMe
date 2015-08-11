@@ -5,7 +5,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -18,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -61,6 +65,8 @@ public class RemoteRecipeFragment extends Fragment {
     private EditText mIngredientInput;
     private TextView mIngredientsQuerying;
     private Button mClearQuery;
+    private ImageView mAvatar;
+
     private boolean inSearch = false;
 
 
@@ -111,9 +117,26 @@ public class RemoteRecipeFragment extends Fragment {
                 }
 
                 Recipe copyRecipe = new Recipe(actualRecipe.getName(),actualRecipe.getIngredients(), actualRecipe.getInstructions(),imagePath);
+
                 Intent intent = new Intent(getActivity(), Remote_Detail_Activity.class).
                         putExtra(Intent.EXTRA_TEXT, copyRecipe);
-                startActivity(intent);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    // Call some material design APIs here
+                    String transitionName = getString(R.string.transition_album_cover);
+                    mAvatar = (ImageView) view.findViewById(R.id.recipe_picture_imageview);
+                    ActivityOptionsCompat options =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                                    mAvatar,   // The view which starts the transition
+                                    transitionName    // The transitionName of the view we’re transitioning to
+                            );
+                    ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
+                } else {
+                    // Implement this feature without material design
+                    startActivity(intent);
+                }
+
+
             }
         });
 
