@@ -26,7 +26,11 @@ import java.util.LinkedList;
  */
 public class Remote_Detail_ActivityFragment extends Fragment {
 
-;
+    private TextView mRecipeName;
+    private TextView mInstructions;
+    private ImageView mRecipePhoto;
+    private ListView mIngredientList;
+    private ArrayList<Ingredient> ingredients;
 
 
     public Remote_Detail_ActivityFragment() {
@@ -40,17 +44,13 @@ public class Remote_Detail_ActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        ArrayList<Ingredient> ingredientArrayList = new ArrayList<Ingredient>();
-
-
-
         View rootView =  inflater.inflate(R.layout.fragment_remote__detail_, container, false);
 
-        TextView name = (TextView) rootView.findViewById(R.id.detail_recipe_name);
-        TextView instructions = (TextView) rootView.findViewById(R.id.remote_instructions);
-        ImageView img = (ImageView) rootView.findViewById(R.id.remote_recipe_picture_imageview);
+        mRecipeName = (TextView) rootView.findViewById(R.id.detail_recipe_name);
+        mInstructions = (TextView) rootView.findViewById(R.id.remote_instructions);
+        mRecipePhoto = (ImageView) rootView.findViewById(R.id.remote_recipe_picture_imageview);
 
-        ListView ingredients = (ListView) rootView.findViewById(R.id.ingredients_list_remote);
+        mIngredientList = (ListView) rootView.findViewById(R.id.ingredients_list_remote);
 
 
         Intent intent = getActivity().getIntent();
@@ -59,26 +59,22 @@ public class Remote_Detail_ActivityFragment extends Fragment {
 
             Recipe r = (Recipe) intent.getSerializableExtra(Intent.EXTRA_TEXT);
 
-            name.setText(r.getName());
-            instructions.setText(r.getInstructions());
-            LinkedList<Ingredient> i = r.getIngredients();
+            mRecipeName.setText(r.getName());
+            mInstructions.setText(r.getInstructions());
+            LinkedList<Ingredient> listIngredients = r.getIngredients();
 
-            RemoteIngredientAdapter remoteIngredientAdapter = new RemoteIngredientAdapter(getActivity(), R.id.ingredients_list_remote, i);
+            RemoteIngredientAdapter remoteIngredientAdapter = new RemoteIngredientAdapter(getActivity(), R.id.ingredients_list_remote, listIngredients);
 
-            ingredients.setAdapter(remoteIngredientAdapter);
-            setListViewHeightBasedOnItems(ingredients);
+            ingredients = new ArrayList<>(listIngredients);
+
+            mIngredientList.setAdapter(remoteIngredientAdapter);
+            setListViewHeightBasedOnItems(mIngredientList);
 
             String imageString = r.getImage();
             byte [] decodedString = Base64.decode(imageString, Base64.URL_SAFE);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            img.setImageBitmap(decodedByte);
-
-
-
-
+            mRecipePhoto.setImageBitmap(decodedByte);
         }
-
-
 
         return rootView;
     }
