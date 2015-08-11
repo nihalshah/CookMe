@@ -1,5 +1,6 @@
 package com.example.android.cookme;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -89,6 +90,10 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
         mRecipeAdapter = new RecipeAdapter(getActivity(), null, 0);
 
         mRecipesList.setAdapter(mRecipeAdapter);
+
+        if(mRecipeAdapter.isEmpty()){
+            displayAlertOfNoResults();
+        }
 
         mRecipesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -225,7 +230,14 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
     }
 
 
-
+    private void displayAlertOfNoResults(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("No recipes found with that ingredients")
+                .setCancelable(true)
+                .setPositiveButton("Ok", null);
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 
 
 }
