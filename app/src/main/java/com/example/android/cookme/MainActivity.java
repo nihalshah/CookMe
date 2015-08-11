@@ -22,6 +22,7 @@ public class MainActivity extends ActionBarActivity {
 
     // Tab titles
     private String[] tabs = { "Local", "Remote"};
+    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,42 +30,53 @@ public class MainActivity extends ActionBarActivity {
         Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_main);
 
-        /*
+        if (findViewById(R.id.fragment_remoteFragmentTablet) != null) {
+            // The detail container view will be present only in the large-screen layouts
+            // (res/layout-sw600dp). If this view is present, then the activity should be
+            // in two-pane mode.
+            mTwoPane = true;
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+
+        } else {
+            mTwoPane = false;
+            // Initilization
+            viewPager = (ViewPager) findViewById(R.id.pager);
+            getSupportActionBar().setElevation(0f);
+            mAdapter = new TabPagerAdapter(getSupportFragmentManager());
+
+            viewPager.setAdapter(mAdapter);
 
 
 
-        // Initilization
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        getSupportActionBar().setElevation(0f);
-        mAdapter = new TabPagerAdapter(getSupportFragmentManager());
 
-        viewPager.setAdapter(mAdapter);
+            /**
+             * on swiping the viewpager make respective tab selected
+             * */
+
+            viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+                @Override
+                public void onPageSelected(int position) {
+                    // on changing the page
+                    // make respected tab selected
+
+                }
+
+                @Override
+                public void onPageScrolled(int arg0, float arg1, int arg2) {
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int arg0) {
+                }
+            });
+
+        }
 
 
 
-
-        /**
-         * on swiping the viewpager make respective tab selected
-         * */
-        /*
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageSelected(int position) {
-                // on changing the page
-                // make respected tab selected
-
-            }
-
-            @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int arg0) {
-            }
-        });
-        */
     }
 
 

@@ -20,7 +20,7 @@
         tools:layout="@android:layout/list_content" />
 
     <fragment
-        android:id="@+id/fragment_remoteFragment"
+        android:id="@+id/fragment_remoteFragmentTablet"
         android:name="com.example.android.cookme.RemoteRecipeFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
