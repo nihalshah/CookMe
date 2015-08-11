@@ -1,5 +1,6 @@
 package com.example.android.cookme;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -180,11 +181,20 @@ public class RemoteRecipeFragment extends Fragment {
             "GET's" data from Remote DataBase.
 
          */
+        Dialog splash;
+        @Override
+        protected void onPreExecute(){
+            splash = new Dialog(getActivity(), R.style.splash);
+            splash.show();
+        }
 
         @Override
         protected void onPostExecute(ArrayList<Recipe> result) {
 
             super.onPostExecute(result);
+            if(splash.isShowing()){
+                splash.dismiss();
+            }
             if( result != null){
 
                mremoteRecipeAdapter.clear();
