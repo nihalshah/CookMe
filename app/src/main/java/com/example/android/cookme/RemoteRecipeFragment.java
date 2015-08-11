@@ -64,7 +64,7 @@ public class RemoteRecipeFragment extends Fragment {
     private ListView mRecipesList;
     private EditText mIngredientInput;
     private TextView mIngredientsQuerying;
-    private Button mClearQuery;
+    private ImageButton mClearQuery;
     private ImageView mAvatar;
 
     private boolean inSearch = false;
@@ -91,7 +91,7 @@ public class RemoteRecipeFragment extends Fragment {
 
         mIngredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
         mIngredientsQuerying = (TextView) rootView.findViewById(R.id.ingredients_in_query_textview);
-        mClearQuery = (Button) rootView.findViewById(R.id.clear_list_ingredients_button);
+        mClearQuery = (ImageButton) rootView.findViewById(R.id.clear_list_ingredients_button);
         mRecipesList = (ListView) rootView.findViewById(R.id.recipes_list);
         //mSearchButton = (ImageButton) rootView.findViewById(R.id.search_ingredient_button);
 
