@@ -29,6 +29,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -293,13 +297,29 @@ public class RemoteRecipeFragment extends Fragment {
         }
 
 
-        private Recipe convertRecipe(JSONObject obj) throws JSONException {
+        private Recipe convertRecipe(JSONObject obj) throws JSONException, IOException {
             String name = obj.getString("name");
             String instructions = obj.getString("instructions");
             LinkedList<Ingredient> ingredients = getIngredients(obj);
             String image = obj.getString("image");
 
-            return new Recipe(name, ingredients, instructions, image);
+            String imagePath = insertBase64IntoLocalFile(image);
+
+            return new Recipe(name, ingredients, instructions, imagePath);
+        }
+
+        private String insertBase64IntoLocalFile(String image) throws IOException {
+
+            String storagePath = getActivity().getFilesDir().getPath();
+            File fileHoldingImagePath = new File(storagePath + "imagePath.txt");
+
+            FileOutputStream stream = new FileOutputStream(fileHoldingImagePath);
+            try{
+                stream.write(image.getBytes());
+            }finally {
+                stream.close();
+            }
+            return fileHoldingImagePath.getPath();
         }
 
     }
