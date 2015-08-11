@@ -1,5 +1,6 @@
 package com.example.android.cookme;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -85,12 +86,14 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
         mRecipesList = (ListView) rootView.findViewById(R.id.recipes_list);
 
 
-        //mSearchButton = (ImageButton) rootView.findViewById(R.id.search_ingredient_button);
-
         // The CursorAdapter will take data from our cursor and populate the ListView.
         mRecipeAdapter = new RecipeAdapter(getActivity(), null, 0);
 
         mRecipesList.setAdapter(mRecipeAdapter);
+
+        if(mRecipeAdapter.isEmpty()){
+            displayAlertOfNoResults();
+        }
 
         mRecipesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -149,73 +152,6 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
                 return false;
             }
         });
-
-        /*
-
-        rootView.setFocusableInTouchMode(true);
-        rootView.requestFocus();
-        rootView.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    if (keyCode == KeyEvent.KEYCODE_BACK) {
-                        Toast.makeText(getActivity(), "Back Pressed", Toast.LENGTH_SHORT).show();
-                        //getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                        mIngredientsSelected = "";
-                        mIngredientsQuerying.setText(mIngredientsSelected);
-                        restartLoader();
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
-        /*
-        rootView.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    Context context = getActivity();
-                    CharSequence text = "Back button pressed";
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                    getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    mIngredientsSelected = "";
-                    mIngredientsQuerying.setText(mIngredientsSelected);
-                    restartLoader();
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        });
-
-        */
-
-        /*
-
-        //Button Pressed event
-        mSearchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                mIngredientTyped = mIngredientInput.getText().toString();
-                mIngredientInput.setText("");
-
-                if (mIngredientsSelected.length() == 0)
-                    mIngredientsSelected += mIngredientTyped;
-                else
-                    mIngredientsSelected += "-" + mIngredientTyped; //DO NOT CHANGE THE '-' ... necessary for later split
-
-                mIngredientsQuerying.setText(mIngredientsSelected);
-
-                restartLoader();
-            }
-        });
-
-        */
 
         mClearQuery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -294,7 +230,14 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
     }
 
 
-
+    private void displayAlertOfNoResults(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("No recipes found with that ingredients")
+                .setCancelable(true)
+                .setPositiveButton("Ok", null);
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 
 
 }
