@@ -57,6 +57,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private String mShareString;
     private ShareActionProvider mShareActionProvider;
     private static final String HASHTAG = "#EasyCook";
+    private static final String IMAGE_REMOTE_SUBSTRING = "content:";
 
 
     private static final String[] RECIPE_COLUMNS = {
@@ -88,7 +89,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private CardView mCardViewTitle;
     private String mPhotoPath;
 
-    private IngredientAdapter mIngedientAdapter;
+    private IngredientAdapter mIngredientAdapter;
 
     public DetailActivityFragment() {
         setHasOptionsMenu(true);
@@ -172,7 +173,11 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             shareIntent.putExtra(Intent.EXTRA_TEXT, mShareString);
         }else{
             shareIntent.setType("*/*");
-            Uri imageUri = Uri.parse("file://" + mPhotoPath);
+            Uri imageUri;
+            if(mPhotoPath.contains(IMAGE_REMOTE_SUBSTRING))
+                imageUri = Uri.parse(mPhotoPath);
+            else
+                imageUri = Uri.parse("file://" + mPhotoPath);
             shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
             shareIntent.putExtra(Intent.EXTRA_TEXT, mShareString);
         }
@@ -250,9 +255,9 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         );
 
 
-        mIngedientAdapter = new IngredientAdapter(getActivity(), data, 0);
+        mIngredientAdapter = new IngredientAdapter(getActivity(), data, 0);
 
-        mIngredientListView.setAdapter(mIngedientAdapter);
+        mIngredientListView.setAdapter(mIngredientAdapter);
         //TO DO CHECK IF FALSE;
         setListViewHeightBasedOnItems(mIngredientListView);
 

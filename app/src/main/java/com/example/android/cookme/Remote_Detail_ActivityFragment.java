@@ -1,5 +1,6 @@
 package com.example.android.cookme;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,15 +10,19 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.cookme.data.Ingredient;
 import com.example.android.cookme.data.Recipe;
@@ -31,7 +36,13 @@ import java.util.LinkedList;
  */
 public class Remote_Detail_ActivityFragment extends Fragment {
 
-;
+    private TextView mRecipeName;
+    private TextView mInstructions;
+    private ImageView mRecipePhoto;
+    private ListView mIngredientList;
+    private ArrayList<Ingredient> ingredients;
+    private Button addButton;
+    private Recipe mRecipe;
 
 
     public Remote_Detail_ActivityFragment() {
@@ -45,45 +56,54 @@ public class Remote_Detail_ActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        ArrayList<Ingredient> ingredientArrayList = new ArrayList<Ingredient>();
-
-
-
         View rootView =  inflater.inflate(R.layout.fragment_remote__detail_, container, false);
 
-        TextView name = (TextView) rootView.findViewById(R.id.detail_recipe_name);
-        TextView instructions = (TextView) rootView.findViewById(R.id.remote_instructions);
-        ImageView img = (ImageView) rootView.findViewById(R.id.remote_recipe_picture_imageview);
-
-        ListView ingredients = (ListView) rootView.findViewById(R.id.ingredients_list_remote);
-
+        mRecipeName = (TextView) rootView.findViewById(R.id.detail_recipe_name);
+        mInstructions = (TextView) rootView.findViewById(R.id.remote_instructions);
+        mRecipePhoto = (ImageView) rootView.findViewById(R.id.remote_recipe_picture_imageview);
+        mIngredientList = (ListView) rootView.findViewById(R.id.ingredients_list_remote);
+        addButton = (Button) rootView.findViewById(R.id.add_recipe_to_local_button);
 
         Intent intent = getActivity().getIntent();
 
         if(intent!= null && intent.hasExtra(Intent.EXTRA_TEXT)){
 
-            Recipe r = (Recipe) intent.getSerializableExtra(Intent.EXTRA_TEXT);
+            mRecipe = (Recipe) intent.getSerializableExtra(Intent.EXTRA_TEXT);
 
-            name.setText(r.getName());
-            instructions.setText(r.getInstructions());
-            LinkedList<Ingredient> i = r.getIngredients();
+            mRecipeName.setText(mRecipe.getName());
+            mInstructions.setText(mRecipe.getInstructions());
+            LinkedList<Ingredient> listIngredients = mRecipe.getIngredients();
 
-            RemoteIngredientAdapter remoteIngredientAdapter = new RemoteIngredientAdapter(getActivity(), R.id.ingredients_list_remote, i);
+            RemoteIngredientAdapter remoteIngredientAdapter = new RemoteIngredientAdapter(getActivity(), R.id.ingredients_list_remote, listIngredients);
 
-            ingredients.setAdapter(remoteIngredientAdapter);
-            setListViewHeightBasedOnItems(ingredients);
+            ingredients = new ArrayList<>(listIngredients);
 
-            String imageString = r.getImage();
+            mIngredientList.setAdapter(remoteIngredientAdapter);
+            setListViewHeightBasedOnItems(mIngredientList);
+
+            String imageString = mRecipe.getImage();
             byte [] decodedString = Base64.decode(imageString, Base64.URL_SAFE);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            img.setImageBitmap(getCircularBitmap(decodedByte));
+            final Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            mRecipePhoto.setImageBitmap(decodedByte);
 
+            addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
+                    String actualPath = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(),
+                                                        decodedByte, null, null);
 
+                    Utility.insertWholeRecipeInDb(getActivity(), mRecipe.getName(), mRecipe.getInstructions(),
+                            actualPath, Utility.getBytes(decodedByte), ingredients);
+                    Context context = getActivity();
+                    CharSequence text = mRecipe.getName() + " recipe added to my recipes!";
+                    int duration = Toast.LENGTH_SHORT;
 
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+            });
         }
-
-
 
         return rootView;
     }
