@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,8 +84,12 @@ public class Remote_Detail_ActivityFragment extends Fragment {
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+                    String actualPath = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(),
+                                                        decodedByte, null, null);
+
                     Utility.insertWholeRecipeInDb(getActivity(), mRecipe.getName(), mRecipe.getInstructions(),
-                            null, Utility.getBytes(decodedByte), ingredients);
+                            actualPath, Utility.getBytes(decodedByte), ingredients);
                     Context context = getActivity();
                     CharSequence text = mRecipe.getName() + " recipe added to my recipes!";
                     int duration = Toast.LENGTH_SHORT;
