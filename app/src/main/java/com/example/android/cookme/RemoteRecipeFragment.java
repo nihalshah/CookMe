@@ -1,6 +1,7 @@
 package com.example.android.cookme;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -58,6 +59,7 @@ public class RemoteRecipeFragment extends Fragment {
     private EditText mIngredientInput;
     private TextView mIngredientsQuerying;
     private Button mClearQuery;
+    private boolean inSearch = false;
 
 
     public RemoteRecipeFragment() {
@@ -111,8 +113,9 @@ public class RemoteRecipeFragment extends Fragment {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
                     //TODO Search into remote function
-
+                    inSearch = true;
                     new RemoteRecipeTask().execute("Search", mIngredientInput.getText().toString());
+
 
                     InputMethodManager inputManager =
                             (InputMethodManager) getActivity().
@@ -184,19 +187,30 @@ public class RemoteRecipeFragment extends Fragment {
 
          */
         Dialog splash;
+        ProgressDialog dialog;
         @Override
         protected void onPreExecute(){
-            splash = new Dialog(getActivity(), R.style.splash);
-            splash.show();
+            if(inSearch){
+                ProgressDialog dialog = ProgressDialog.show(getActivity(), "",
+                        "Searching in the server...", true);
+            } else{
+                splash = new Dialog(getActivity(), R.style.splash);
+                splash.show();
+            }
+
+
         }
 
         @Override
         protected void onPostExecute(ArrayList<Recipe> result) {
 
             super.onPostExecute(result);
-            if(splash.isShowing()){
+            if(splash != null && splash.isShowing()){
                 splash.dismiss();
+            } else if(dialog.isShowing()){
+                dialog.dismiss();
             }
+
             if( result != null){
 
                mremoteRecipeAdapter.clear();
