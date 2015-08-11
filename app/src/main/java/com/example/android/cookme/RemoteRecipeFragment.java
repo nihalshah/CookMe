@@ -31,8 +31,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -111,9 +109,10 @@ public class RemoteRecipeFragment extends Fragment {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                actualRecipe.setImage(imagePath);
+
+                Recipe copyRecipe = new Recipe(actualRecipe.getName(),actualRecipe.getIngredients(), actualRecipe.getInstructions(),imagePath);
                 Intent intent = new Intent(getActivity(), Remote_Detail_Activity.class).
-                        putExtra(Intent.EXTRA_TEXT, actualRecipe);
+                        putExtra(Intent.EXTRA_TEXT, copyRecipe);
                 startActivity(intent);
             }
         });

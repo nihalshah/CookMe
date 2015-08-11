@@ -112,11 +112,12 @@ public class Remote_Detail_ActivityFragment extends Fragment {
                 e.printStackTrace();
             }
             String imageString = new String(bytes);
+
             Log.i("Image in Adapter", imageString);
             byte [] decodedString = Base64.decode(imageString, Base64.URL_SAFE);
             final Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-            mRecipePhoto.setImageBitmap(decodedByte);
+            mRecipePhoto.setImageBitmap(getCircularBitmap(decodedByte));
 
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override

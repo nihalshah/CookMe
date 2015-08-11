@@ -19,10 +19,6 @@ import android.widget.TextView;
 
 import com.example.android.cookme.data.Recipe;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,39 +79,14 @@ public class RemoteRecipeAdapter extends ArrayAdapter<Recipe> {
 
 
 
-        String imageStringReference = r.getImage();
-        File filePath = new File(imageStringReference);
 
-        int length = (int) filePath.length();
-        byte [] bytes = new byte[length];
-
-        FileInputStream input = null;
-        try {
-            input = new FileInputStream(filePath);
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            input.read(bytes);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            input.close();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        String imageString = new String(bytes);
+        String imageString = r.getImage();
         Log.i("Image in Adapter", imageString);
         byte [] decodedString = Base64.decode(imageString, Base64.URL_SAFE);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-        //img.setImageBitmap(getCircularBitmap(decodedByte));
-        img.setImageBitmap(decodedByte);
+        img.setImageBitmap(getCircularBitmap(decodedByte));
+
 
         return v;
     }
