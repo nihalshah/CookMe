@@ -112,6 +112,8 @@ public class RemoteRecipeFragment extends Fragment {
 
                     //TODO Search into remote function
 
+                    new RemoteRecipeTask().execute("Search", mIngredientInput.getText().toString());
+
                     InputMethodManager inputManager =
                             (InputMethodManager) getActivity().
                                     getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -218,7 +220,7 @@ public class RemoteRecipeFragment extends Fragment {
                 String base = "http://45.55.139.196:5000/";
                 String buildUri;
                 if( params[0].equals("Search")) {
-                    buildUri = base.concat("/ingredient/"+params[1]);
+                    buildUri = base.concat("ingredient/"+params[1]);
                 }
                 else{
                     buildUri = base;
