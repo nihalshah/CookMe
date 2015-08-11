@@ -187,15 +187,15 @@ public class RemoteRecipeFragment extends Fragment {
 
          */
         Dialog splash;
-        ProgressDialog dialog;
+        ProgressDialog Searchdialog;
         @Override
         protected void onPreExecute(){
-            dialog = new ProgressDialog(getActivity());
+            Searchdialog = new ProgressDialog(getActivity());
 
             splash = new Dialog(getActivity(), R.style.splash);
             if(inSearch){
-                dialog.setMessage("Searching in the server...");
-                 dialog.show();
+               Searchdialog.setMessage("Searching in the server...");
+                 Searchdialog.show();
             } else{
                 splash.show();
             }
@@ -208,8 +208,8 @@ public class RemoteRecipeFragment extends Fragment {
 
             super.onPostExecute(result);
             if (inSearch){
-                if(dialog.isShowing()) {
-                    dialog.dismiss();
+                if(Searchdialog.isShowing()) {
+                    Searchdialog.dismiss();
                 }
 
             }
