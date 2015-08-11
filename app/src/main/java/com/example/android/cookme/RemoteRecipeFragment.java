@@ -72,6 +72,15 @@ public class RemoteRecipeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_remote_recipe, container, false);
 
+        if(savedInstanceState != null && savedInstanceState.containsKey(STATE_HAVE_REQUESTED)){
+            haveRequested = savedInstanceState.getBoolean(STATE_HAVE_REQUESTED);
+            Log.v(null, "HAVE REQUESTED second time = " + haveRequested);
+        }else{
+            haveRequested = false;
+        }
+
+        Log.v(null, "HAVE REQUESTED = " + haveRequested);
+
         ArrayList<Recipe> list = new ArrayList<Recipe>();
         mRemoteRecipeAdapter  = new RemoteRecipeAdapter(getActivity(),0, list);
 
@@ -138,6 +147,8 @@ public class RemoteRecipeFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+
+        Log.v(null, "IN THE SAVE INSTANCE = " + haveRequested);
 
         if(haveRequested){
             outState.putBoolean(STATE_HAVE_REQUESTED, haveRequested);
@@ -222,6 +233,7 @@ public class RemoteRecipeFragment extends Fragment {
             }
             if(splash.isShowing()){
                 splash.dismiss();
+                inSearch = true;
             }
             if( result != null){
 
@@ -311,6 +323,8 @@ public class RemoteRecipeFragment extends Fragment {
                     }
                 }
             }
+
+            haveRequested = true;
 
             return null;
         } 
