@@ -27,8 +27,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(this);
-
         setContentView(R.layout.activity_main);
+
+        /*
 
 
 
@@ -45,6 +46,7 @@ public class MainActivity extends ActionBarActivity {
         /**
          * on swiping the viewpager make respective tab selected
          * */
+        /*
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
@@ -62,6 +64,7 @@ public class MainActivity extends ActionBarActivity {
             public void onPageScrollStateChanged(int arg0) {
             }
         });
+        */
     }
 
 
