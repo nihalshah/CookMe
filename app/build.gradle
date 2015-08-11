@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.android.cookme"
-        minSdkVersion 10
+        minSdkVersion 11
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
