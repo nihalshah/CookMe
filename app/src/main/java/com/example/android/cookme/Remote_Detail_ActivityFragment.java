@@ -27,6 +27,10 @@ import android.widget.Toast;
 import com.example.android.cookme.data.Ingredient;
 import com.example.android.cookme.data.Recipe;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -81,9 +85,37 @@ public class Remote_Detail_ActivityFragment extends Fragment {
             mIngredientList.setAdapter(remoteIngredientAdapter);
             setListViewHeightBasedOnItems(mIngredientList);
 
-            String imageString = mRecipe.getImage();
+            String imageStringReference = mRecipe.getImage();
+            File filePath = new File(imageStringReference);
+
+            int length = (int) filePath.length();
+            byte [] bytes = new byte[length];
+
+            FileInputStream input = null;
+            try {
+                input = new FileInputStream(filePath);
+            }
+            catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                input.read(bytes);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                input.close();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            String imageString = new String(bytes);
+            Log.i("Image in Adapter", imageString);
             byte [] decodedString = Base64.decode(imageString, Base64.URL_SAFE);
             final Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
             mRecipePhoto.setImageBitmap(decodedByte);
 
             addButton.setOnClickListener(new View.OnClickListener() {
