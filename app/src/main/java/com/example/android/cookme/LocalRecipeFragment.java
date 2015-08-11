@@ -91,10 +91,6 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
 
         mRecipesList.setAdapter(mRecipeAdapter);
 
-        if(mRecipeAdapter.isEmpty()){
-            displayAlertOfNoResults();
-        }
-
         mRecipesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -202,6 +198,9 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if(cursor.getCount() == 0){
+            displayAlertOfNoResults();
+        }
         mRecipeAdapter.swapCursor(cursor);
         getView().setFocusableInTouchMode(true);
         getView().requestFocus();
