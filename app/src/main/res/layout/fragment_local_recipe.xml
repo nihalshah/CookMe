@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivityFragment"
-    android:background="@color/ColorPrimaryLight">
+    android:background="@color/ColorPrimaryLight"
+    android:gravity="left">
 
     <LinearLayout
         android:paddingLeft="10dp"
@@ -48,28 +49,42 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="320dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:text="Recipes that have: "
+                    android:textStyle="bold"
+                    android:textColor="#ffffff"/>
+                <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="7"
-                android:text="Recipes that have: "
-                android:textStyle="bold"
-                android:textColor="#ffffff"/>
-            <Button
+                android:id="@+id/ingredients_in_query_textview"
+                android:textColor="#ffffff"
+                android:paddingBottom="0dp"
+                android:layout_weight="3"/>
+
+            </LinearLayout>
+
+
+            <ImageButton
                 android:id="@+id/clear_list_ingredients_button"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
+                android:src="@drawable/ic_clear_white_36dp"
                 android:layout_weight="1"
-                android:text="X" />
+                android:background="@color/ColorPrimaryLight"
+                android:layout_gravity="left"/>
 
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/ingredients_in_query_textview"
-            android:textColor="#ffffff"
-            android:paddingBottom="0dp"/>
+
+
+
 
     </LinearLayout>
 

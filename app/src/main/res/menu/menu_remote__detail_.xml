@@ -1,7 +1,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.android.cookme.Remote_Detail_Activity">
+    tools:context="com.example.android.cookme.Remote_Detail_Activity"
+    xmlns:cook_me="http://schemas.android.com/apk/res-auto"
+    >
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_save_from_remote"
+        android:icon="@drawable/ic_add_box_white_24dp"
+        android:title="Add Recipe"
+        cook_me:showAsAction="ifRoom" />
 </menu>

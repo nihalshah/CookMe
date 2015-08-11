@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -118,6 +119,28 @@ public class Remote_Detail_ActivityFragment extends Fragment {
             final Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
             mRecipePhoto.setImageBitmap(getCircularBitmap(decodedByte));
+
+            mRecipePhoto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    String mPhotoPath = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(),
+                            decodedByte, null, null);
+                    if (mPhotoPath != null) {
+                        intent.setDataAndType(Uri.parse(mPhotoPath), "image/*");
+                        startActivity(intent);
+                    } else {
+                        Context context = getActivity();
+                        CharSequence text = "No image to display!";
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
+
+
+                }
+            });
 
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
