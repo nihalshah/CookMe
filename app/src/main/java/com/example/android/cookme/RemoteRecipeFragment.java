@@ -58,6 +58,8 @@ public class RemoteRecipeFragment extends Fragment {
     private ProgressDialog Searchdialog;
     private boolean haveRequested;
 
+    private static final String STATE_HAVE_REQUESTED = "haveRequestedState";
+
 
     public RemoteRecipeFragment() {
     }
@@ -134,8 +136,14 @@ public class RemoteRecipeFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
 
-
+        if(haveRequested){
+            outState.putBoolean(STATE_HAVE_REQUESTED, haveRequested);
+        }
+        super.onSaveInstanceState(outState);
+    }
 
     private String insertBase64IntoLocalFile(String image) throws IOException {
 
