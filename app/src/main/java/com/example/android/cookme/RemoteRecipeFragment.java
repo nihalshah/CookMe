@@ -140,20 +140,6 @@ public class RemoteRecipeFragment extends Fragment {
             }
         });
 
-        /*
-
-        mClearQuery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                mIngredientsSelected = "";
-                mIngredientsQuerying.setText(mIngredientsSelected);
-
-               // restartLoader();
-            }
-        });
-
-        */
 
         return rootView;
     }
@@ -304,11 +290,6 @@ public class RemoteRecipeFragment extends Fragment {
 
 
                 return result;
-//                try {
-//                    return getRecipeDataFromString(result);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
 
 
             } catch (MalformedURLException e) {
