@@ -7,6 +7,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,7 +16,7 @@ import android.view.MenuItem;
 import com.firebase.client.Firebase;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     private TabPagerAdapter mAdapter;
@@ -30,6 +32,8 @@ public class MainActivity extends ActionBarActivity {
         Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_main);
 
+
+
         if (findViewById(R.id.fragment_remoteFragmentTablet) != null) {
             // The detail container view will be present only in the large-screen layouts
             // (res/layout-sw600dp). If this view is present, then the activity should be
@@ -43,6 +47,7 @@ public class MainActivity extends ActionBarActivity {
             mTwoPane = false;
             // Initilization
             viewPager = (ViewPager) findViewById(R.id.pager);
+           //
             getSupportActionBar().setElevation(0f);
             mAdapter = new TabPagerAdapter(getSupportFragmentManager());
 
