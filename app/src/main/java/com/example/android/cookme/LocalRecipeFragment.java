@@ -199,7 +199,7 @@ public class LocalRecipeFragment extends Fragment implements  LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        if(cursor.getCount() == 0){
+        if(cursor.getCount() == 0 && InSearchMode){
             displayAlertOfNoResults();
         }
         mRecipeAdapter.swapCursor(cursor);

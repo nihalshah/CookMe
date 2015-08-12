@@ -2,10 +2,8 @@ package com.example.android.cookme;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -112,9 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 sendMessage();
                 //openSettings();
                 return true;
-            case R.id.limit:
-                startActivity(new Intent(this, SettingsActivity.class));
-                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
