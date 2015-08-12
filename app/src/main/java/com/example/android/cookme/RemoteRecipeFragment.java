@@ -1,5 +1,6 @@
 package com.example.android.cookme;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -62,6 +63,7 @@ public class RemoteRecipeFragment extends Fragment {
     private TextView mIngredientsQuerying;
     private Button mClearQuery;
     private boolean inSearch = false;
+    private boolean elementNotFound =false;
 
 
     public RemoteRecipeFragment() {
@@ -124,8 +126,13 @@ public class RemoteRecipeFragment extends Fragment {
 
                     //TODO Search into remote function
                     inSearch = true;
-                    new RemoteRecipeTask().execute("Search", mIngredientInput.getText().toString());
-
+                    String ingredientSearch = mIngredientInput.getText().toString();
+                    if (ingredientSearch.equals("")){
+                        new RemoteRecipeTask().execute("Get");
+                    }
+                    else {
+                        new RemoteRecipeTask().execute("Search", ingredientSearch);
+                    }
 
                     InputMethodManager inputManager =
                             (InputMethodManager) getActivity().
@@ -202,10 +209,11 @@ public class RemoteRecipeFragment extends Fragment {
             Searchdialog = new ProgressDialog(getActivity());
 
             splash = new Dialog(getActivity(), R.style.splash);
-            if(inSearch){
+            if(inSearch && !elementNotFound){
                Searchdialog.setMessage("Searching in the server...");
                  Searchdialog.show();
-            } else{
+
+            } else if (!elementNotFound){
                 splash.show();
             }
 
@@ -227,12 +235,14 @@ public class RemoteRecipeFragment extends Fragment {
             }
             if( result != null){
 
-               mremoteRecipeAdapter.clear();
+                addDataToRemoteRecipeAdapter(result);
 
-                for(Recipe recipe : result){
-                    mremoteRecipeAdapter.add(recipe);
-                }
+            }
 
+            if(result.size() == 0){
+                displayAlertOfNoResults();
+                elementNotFound = true;
+                new RemoteRecipeTask().execute("Get");
             }
         }
 
@@ -245,7 +255,8 @@ public class RemoteRecipeFragment extends Fragment {
             ArrayList<Recipe> result = new ArrayList<Recipe>();
 
             try {
-                String base = "http://45.55.139.196:5000/";
+                String base = "http://146.148.59.253:5000/";
+                        //"http://45.55.139.196:5000/";
                 String buildUri;
                 if( params[0].equals("Search")) {
                     buildUri = base.concat("ingredient/"+params[1]);
@@ -281,14 +292,7 @@ public class RemoteRecipeFragment extends Fragment {
                 }
 
                 recipeList = buffer.toString();
-                Log.i("Recipe is : ", recipeList);
-                JSONArray arr = new JSONArray(recipeList);
-                for(int i =0; i < arr.length(); i++){
-                    JSONObject r = arr.getJSONObject(i);
-                    result.add(convertRecipe(r));
-                }
-
-
+                result = parseJSONString(recipeList);
                 return result;
 
 
@@ -317,7 +321,46 @@ public class RemoteRecipeFragment extends Fragment {
             return null;
         } 
 
+        /*
+            Parses JSON String to convert it to an Array of JSON objects
+            and returns an ArrayList of Recipes
 
+         */
+        private ArrayList<Recipe> parseJSONString(String jsonString) throws JSONException, IOException {
+            ArrayList<Recipe> result = new ArrayList<Recipe>();
+            Log.i("Recipe is : ", jsonString);
+            JSONArray arr = new JSONArray(jsonString);
+            for(int i =0; i < arr.length(); i++){
+                JSONObject r = arr.getJSONObject(i);
+                result.add(convertRecipe(r));
+            }
+            return  result;
+        }
+
+        /*
+            Populates the Remote Recipe Adapter.
+         */
+
+        private void addDataToRemoteRecipeAdapter(ArrayList<Recipe> result){
+
+            mremoteRecipeAdapter.clear();
+            for(Recipe recipe : result){
+                mremoteRecipeAdapter.add(recipe);
+            }
+
+        }
+
+        /*
+            Returns a reference to the Remote Recipe Adapter.
+         */
+
+        private RemoteRecipeAdapter getRemoteRecipeAdapter(){
+            return mremoteRecipeAdapter;
+        }
+
+        /*
+            Converts JSON Object to Recipe Object.
+         */
         private Recipe convertRecipe(JSONObject obj) throws JSONException, IOException {
             String name = obj.getString("name");
             String instructions = obj.getString("instructions");
@@ -325,6 +368,27 @@ public class RemoteRecipeFragment extends Fragment {
             String image = obj.getString("image");
 
             return new Recipe(name, ingredients, instructions, image);
+        }
+
+        /*
+            Display's an alert if Search returns nothing.
+         */
+
+        private void displayAlertOfNoResults(){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("No recipes found with that ingredients")
+                    .setCancelable(true)
+                    .setPositiveButton("Ok", null);
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+
+        public void getCachedData(String recipeList) throws IOException, JSONException {
+            ArrayList<Recipe> result = parseJSONString(recipeList);
+            addDataToRemoteRecipeAdapter(result);
+
+
+
         }
 
 
