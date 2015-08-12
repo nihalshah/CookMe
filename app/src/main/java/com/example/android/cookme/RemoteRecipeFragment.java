@@ -257,7 +257,7 @@ public class RemoteRecipeFragment extends Fragment {
                 addDataToRemoteRecipeAdapter(result);
             }
 
-            if(result.size() == 0){
+            if(result !=null && result.size() == 0){
                 displayAlertOfNoResults();
                 elementNotFound = true;
                 new RemoteRecipeTask().execute("Get");
