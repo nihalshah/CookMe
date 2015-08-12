@@ -5,5 +5,10 @@
     xmlns:cook_me="http://schemas.android.com/apk/res-auto"
     >
 
+    <item android:id="@+id/save_from_remote"
+        android:icon="@drawable/ic_save_white_24dp"
+        android:title="Add Recipe"
+        cook_me:showAsAction="ifRoom" />
+
 
 </menu>

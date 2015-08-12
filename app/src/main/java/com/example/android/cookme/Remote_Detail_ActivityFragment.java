@@ -4,11 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -16,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -48,6 +44,7 @@ public class Remote_Detail_ActivityFragment extends Fragment {
     private ArrayList<Ingredient> ingredients;
     private Button addButton;
     private Recipe mRecipe;
+    private Bitmap decodedByte;
 
 
     public Remote_Detail_ActivityFragment() {
@@ -163,6 +160,33 @@ public class Remote_Detail_ActivityFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+   
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.save_from_remote:
+                String actualPath = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(),
+                        decodedByte, null, null);
+
+                Utility.insertWholeRecipeInDb(getActivity(), mRecipe.getName(), mRecipe.getInstructions(),
+                        actualPath, Utility.getBytes(decodedByte), ingredients);
+                Context context = getActivity();
+                CharSequence text = mRecipe.getName() + " recipe added to my recipes!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**
