@@ -58,6 +58,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
     private ShareActionProvider mShareActionProvider;
     private static final String HASHTAG = "#EasyCook";
     private static final String IMAGE_REMOTE_SUBSTRING = "content:";
+    private static final String LINK_TO_REPO =  "https://github.com/CookMe-CodeU/CookMe";
 
 
     private static final String[] RECIPE_COLUMNS = {
@@ -262,7 +263,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         setListViewHeightBasedOnItems(mIngredientListView);
 
         mShareString += "\n\nSteps: \n" + instructions + "\n\n" + HASHTAG;
-        mShareString += "\n" + "https://www.facebook.com";
+        mShareString += "\n" + LINK_TO_REPO;
 
         if(mShareActionProvider != null){
             mShareActionProvider.setShareIntent(createRecipeShareIntent());
