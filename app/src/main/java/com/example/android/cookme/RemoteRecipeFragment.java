@@ -36,6 +36,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -71,6 +72,7 @@ public class RemoteRecipeFragment extends Fragment {
     private boolean haveRequested;
 
     private static final String STATE_HAVE_REQUESTED = "haveRequestedState";
+    private static final String LIST_RECIPES_LOCAL_CACHE = "listRecipesLocalCache.txt";
 
 
 
@@ -332,6 +334,8 @@ public class RemoteRecipeFragment extends Fragment {
                 }
 
                 recipeList = buffer.toString();
+                //Save String into File
+                saveListRecipesIntoLocalCache(recipeList);
                 result = parseJSONString(recipeList);
                 return result;
 
@@ -429,10 +433,24 @@ public class RemoteRecipeFragment extends Fragment {
             ArrayList<Recipe> result = parseJSONString(recipeList);
             addDataToRemoteRecipeAdapter(result);
 
-
-
         }
 
+
+    }
+
+    private void saveListRecipesIntoLocalCache(String listRecipes) throws IOException {
+
+        String basePath = getActivity().getFilesDir().getPath();
+        File localCache = new File(basePath + LIST_RECIPES_LOCAL_CACHE);
+
+        FileOutputStream stream = new FileOutputStream(localCache);
+        try {
+            stream.write(listRecipes.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            stream.close();
+        }
 
     }
 
