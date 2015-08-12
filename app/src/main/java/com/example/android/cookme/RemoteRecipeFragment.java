@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -28,7 +27,6 @@ import android.widget.TextView;
 
 import com.example.android.cookme.data.Ingredient;
 import com.example.android.cookme.data.Recipe;
-import com.example.android.cookme.data.RecipeProviderByJSON;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +35,6 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -153,6 +150,7 @@ public class RemoteRecipeFragment extends Fragment {
                 } else {
                     // Implement this feature without material design
                     startActivity(intent);
+
                 }
 
 
