@@ -36,6 +36,8 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -71,6 +73,7 @@ public class RemoteRecipeFragment extends Fragment {
     private boolean haveRequested;
 
     private static final String STATE_HAVE_REQUESTED = "haveRequestedState";
+    private static final String LIST_RECIPES_LOCAL_CACHE = "listRecipesLocalCache.txt";
 
 
 
@@ -85,17 +88,21 @@ public class RemoteRecipeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_remote_recipe, container, false);
 
+        ArrayList<Recipe> list = new ArrayList<Recipe>();
+        mRemoteRecipeAdapter  = new RemoteRecipeAdapter(getActivity(),0, list);
+
         if(savedInstanceState != null && savedInstanceState.containsKey(STATE_HAVE_REQUESTED)){
             haveRequested = savedInstanceState.getBoolean(STATE_HAVE_REQUESTED);
-            Log.v(null, "HAVE REQUESTED second time = " + haveRequested);
+            try {
+                getCachedData(getStringFromLocalCache());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }else{
             haveRequested = false;
         }
-
-        Log.v(null, "HAVE REQUESTED = " + haveRequested);
-
-        ArrayList<Recipe> list = new ArrayList<Recipe>();
-        mRemoteRecipeAdapter  = new RemoteRecipeAdapter(getActivity(),0, list);
 
 
         mIngredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
@@ -212,33 +219,6 @@ public class RemoteRecipeFragment extends Fragment {
 
     public class RemoteRecipeTask extends AsyncTask<String, Void, ArrayList<Recipe>>{
 
-
-        /*
-            Returns a LinkedList of Ingredients and all their information
-         */
-
-        public LinkedList<Ingredient> getIngredients(JSONObject dish) {
-
-            JSONArray ingredientInfo = null;
-            LinkedList<Ingredient> allIngredients = new LinkedList<Ingredient>();
-            try {
-                ingredientInfo = dish.getJSONArray("ingredients");
-                for(int i = 0; i< ingredientInfo.length(); i++){
-                    double quantity = Double.parseDouble(ingredientInfo.getJSONObject(i).getString("ingredient quantity"));
-                    String ingredientName = ingredientInfo.getJSONObject(i).getString("ingredient name");
-                    String ingredientUnit = ingredientInfo.getJSONObject(i).getString("ingredient units");
-                    Ingredient ingredients = new Ingredient(ingredientName, quantity, ingredientUnit);
-                    allIngredients.add(ingredients);
-                }
-            }
-            catch (JSONException e) {
-                e.printStackTrace();
-                return null;
-            }
-            return allIngredients;
-        }
-
-
         /*
 
             Makes an HTTP connection with Remote Server.
@@ -332,6 +312,8 @@ public class RemoteRecipeFragment extends Fragment {
                 }
 
                 recipeList = buffer.toString();
+                //Save String into File
+                saveListRecipesIntoLocalCache(recipeList);
                 result = parseJSONString(recipeList);
                 return result;
 
@@ -363,54 +345,6 @@ public class RemoteRecipeFragment extends Fragment {
             return null;
         } 
 
-        /*
-            Parses JSON String to convert it to an Array of JSON objects
-            and returns an ArrayList of Recipes
-
-         */
-        private ArrayList<Recipe> parseJSONString(String jsonString) throws JSONException, IOException {
-            ArrayList<Recipe> result = new ArrayList<Recipe>();
-            Log.i("Recipe is : ", jsonString);
-            JSONArray arr = new JSONArray(jsonString);
-            for(int i =0; i < arr.length(); i++){
-                JSONObject r = arr.getJSONObject(i);
-                result.add(convertRecipe(r));
-            }
-            return  result;
-        }
-
-        /*
-            Populates the Remote Recipe Adapter.
-         */
-
-        private void addDataToRemoteRecipeAdapter(ArrayList<Recipe> result){
-
-            mRemoteRecipeAdapter.clear();
-            for(Recipe recipe : result){
-                mRemoteRecipeAdapter.add(recipe);
-            }
-
-        }
-
-        /*
-            Returns a reference to the Remote Recipe Adapter.
-         */
-
-        private RemoteRecipeAdapter getRemoteRecipeAdapter(){
-            return mRemoteRecipeAdapter;
-        }
-
-        /*
-            Converts JSON Object to Recipe Object.
-         */
-        private Recipe convertRecipe(JSONObject obj) throws JSONException, IOException {
-            String name = obj.getString("name");
-            String instructions = obj.getString("instructions");
-            LinkedList<Ingredient> ingredients = getIngredients(obj);
-            String image = obj.getString("image");
-
-            return new Recipe(name, ingredients, instructions, image);
-        }
 
         /*
             Display's an alert if Search returns nothing.
@@ -425,15 +359,125 @@ public class RemoteRecipeFragment extends Fragment {
             alert.show();
         }
 
-        public void getCachedData(String recipeList) throws IOException, JSONException {
-            ArrayList<Recipe> result = parseJSONString(recipeList);
-            addDataToRemoteRecipeAdapter(result);
+    }
 
+    private void saveListRecipesIntoLocalCache(String listRecipes) throws IOException {
 
+        String basePath = getActivity().getFilesDir().getPath();
+        File localCache = new File(basePath + LIST_RECIPES_LOCAL_CACHE);
 
+        FileOutputStream stream = new FileOutputStream(localCache);
+        try {
+            stream.write(listRecipes.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            stream.close();
         }
 
+    }
+
+    private String getStringFromLocalCache() throws IOException {
+
+        String basePath = getActivity().getFilesDir().getPath();
+        File localCache = new File(basePath + LIST_RECIPES_LOCAL_CACHE);
+
+        FileInputStream stream = new FileInputStream(localCache);
+
+        int length = (int) localCache.length();
+        byte [] bytes = new byte[length];
+
+        try{
+            stream.read(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            stream.close();
+        }
+
+        return new String(bytes);
 
     }
+
+    /*
+            Parses JSON String to convert it to an Array of JSON objects
+            and returns an ArrayList of Recipes
+
+         */
+    private ArrayList<Recipe> parseJSONString(String jsonString) throws JSONException, IOException {
+        ArrayList<Recipe> result = new ArrayList<Recipe>();
+        Log.i("Recipe is : ", jsonString);
+        JSONArray arr = new JSONArray(jsonString);
+        for(int i =0; i < arr.length(); i++){
+            JSONObject r = arr.getJSONObject(i);
+            result.add(convertRecipe(r));
+        }
+        return  result;
+    }
+
+        /*
+            Populates the Remote Recipe Adapter.
+         */
+
+    private void addDataToRemoteRecipeAdapter(ArrayList<Recipe> result){
+
+        mRemoteRecipeAdapter.clear();
+        for(Recipe recipe : result){
+            mRemoteRecipeAdapter.add(recipe);
+        }
+
+    }
+
+        /*
+            Returns a reference to the Remote Recipe Adapter.
+         */
+
+    private RemoteRecipeAdapter getRemoteRecipeAdapter(){
+        return mRemoteRecipeAdapter;
+    }
+
+    /*
+        Converts JSON Object to Recipe Object.
+     */
+    private Recipe convertRecipe(JSONObject obj) throws JSONException, IOException {
+        String name = obj.getString("name");
+        String instructions = obj.getString("instructions");
+        LinkedList<Ingredient> ingredients = getIngredients(obj);
+        String image = obj.getString("image");
+
+        return new Recipe(name, ingredients, instructions, image);
+    }
+
+        /*
+            Returns a LinkedList of Ingredients and all their information
+         */
+
+    public LinkedList<Ingredient> getIngredients(JSONObject dish) {
+
+        JSONArray ingredientInfo = null;
+        LinkedList<Ingredient> allIngredients = new LinkedList<Ingredient>();
+        try {
+            ingredientInfo = dish.getJSONArray("ingredients");
+            for(int i = 0; i< ingredientInfo.length(); i++){
+                double quantity = Double.parseDouble(ingredientInfo.getJSONObject(i).getString("ingredient quantity"));
+                String ingredientName = ingredientInfo.getJSONObject(i).getString("ingredient name");
+                String ingredientUnit = ingredientInfo.getJSONObject(i).getString("ingredient units");
+                Ingredient ingredients = new Ingredient(ingredientName, quantity, ingredientUnit);
+                allIngredients.add(ingredients);
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return allIngredients;
+    }
+
+
+    public void getCachedData(String recipeList) throws IOException, JSONException {
+        ArrayList<Recipe> result = parseJSONString(recipeList);
+        addDataToRemoteRecipeAdapter(result);
+    }
+
 
 }
