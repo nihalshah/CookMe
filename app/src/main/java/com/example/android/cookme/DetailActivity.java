@@ -1,24 +1,14 @@
 package com.example.android.cookme;
 
-<<<<<<< HEAD
+
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBarActivity;
-||||||| merged common ancestors
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.support.v7.app.ActionBarActivity;
-=======
->>>>>>> d872d2518991ce162f057a7b7df12cd223b66ebc
 import android.os.Bundle;
-<<<<<<< HEAD
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-||||||| merged common ancestors
-=======
-import android.support.v7.app.ActionBarActivity;
->>>>>>> d872d2518991ce162f057a7b7df12cd223b66ebc
 import android.view.Menu;
 import android.view.MenuItem;
 
