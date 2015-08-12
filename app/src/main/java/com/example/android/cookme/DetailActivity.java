@@ -1,12 +1,9 @@
 package com.example.android.cookme;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 
 public class DetailActivity extends ActionBarActivity {
@@ -16,6 +13,7 @@ public class DetailActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         getSupportActionBar().setElevation(0f);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
 
