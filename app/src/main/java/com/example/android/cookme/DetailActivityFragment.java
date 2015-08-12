@@ -15,6 +15,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -22,6 +23,8 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -100,10 +103,11 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
-        mNameView = (TextView)rootView.findViewById(R.id.recipeName_textView);
+        //mNameView = (TextView)rootView.findViewById(R.id.recipeName_textView);
         mPhotoView = (ImageView)rootView.findViewById(R.id.recipe_picture_imageview);
         mIngredientListView = (ListView)rootView.findViewById(R.id.ingredients_list);
         mInstructionsView = (TextView)rootView.findViewById(R.id.instructions_textView);
+
 
         mShareString = "Check out this recipe!";
         // Listener for displaying image full size;
@@ -113,10 +117,10 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
-                if(mPhotoPath != null){
+                if (mPhotoPath != null) {
                     intent.setDataAndType(Uri.parse("file://" + mPhotoPath), "image/*");
                     startActivity(intent);
-                } else{
+                } else {
                     Context context = getActivity();
                     CharSequence text = "No image to display!";
                     int duration = Toast.LENGTH_SHORT;
@@ -212,11 +216,15 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         if(!data.moveToFirst())
             return;
 
-
         mActualRecipeId = data.getLong(COL_RECIPE_ID);
 
         String name = data.getString(COL_RECIPE_NAME);
-        mNameView.setText(name);
+
+        if(getActivity() instanceof DetailActivity) {
+            ((DetailActivity) getActivity()).setToolbarTitle(name);
+        }
+
+        //mNameView.setText(name);
         mShareString += "\n\n" + name.toUpperCase() + "\n";
 
         String instructions = data.getString(COL_INSTRUCTIONS);
@@ -227,7 +235,7 @@ public class DetailActivityFragment extends Fragment implements LoaderCallbacks<
         if(array_picture != null){
             //TODO:Fixing the size of picture
             Bitmap picture = Utility.getImage(array_picture);
-            mPhotoView.setImageBitmap(getCircularBitmap(picture));
+            mPhotoView.setImageBitmap(picture);
         }
 
 

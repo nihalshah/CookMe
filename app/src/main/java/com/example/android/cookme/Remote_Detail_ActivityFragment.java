@@ -41,7 +41,7 @@ import java.util.LinkedList;
  */
 public class Remote_Detail_ActivityFragment extends Fragment {
 
-    private TextView mRecipeName;
+    //private TextView mRecipeName;
     private TextView mInstructions;
     private ImageView mRecipePhoto;
     private ListView mIngredientList;
@@ -63,7 +63,7 @@ public class Remote_Detail_ActivityFragment extends Fragment {
 
         View rootView =  inflater.inflate(R.layout.fragment_remote__detail_, container, false);
 
-        mRecipeName = (TextView) rootView.findViewById(R.id.detail_recipe_name);
+        //mRecipeName = (TextView) rootView.findViewById(R.id.detail_recipe_name);
         mInstructions = (TextView) rootView.findViewById(R.id.remote_instructions);
         mRecipePhoto = (ImageView) rootView.findViewById(R.id.remote_recipe_picture_imageview);
         mIngredientList = (ListView) rootView.findViewById(R.id.ingredients_list_remote);
@@ -75,7 +75,8 @@ public class Remote_Detail_ActivityFragment extends Fragment {
 
             mRecipe = (Recipe) intent.getSerializableExtra(Intent.EXTRA_TEXT);
 
-            mRecipeName.setText(mRecipe.getName());
+            //mRecipeName.setText(mRecipe.getName());
+
             mInstructions.setText(mRecipe.getInstructions());
             LinkedList<Ingredient> listIngredients = mRecipe.getIngredients();
 
@@ -118,7 +119,7 @@ public class Remote_Detail_ActivityFragment extends Fragment {
             byte [] decodedString = Base64.decode(imageString, Base64.URL_SAFE);
             final Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-            mRecipePhoto.setImageBitmap(getCircularBitmap(decodedByte));
+            mRecipePhoto.setImageBitmap(decodedByte);
 
             mRecipePhoto.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -203,35 +204,5 @@ public class Remote_Detail_ActivityFragment extends Fragment {
 
     }
 
-    public static Bitmap getCircularBitmap(Bitmap bitmap) {
-        Bitmap output;
 
-        if (bitmap.getWidth() > bitmap.getHeight()) {
-            output = Bitmap.createBitmap(bitmap.getHeight(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        } else {
-            output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getWidth(), Bitmap.Config.ARGB_8888);
-        }
-
-        Canvas canvas = new Canvas(output);
-
-        final int color = 0xff424242;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-
-        float r = 0;
-
-        if (bitmap.getWidth() > bitmap.getHeight()) {
-            r = bitmap.getHeight() / 2;
-        } else {
-            r = bitmap.getWidth() / 2;
-        }
-
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-        canvas.drawCircle(r, r, r, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-        return output;
-    }
 }

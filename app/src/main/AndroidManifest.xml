@@ -30,6 +30,7 @@
         <activity
             android:name=".DetailActivity"
             android:label="@string/title_activity_detail"
+            android:theme="@style/DetailViewNoActionBar"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -59,6 +60,7 @@
         <activity
             android:name=".Remote_Detail_Activity"
             android:label="@string/title_activity_remote__detail_"
+            android:theme="@style/DetailViewNoActionBar"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
