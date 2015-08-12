@@ -6,7 +6,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -19,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -50,18 +54,16 @@ import java.util.LinkedList;
 public class RemoteRecipeFragment extends Fragment {
 
 
-    private static final int RECIPE_LOADER = 0;
-    private RecipeProviderByJSON mListRecipes;
-    private RecipeAdapter mRecipeAdapter;
-    private String mIngredientTyped;
-    private String mIngredientsSelected;
-    private RemoteRecipeAdapter mremoteRecipeAdapter;
+    private RemoteRecipeAdapter mRemoteRecipeAdapter;
 
-    private ImageButton mSearchButton;
     private ListView mRecipesList;
     private EditText mIngredientInput;
+
     private TextView mIngredientsQuerying;
-    private Button mClearQuery;
+    private ImageButton mClearQuery;
+    private ImageView mAvatar;
+
+
     private boolean inSearch = false;
     private boolean elementNotFound =false;
 
@@ -79,20 +81,19 @@ public class RemoteRecipeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_remote_recipe, container, false);
 
         ArrayList<Recipe> list = new ArrayList<Recipe>();
-        mremoteRecipeAdapter  = new RemoteRecipeAdapter(getActivity(),0, list);
+        mRemoteRecipeAdapter  = new RemoteRecipeAdapter(getActivity(),0, list);
 
-
-        mIngredientTyped = "";
-        mIngredientsSelected = "";
 
         mIngredientInput = (EditText) rootView.findViewById(R.id.ingredient_input);
+
         mIngredientsQuerying = (TextView) rootView.findViewById(R.id.ingredients_in_query_textview);
-        mClearQuery = (Button) rootView.findViewById(R.id.clear_list_ingredients_button);
+        mClearQuery = (ImageButton) rootView.findViewById(R.id.clear_list_ingredients_button);
+
         mRecipesList = (ListView) rootView.findViewById(R.id.recipes_list);
         //mSearchButton = (ImageButton) rootView.findViewById(R.id.search_ingredient_button);
 
 
-        mRecipesList.setAdapter(mremoteRecipeAdapter);
+        mRecipesList.setAdapter(mRemoteRecipeAdapter);
 
         // Exec async load task
         final RemoteRecipeTask remoteRecipeTask = new RemoteRecipeTask();
@@ -103,7 +104,7 @@ public class RemoteRecipeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                Recipe actualRecipe = mremoteRecipeAdapter.getItem(i);
+                Recipe actualRecipe = mRemoteRecipeAdapter.getItem(i);
                 String actualImage = actualRecipe.getImage();
                 String imagePath = actualImage;
                 try {
@@ -113,9 +114,26 @@ public class RemoteRecipeFragment extends Fragment {
                 }
 
                 Recipe copyRecipe = new Recipe(actualRecipe.getName(),actualRecipe.getIngredients(), actualRecipe.getInstructions(),imagePath);
+
                 Intent intent = new Intent(getActivity(), Remote_Detail_Activity.class).
                         putExtra(Intent.EXTRA_TEXT, copyRecipe);
-                startActivity(intent);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    // Call some material design APIs here
+                    String transitionName = getString(R.string.transition_album_cover);
+                    mAvatar = (ImageView) view.findViewById(R.id.recipe_picture_imageview);
+                    ActivityOptionsCompat options =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                                    mAvatar,   // The view which starts the transition
+                                    transitionName    // The transitionName of the view we’re transitioning to
+                            );
+                    ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
+                } else {
+                    // Implement this feature without material design
+                    startActivity(intent);
+                }
+
+
             }
         });
 
@@ -233,10 +251,8 @@ public class RemoteRecipeFragment extends Fragment {
             if(splash.isShowing()){
                 splash.dismiss();
             }
-            if( result != null){
-
+            if( result != null) {
                 addDataToRemoteRecipeAdapter(result);
-
             }
 
             if(result.size() == 0){
@@ -343,9 +359,9 @@ public class RemoteRecipeFragment extends Fragment {
 
         private void addDataToRemoteRecipeAdapter(ArrayList<Recipe> result){
 
-            mremoteRecipeAdapter.clear();
+            mRemoteRecipeAdapter.clear();
             for(Recipe recipe : result){
-                mremoteRecipeAdapter.add(recipe);
+                mRemoteRecipeAdapter.add(recipe);
             }
 
         }
@@ -355,7 +371,7 @@ public class RemoteRecipeFragment extends Fragment {
          */
 
         private RemoteRecipeAdapter getRemoteRecipeAdapter(){
-            return mremoteRecipeAdapter;
+            return mRemoteRecipeAdapter;
         }
 
         /*

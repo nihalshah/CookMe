@@ -45,8 +45,10 @@
                     android:hint="@string/add_recipe_name"
                     android:layout_marginBottom="15dp"
                     android:layout_weight="7"
-                    android:fontFamily="sans-serif-light"
-                    android:inputType="textCapSentences"/>
+                    android:fontFamily="Roboto Regular"
+                    android:inputType="textCapSentences"
+                    android:textColor="@color/ColorPrimaryDark"
+                    android:textColorHint="@color/ColorPrimaryLight" />
             </LinearLayout>
 
             <LinearLayout
@@ -70,8 +72,10 @@
                     android:layout_marginBottom="15dp"
                     android:layout_marginTop="15dp"
                     android:layout_weight="7"
-                    android:fontFamily="sans-serif-light"
-                    android:inputType="textCapSentences"/>
+                    android:fontFamily="Roboto Regular"
+                    android:inputType="textCapSentences"
+                    android:textColor="@color/ColorPrimaryDark"
+                    android:textColorHint="@color/ColorPrimaryLight" />
 
             </LinearLayout>
 
@@ -94,7 +98,9 @@
                     android:hint="@string/add_ingredient_units"
                     android:layout_marginBottom="15dp"
                     android:layout_weight="7"
-                    android:fontFamily="sans-serif-light"/>
+                    android:fontFamily="Roboto Regular"
+                    android:textColor="@color/ColorPrimaryDark"
+                    android:textColorHint="@color/ColorPrimaryLight" />
 
             </LinearLayout>
 
@@ -118,7 +124,9 @@
                     android:layout_marginBottom="15dp"
                     android:inputType="numberDecimal"
                     android:layout_weight="7"
-                    android:fontFamily="sans-serif-light"/>
+                    android:fontFamily="Roboto Regular"
+                    android:textColor="@color/ColorPrimaryDark"
+                    android:textColorHint="@color/ColorPrimaryLight" />
 
             </LinearLayout>
 
@@ -129,14 +137,17 @@
                 android:layout_height="wrap_content"
                 android:text="Add Ingredient"
                 android:layout_gravity="right"
-                android:fontFamily="sans-serif-bold"/>
+                android:fontFamily="Roboto Regular"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/list_of_ingredients_added"
                 android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-light"/>
+                android:fontFamily="Roboto Regular"
+                android:textStyle="bold"
+                android:textColor="@color/ColorPrimaryDark" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -158,8 +169,10 @@
                     android:layout_marginBottom="15dp"
                     android:layout_marginTop="20dp"
                     android:layout_weight="7"
-                    android:fontFamily="sans-serif-light"
-                    android:inputType="textCapSentences"/>
+                    android:fontFamily="Roboto Regular"
+                    android:inputType="textCapSentences"
+                    android:textColor="@color/ColorPrimaryDark"
+                    android:textColorHint="@color/ColorPrimaryLight" />
 
             </LinearLayout>
 
@@ -170,7 +183,8 @@
                 android:layout_height="wrap_content"
                 android:text="Add Instruction"
                 android:layout_gravity="right"
-                android:fontFamily="sans-serif-bold"/>
+                android:fontFamily="Roboto Regular"
+                android:textStyle="bold" />
 
 
             <TextView
@@ -180,8 +194,10 @@
                 android:layout_marginLeft="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-light"
-                android:textSize="15sp"/>
+                android:fontFamily="Roboto Regular"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/ColorPrimaryDark" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -212,7 +228,8 @@
                     android:layout_marginBottom="15dp"
                     android:text="@string/take_picture"
                     android:layout_weight="3"
-                    android:fontFamily="sans-serif-bold"/>
+                    android:fontFamily="Roboto Regular"
+                    android:textStyle="bold" />
             </LinearLayout>
 
 
@@ -223,8 +240,8 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="35dp"
                 android:text="@string/add_new_recipe_button"
-                android:fontFamily="sans-serif-black"
-                android:textSize="20dp"/>
+                android:fontFamily="Roboto Regular"
+                android:textSize="20sp" />
 
 
         </LinearLayout>
