@@ -66,6 +66,12 @@ public class RemoteRecipeFragment extends Fragment {
 
     private boolean inSearch = false;
     private boolean elementNotFound =false;
+    private Dialog splash;
+    private ProgressDialog Searchdialog;
+    private boolean haveRequested;
+
+    private static final String STATE_HAVE_REQUESTED = "haveRequestedState";
+
 
 
     public RemoteRecipeFragment() {
@@ -76,9 +82,17 @@ public class RemoteRecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-
         super.onCreate(savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_remote_recipe, container, false);
+
+        if(savedInstanceState != null && savedInstanceState.containsKey(STATE_HAVE_REQUESTED)){
+            haveRequested = savedInstanceState.getBoolean(STATE_HAVE_REQUESTED);
+            Log.v(null, "HAVE REQUESTED second time = " + haveRequested);
+        }else{
+            haveRequested = false;
+        }
+
+        Log.v(null, "HAVE REQUESTED = " + haveRequested);
 
         ArrayList<Recipe> list = new ArrayList<Recipe>();
         mRemoteRecipeAdapter  = new RemoteRecipeAdapter(getActivity(),0, list);
@@ -96,9 +110,10 @@ public class RemoteRecipeFragment extends Fragment {
         mRecipesList.setAdapter(mRemoteRecipeAdapter);
 
         // Exec async load task
-        final RemoteRecipeTask remoteRecipeTask = new RemoteRecipeTask();
-        remoteRecipeTask.execute("Get");
-
+        if(!haveRequested){
+            final RemoteRecipeTask remoteRecipeTask = new RemoteRecipeTask();
+            remoteRecipeTask.execute("Get");
+        }
 
         mRecipesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -169,6 +184,16 @@ public class RemoteRecipeFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+        Log.v(null, "IN THE SAVE INSTANCE = " + haveRequested);
+
+        if(haveRequested){
+            outState.putBoolean(STATE_HAVE_REQUESTED, haveRequested);
+        }
+        super.onSaveInstanceState(outState);
+    }
 
     private String insertBase64IntoLocalFile(String image) throws IOException {
 
@@ -220,8 +245,6 @@ public class RemoteRecipeFragment extends Fragment {
             "GET's" data from Remote DataBase.
 
          */
-        Dialog splash;
-        ProgressDialog Searchdialog;
         @Override
         protected void onPreExecute(){
             Searchdialog = new ProgressDialog(getActivity());
@@ -235,13 +258,13 @@ public class RemoteRecipeFragment extends Fragment {
                 splash.show();
             }
 
-
         }
 
         @Override
         protected void onPostExecute(ArrayList<Recipe> result) {
 
             super.onPostExecute(result);
+            haveRequested = true;
             if (inSearch){
                 if(Searchdialog.isShowing()) {
                     Searchdialog.dismiss();
@@ -250,6 +273,7 @@ public class RemoteRecipeFragment extends Fragment {
             }
             if(splash.isShowing()){
                 splash.dismiss();
+                inSearch = true;
             }
             if( result != null) {
                 addDataToRemoteRecipeAdapter(result);
@@ -333,6 +357,8 @@ public class RemoteRecipeFragment extends Fragment {
                     }
                 }
             }
+
+            haveRequested = true;
 
             return null;
         } 
